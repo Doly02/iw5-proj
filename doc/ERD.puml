@@ -1,0 +1,48 @@
+@startuml
+
+entity "Otázka" {
+    <weak>
+    ---
+    <<PK>> Id otázky
+    <<FK>> Id formuláře
+    ---
+    + Zadání otázky
+    + Popis?
+    + Typ odpovědi
+    + Odpověď?
+}
+
+entity "Užívatel" {
+    <<PK>> Id uživatele
+    ---
+    + Meno
+    + Fotografie - URL
+    + Role    
+}
+
+entity "Formulář" {
+    <<PK>> Id formuláře
+    ---
+    + Název
+    + Popis
+    + Datum otevření
+    + Čas otevření
+    + Datum uzavření
+    + Čas uzavření   
+}
+
+entity "Odpověď" {
+    <<PK>> Id odpovědi
+    <<FK>> Id uživatele
+    <<FK>> Id formuláře
+    <<FK>> Id otázky
+    ---
+    + Odpověď uživatele
+}
+
+Užívatel "1   " -- "0..N " Formulář : vytváří
+Formulář "1 " -- "1..N  " Otázka : " obsahuje"
+Užívatel "1 " -- "0..N " Odpověď : vyplní
+Otázka "1  " -- "0..N   " Odpověď : je zodpovězená
+
+@enduml
