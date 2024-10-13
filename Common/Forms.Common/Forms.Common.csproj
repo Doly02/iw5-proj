@@ -7,4 +7,37 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\QuestionTypeResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>QuestionTypeResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\QuestionTypeResources.cs.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>QuestionTypeResources.cs.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Resources\QuestionTypeResources.en.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>QuestionTypeResources.en.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\QuestionTypeResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>QuestionTypeResources.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\QuestionTypeResources.cs.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>QuestionTypeResources.cs.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Resources\QuestionTypeResources.en.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>QuestionTypeResources.en.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

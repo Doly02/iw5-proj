@@ -1,5 +1,6 @@
 using System;
 using AutoMapper;
+using Forms.Common.Enums;
 
 namespace Forms.Api.DAL.Common.Entities
 {
@@ -7,6 +8,8 @@ namespace Forms.Api.DAL.Common.Entities
     {
         public required string Name { get; set; }
         public required string Description { get; set; }
+        public required QuestionType QuestionType { get; set; }
+        
         public required string Answer { get; set; }
     }
 
