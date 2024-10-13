@@ -1,7 +1,7 @@
 using System;
 using Forms.Api.DAL.Common.Entities.Interfaces;
 
-namespace CookBook.Api.DAL.Common.Entities
+namespace Forms.Api.DAL.Common.Entities
 {
     public abstract record EntityBase : IEntity
     {
