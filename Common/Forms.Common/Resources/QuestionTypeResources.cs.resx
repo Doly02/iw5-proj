@@ -27,4 +27,7 @@
     <data name="UnknownDescription" xml:space="preserve">
         <value>Neznamy</value>
     </data>
+    <data name="RangeDescription" xml:space="preserve">
+        <value>Ciselne rozpeti</value>
+    </data>
 </root>

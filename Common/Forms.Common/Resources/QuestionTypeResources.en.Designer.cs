@@ -69,6 +69,15 @@ namespace Forms.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Range.
+        /// </summary>
+        internal static string RangeDescription {
+            get {
+                return ResourceManager.GetString("RangeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selection From Options.
         /// </summary>
         internal static string SelectionFromOptionsDescription {

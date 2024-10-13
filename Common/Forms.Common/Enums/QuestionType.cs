@@ -15,6 +15,8 @@ namespace Forms.Common.Enums
         [QuestionTypeDescription(nameof(QuestionTypeResources.SelectionFromOptionsDescription))]
         Selection = 2,
         
+        [QuestionTypeDescription(nameof(QuestionTypeResources.RangeDescription))]
+        Range = 3,
     }
 
 

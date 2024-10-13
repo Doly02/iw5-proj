@@ -69,6 +69,15 @@ namespace Forms.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ciselne rozpeti.
+        /// </summary>
+        internal static string RangeDescription {
+            get {
+                return ResourceManager.GetString("RangeDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vyber z moznosti.
         /// </summary>
         internal static string SelectionFromOptionsDescription {
