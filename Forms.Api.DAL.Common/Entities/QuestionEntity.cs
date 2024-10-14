@@ -13,13 +13,12 @@ namespace Forms.Api.DAL.Common.Entities
         public Guid FormId { get; set; }
         public required FormEntity Form { get; set; }
         public ICollection<ResponseEntity> Responses { get; set; } = new List<ResponseEntity>();
-        
-        public required string Answer { get; set; }
+        public List<string> Answer { get; set; } = new List<string>();
     }
 
-    public class IngredientEntityMapperProfile : Profile
+    public class QuestionEntityMapperProfile : Profile
     {
-        public IngredientEntityMapperProfile()
+        public QuestionEntityMapperProfile()
         {
             CreateMap<QuestionEntity, QuestionEntity>();
         }
