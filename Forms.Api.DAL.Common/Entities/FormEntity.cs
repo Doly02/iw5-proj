@@ -9,6 +9,9 @@ namespace Forms.Api.DAL.Common.Entities
         public required DateTime DateOpen { get; set; }
         public required DateTime DateClose { get; set; }
 
+        public Guid UserId { get; set; }
+        public required UserEntity User { get; set; }
+        
         public ICollection<QuestionEntity> Questions { get; set; } = new List<QuestionEntity>();
     }
 
