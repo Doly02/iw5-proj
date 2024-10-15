@@ -15,7 +15,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Common\Forms.Common.BL\Forms.Common.BL.csproj" />
+    <ProjectReference Include="..\Common\Forms.Common.Models\Forms.Common.Models.csproj" />
     <ProjectReference Include="..\Common\Forms.Common\Forms.Common.csproj" />
+    <ProjectReference Include="..\Forms.Api.DAL.Common\Forms.Api.DAL.Common.csproj" />
   </ItemGroup>
 
 </Project>

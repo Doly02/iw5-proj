@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using AutoMapper;
 using AutoMapper.Internal;
+using Forms.Api.BL.Facades;
 using Forms.Api.BL.Installers;
 using Forms.Api.DAL.Common;
 using Forms.Api.DAL.Common.Entities;
@@ -15,6 +16,7 @@ using Microsoft.AspNetCore.Localization;
 using Forms.Api.DAL.EF.Extensions;
 using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
+using Forms.Common.Models.User;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -105,7 +107,30 @@ void UseEndpoints(WebApplication application)
         .WithOpenApi();
 
     // Use***Endpoints(endpointsBase);
+    UseUserEndpoints(endpointsBase);
 }
+
+void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var userEndpoints = routeGroupBuilder.MapGroup("user")
+        .WithTags("user");
+
+    userEndpoints.MapGet("", (IUserFacade userFacade) => userFacade.GetAll());
+
+    userEndpoints.MapGet("{id:guid}", Results<Ok<UserDetailModel>, NotFound<string>> (Guid id, IUserFacade userFacade)
+        => userFacade.GetById(id) is { } user
+            ? TypedResults.Ok(user)
+            : TypedResults.NotFound($"User with ID {id} not found"));
+
+    userEndpoints.MapPost("", (UserDetailModel user, IUserFacade userFacade) => userFacade.Create(user));
+
+    userEndpoints.MapPut("", (UserDetailModel user, IUserFacade userFacade) => userFacade.Update(user));
+
+    userEndpoints.MapPost("upsert", (UserDetailModel user, IUserFacade userFacade) => userFacade.CreateOrUpdate(user));
+
+    userEndpoints.MapDelete("{id:guid}", (Guid id, IUserFacade userFacade) => userFacade.Delete(id));
+}
+
 
 void UseDevelopmentSettings(WebApplication application)
 {

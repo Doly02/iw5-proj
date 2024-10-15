@@ -13,8 +13,4 @@
       <ProjectReference Include="..\Forms.Common\Forms.Common.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="User\" />
-    </ItemGroup>
-
 </Project>
