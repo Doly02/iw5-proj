@@ -19,9 +19,9 @@ namespace Forms.Api.DAL.Common.Entities
         public List<string> Answer { get; set; } = new List<string>();
     }
 
-    public class IngredientEntityMapperProfile : Profile
+    public class QuestionEntityMapperProfile : Profile
     {
-        public IngredientEntityMapperProfile()
+        public QuestionEntityMapperProfile()
         {
             CreateMap<QuestionEntity, QuestionEntity>();
         }

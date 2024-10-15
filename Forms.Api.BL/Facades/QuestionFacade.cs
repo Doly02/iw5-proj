@@ -9,50 +9,50 @@ namespace Forms.Api.BL.Facades
 {
     public class QuestionFacade : IQuestionFacade
     {
-        private readonly IQuestionRepository questionRepository;
-        private readonly IMapper mapper;
+        private readonly IQuestionRepository _questionRepository;
+        private readonly IMapper _mapper;
 
         public QuestionFacade(
             IQuestionRepository questionRepository,
             IMapper mapper)
         {
-            this.questionRepository = questionRepository;
-            this.mapper = mapper;
+            this._questionRepository = questionRepository;
+            this._mapper = mapper;
         }
 
         public List<QuestionListModel> GetAll()
         {
-            return mapper.Map<List<QuestionListModel>>(questionRepository.GetAll());
+            return _mapper.Map<List<QuestionListModel>>(_questionRepository.GetAll());
         }
 
         public QuestionDetailModel? GetById(Guid id)
         {
-            var questionEntity = questionRepository.GetById(id);
-            return mapper.Map<QuestionDetailModel>(questionEntity);
+            var questionEntity = _questionRepository.GetById(id);
+            return _mapper.Map<QuestionDetailModel>(questionEntity);
         }
 
         public Guid CreateOrUpdate(QuestionDetailModel questionModel)
         {
-            return questionRepository.Exists(questionModel.Id)
+            return _questionRepository.Exists(questionModel.Id)
                 ? Update(questionModel)!.Value
                 : Create(questionModel);
         }
 
         public Guid Create(QuestionDetailModel questionModel)
         {
-            var questionEntity = mapper.Map<QuestionEntity>(questionModel);
-            return questionRepository.Insert(questionEntity);
+            var questionEntity = _mapper.Map<QuestionEntity>(questionModel);
+            return _questionRepository.Insert(questionEntity);
         }
 
         public Guid? Update(QuestionDetailModel questionModel)
         {
-            var questionEntity = mapper.Map<QuestionEntity>(questionModel);
-            return questionRepository.Update(questionEntity);
+            var questionEntity = _mapper.Map<QuestionEntity>(questionModel);
+            return _questionRepository.Update(questionEntity);
         }
 
         public void Delete(Guid id)
         {
-            questionRepository.Remove(id);
+            _questionRepository.Remove(id);
         }
     }
 }
