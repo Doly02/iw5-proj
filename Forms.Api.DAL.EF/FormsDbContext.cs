@@ -6,7 +6,8 @@ namespace Forms.Api.DAL.EF;
 public class FormsDbContext : DbContext
 {
     public DbSet<UserEntity> Users { get; set; } = null!;
-
+    public DbSet<QuestionEntity> Questions => Set<QuestionEntity>(); 
+    
     public FormsDbContext(DbContextOptions<FormsDbContext> options)
         : base(options)
     {
