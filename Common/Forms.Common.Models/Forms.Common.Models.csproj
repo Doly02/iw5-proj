@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Enums.NET" Version="5.0.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Forms.Common\Forms.Common.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="User\" />
+    </ItemGroup>
+
+</Project>
