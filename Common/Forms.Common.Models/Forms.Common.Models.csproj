@@ -1,16 +1,48 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
     </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Enums.NET" Version="5.0.0" />
+  </ItemGroup>
 
-    <ItemGroup>
-        <PackageReference Include="Enums.NET" Version="5.0.0" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Forms.Common\Forms.Common.csproj" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Forms.Common\Forms.Common.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Texts\QuestionDetailModelResources.Designer.cs">
+      <DependentUpon>QuestionDetailModelResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Texts\QuestionDetailModelResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionDetailModelResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Texts\QuestionDetailModelResources.cs.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionDetailModelResources.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Texts\QuestionDetailModelResources.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>QuestionDetailModelResources.en.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Texts\QuestionDetailModelResources.resx">
+      <LastGenOutput>QuestionDetailModelResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Texts\QuestionDetailModelResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>QuestionDetailModelResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
 
 </Project>
