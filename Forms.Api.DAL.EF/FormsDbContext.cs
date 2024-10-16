@@ -1,6 +1,7 @@
 using Forms.Api.DAL.Common.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Forms.Api.DAL.Memory;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Forms.Api.DAL.EF;
@@ -8,7 +9,9 @@ namespace Forms.Api.DAL.EF;
 public class FormsDbContext : DbContext
 {
     public DbSet<UserEntity> Users { get; set; } = null!;
-    public DbSet<QuestionEntity> Questions => Set<QuestionEntity>(); 
+    public DbSet<QuestionEntity> Questions { get; set; } = null!;
+    public DbSet<FormEntity> Forms { get; set; } = null!;
+    public DbSet<ResponseEntity> Responses { get; set; } = null!;
     
     public FormsDbContext(DbContextOptions<FormsDbContext> options)
         : base(options)
@@ -68,5 +71,40 @@ public class FormsDbContext : DbContext
                      new List<string>()
             )
             .Metadata.SetValueComparer(listComparer);
+        
+    }
+    
+    public void SeedData()
+    {
+        
+        Users.RemoveRange(Users);
+        Forms.RemoveRange(Forms);
+        Questions.RemoveRange(Questions);
+        Responses.RemoveRange(Responses);
+        SaveChanges();
+        
+        
+        var storage = new Storage();
+
+        if (!Users.Any())
+        {
+            Users.AddRange(storage.Users);
+            SaveChanges();
+        }
+        if (!Forms.Any())
+        {
+            Forms.AddRange(storage.Forms);
+            SaveChanges();
+        }
+        if (!Questions.Any())
+        {
+            Questions.AddRange(storage.Questions);
+            SaveChanges();
+        }
+        if (!Responses.Any())
+        {
+            Responses.AddRange(storage.Responses);
+            SaveChanges();
+        }
     }
 }

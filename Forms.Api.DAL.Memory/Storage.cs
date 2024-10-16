@@ -39,8 +39,8 @@ namespace Forms.Api.DAL.Memory;
         };
         
         public IList<UserEntity> Users { get; } = new List<UserEntity>(); 
-        public IList<QuestionEntity> Questions { get; } = new List<QuestionEntity>();
         public IList<FormEntity> Forms { get; } = new List<FormEntity>();
+        public IList<QuestionEntity> Questions { get; } = new List<QuestionEntity>();
         public IList<ResponseEntity> Responses { get; } = new List<ResponseEntity>();
 
 
@@ -49,8 +49,8 @@ namespace Forms.Api.DAL.Memory;
             if (seedData)
             {
                 SeedUsers();
-                SeedQuestions();
                 SeedForms();
+                SeedQuestions();
                 SeedResponses();
             }
         }
@@ -85,53 +85,6 @@ namespace Forms.Api.DAL.Memory;
                 Email = "alice.wonderland@example.com",
                 PasswordHash = "hashedPassword789",
                 PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-3.jpg"
-            });
-        }
-
-        private void SeedQuestions()
-        {
-            Questions.Add(new QuestionEntity
-            {
-                Id = _questionGuids[0],
-                Name = "Question 1",
-                Description = "Napis",
-                QuestionType = QuestionType.OpenQuestion,
-                FormId = _formGuids[0],
-                Form = Forms[0],
-                Answer = new List<string>()
-            });
-            
-            Questions.Add(new QuestionEntity
-            {
-                Id = _questionGuids[1],
-                Name = "Question 2",
-                Description = "Vyber jednu z moznosti",
-                QuestionType = QuestionType.Selection,
-                FormId = _formGuids[0],
-                Form = Forms[0],
-                Answer = new List<string>{"Som muž", "Som žena" }
-            });
-            
-            Questions.Add(new QuestionEntity
-            {
-                Id = _questionGuids[2],
-                Name = "Question 3",
-                Description = "Vyber z idealniho mista dovolene :D",
-                QuestionType = QuestionType.Selection,
-                FormId = _formGuids[2],
-                Form = Forms[2],
-                Answer = new List<string>{"Grécko", "Taliansko", "Egypt", "Bulharsko"}
-            });
-            
-            Questions.Add(new QuestionEntity
-            {
-                Id = _questionGuids[3],
-                Name = "Question 4",
-                Description = "Kolik jsi mel na bodu z ISA cvika?",
-                QuestionType = QuestionType.Range,
-                FormId = _formGuids[1],
-                Form = Forms[1],
-                Answer = new List<string>{}   // todo doplnit range odpovedi
             });
         }
         
@@ -175,6 +128,54 @@ namespace Forms.Api.DAL.Memory;
         }
         
         
+        private void SeedQuestions()
+        {
+            Questions.Add(new QuestionEntity
+            {
+                Id = _questionGuids[0],
+                Name = "Question 1",
+                Description = "Napis",
+                QuestionType = QuestionType.OpenQuestion,
+                FormId = _formGuids[0],
+                Form = Forms[0],
+                Answer = new List<string>()
+            });
+            
+            Questions.Add(new QuestionEntity
+            {
+                Id = _questionGuids[1],
+                Name = "Question 2",
+                Description = "Vyber jednu z moznosti",
+                QuestionType = QuestionType.Selection,
+                FormId = _formGuids[0],
+                Form = Forms[0],
+                Answer = new List<string>{"Som muz", "Som zena" }
+            });
+            
+            Questions.Add(new QuestionEntity
+            {
+                Id = _questionGuids[2],
+                Name = "Question 3",
+                Description = "Vyber z idealniho mista dovolene :D",
+                QuestionType = QuestionType.Selection,
+                FormId = _formGuids[2],
+                Form = Forms[2],
+                Answer = new List<string>{"Grecko", "Taliansko", "Egypt", "Bulharsko"}
+            });
+            
+            Questions.Add(new QuestionEntity
+            {
+                Id = _questionGuids[3],
+                Name = "Question 4",
+                Description = "Kolik jsi mel na bodu z ISA cvika?",
+                QuestionType = QuestionType.Range,
+                FormId = _formGuids[1],
+                Form = Forms[1],
+                Answer = new List<string>{}   // todo doplnit range odpovedi
+            });
+        }
+        
+        
         private void SeedResponses()
         {
             Responses.Add(new ResponseEntity
@@ -184,7 +185,7 @@ namespace Forms.Api.DAL.Memory;
                 QuestionId = _questionGuids[0],
                 User = Users[0],
                 Question = Questions[0],
-                UserResponse = new List<string>{"Napíšem ti Hello World!!!"}
+                UserResponse = new List<string>{"Napisem ti Hello World!!!"}
             });
             
             Responses.Add(new ResponseEntity
@@ -194,7 +195,7 @@ namespace Forms.Api.DAL.Memory;
                 QuestionId = _questionGuids[1],
                 User = Users[0],
                 Question = Questions[1],
-                UserResponse = new List<string>{Questions[1].Answer[1]}   // "Som žena"
+                UserResponse = new List<string>{Questions[1].Answer[1]}   // "Som zena"
             });
             
             Responses.Add(new ResponseEntity
@@ -204,7 +205,7 @@ namespace Forms.Api.DAL.Memory;
                 QuestionId = _questionGuids[2],
                 User = Users[2],
                 Question = Questions[2],
-                UserResponse = new List<string>{Questions[2].Answer[0], Questions[2].Answer[2]}   // "Grécko", "Egypt"
+                UserResponse = new List<string>{Questions[2].Answer[0], Questions[2].Answer[2]}   // "Grecko", "Egypt"
             });
             
             // todo range odpoved dopisat
