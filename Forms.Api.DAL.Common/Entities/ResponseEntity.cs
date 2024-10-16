@@ -10,7 +10,7 @@ namespace Forms.Api.DAL.Common.Entities
         public required UserEntity User { get; set; }
         public required QuestionEntity Question { get; set; }
         
-        public string? UserResponse { get; set; }
+        public List<string>? UserResponse { get; set; }
     }
     
     public class ResponseEntityMapperProfile : Profile
