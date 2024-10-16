@@ -1,5 +1,7 @@
 using Forms.Api.DAL.Common.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Forms.Api.DAL.EF;
 
@@ -11,7 +13,7 @@ public class FormsDbContext : DbContext
     public FormsDbContext(DbContextOptions<FormsDbContext> options)
         : base(options)
     {
-        
+
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -22,23 +24,49 @@ public class FormsDbContext : DbContext
             .HasMany(userEntity => userEntity.Responses)
             .WithOne(responseEntity => responseEntity.User)
             .OnDelete(DeleteBehavior.Restrict);
-        
+
         modelBuilder.Entity<UserEntity>()
             .HasMany(userEntity => userEntity.Forms)
             .WithOne(formEntity => formEntity.User)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         modelBuilder.Entity<FormEntity>()
             .HasMany(formEntity => formEntity.Questions)
             .WithOne(questionEntity => questionEntity.Form)
             .OnDelete(DeleteBehavior.Cascade);
-        
+
         modelBuilder.Entity<QuestionEntity>()
             .HasMany(questionEntity => questionEntity.Responses)
             .WithOne(responseEntity => responseEntity.Question)
             .OnDelete(DeleteBehavior.Cascade);
+
+
+        // Entity Framework doesn’t know how to compare the List<string> properties (Answer and UserResponse) when checking for changes
+        // Create a reusable ValueComparer for List<string>
+        var listComparer = new ValueComparer<List<string>>(
+            (c1, c2) => c1 != null && c2 != null && c1.SequenceEqual(c2), // Compare elements in the lists
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())), // Compute hash code
+            c => c.ToList() // Deep copy the list
+        );
         
+        // Serializes List<string> to JSON format for storage in the database
+        modelBuilder.Entity<QuestionEntity>()
+            .Property(q => q.Answer)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null), // Serialize List<string> to JSON
+                v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ??
+                     new List<string>() // Deserialize JSON to List<string>
+            )
+            .Metadata.SetValueComparer(listComparer);
+
         
+        modelBuilder.Entity<ResponseEntity>()
+            .Property(r => r.UserResponse)
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ??
+                     new List<string>()
+            )
+            .Metadata.SetValueComparer(listComparer);
     }
-    
 }
