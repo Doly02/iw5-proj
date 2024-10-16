@@ -15,9 +15,9 @@ public class QuestionMapperProfile : Profile
         
         /* Reverse Mapping */
         CreateMap<QuestionDetailModel, QuestionEntity>()
-            .ForMember(dest => dest.Responses, opt => opt.Ignore());
+            .ForMember(dst => dst.Responses, opt => opt.Ignore());
 
         CreateMap<QuestionListModel, QuestionEntity>()
-            .ForMember(dest => dest.Responses, opt => opt.Ignore());
+            .ForMember(dst => dst.Responses, opt => opt.Ignore());
     }
 }

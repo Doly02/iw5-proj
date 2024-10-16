@@ -22,6 +22,15 @@ namespace Forms.Api.DAL.Memory;
             new("185469bb-a449-3335-2399-1af3ff276dca")
         };
 
+        private readonly IList<Guid> _responseGuids = new List<Guid>
+        {
+            new("fffb7c9f-3edb-45ef-112b-3e2a2b5d9289"),
+            new("c1dff28b-b88d-0015-8668-ba9300004321"),
+            new("11111b8b-a96f-4ee5-8899-3afbb3276dca"),
+            new("aad1223b-7114-0005-9989-339300456621"),
+            new("11246aab-aaaa-6969-2449-1af334566dca")
+        };
+        
         private readonly IList<Guid> _formGuids = new List<Guid>
         {
             new("b8f6666b-c91c-4ee5-8899-3afbb3276dca"),
@@ -33,6 +42,8 @@ namespace Forms.Api.DAL.Memory;
         public IList<UserEntity> Users { get; } = new List<UserEntity>();
 
         public IList<QuestionEntity> Questions { get; } = new List<QuestionEntity>();
+        
+        public IList<ResponseEntity> Responses { get; } = new List<ResponseEntity>();
 
         public Storage(bool seedData = true)
         {
@@ -40,6 +51,7 @@ namespace Forms.Api.DAL.Memory;
             {
                 SeedUsers();
                 SeedQuestions();
+                SeedResponse();
             }
         }
         
@@ -152,6 +164,37 @@ namespace Forms.Api.DAL.Memory;
                     UserId = _userGuids[1],
                     User = Users[1],                                // Jane Doe
                 }
+            });
+        }
+
+        private void SeedResponse()
+        {
+            Responses.Add(new ResponseEntity
+            {
+                Id = _responseGuids[0],
+                UserId = _userGuids[0],
+                User = Users[0],
+                QuestionId = _questionGuids[0],
+                Question = Questions[0],
+                UserResponse = "VUT FIT je TOP"
+            });
+            Responses.Add(new ResponseEntity
+            {
+                Id = _responseGuids[1],
+                UserId = _userGuids[1],
+                User = Users[1],
+                QuestionId = _questionGuids[1],
+                Question = Questions[1],
+                UserResponse = "Jo, to mi vyhovuje"
+            });
+            Responses.Add(new ResponseEntity
+            {
+                Id = _responseGuids[2],
+                UserId = _userGuids[2],
+                User = Users[1],
+                QuestionId = _questionGuids[1],
+                Question = Questions[2],
+                UserResponse = "Italie vyhovuje"
             });
         }
     }
