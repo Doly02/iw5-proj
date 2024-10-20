@@ -6,4 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="Moq" Version="4.20.72" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Forms.Api.BL\Forms.Api.BL.csproj" />
+  </ItemGroup>
+    <ItemGroup>
+    <ProjectReference Include="..\Forms.Api.DAL.Common\Forms.Api.DAL.Common.csproj" />
+  </ItemGroup>
 </Project>

@@ -2,7 +2,7 @@ using Forms.Api.DAL.Common.Entities;
 
 namespace Forms.Common.Models.Response;
 
-public record ResponseDetailModel : IWithId
+public record ResponseListModel : IWithId
 {
     public required Guid Id { get; init; }
     public required Guid UserId { get; set; }  // todo treba?

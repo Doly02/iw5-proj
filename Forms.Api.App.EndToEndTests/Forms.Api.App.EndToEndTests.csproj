@@ -20,4 +20,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Forms.Api.App\Forms.Api.App.csproj" />
+  </ItemGroup>
+
 </Project>

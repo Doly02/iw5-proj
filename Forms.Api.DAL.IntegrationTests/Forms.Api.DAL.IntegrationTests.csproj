@@ -19,4 +19,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Forms.Api.DAL.EF\Forms.Api.DAL.EF.csproj" />
+    <ProjectReference Include="..\Forms.Api.DAL.Memory\Forms.Api.DAL.Memory.csproj" />
+  </ItemGroup>
+
 </Project>

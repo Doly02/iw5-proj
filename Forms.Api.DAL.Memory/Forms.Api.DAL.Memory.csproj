@@ -10,5 +10,5 @@
     <ProjectReference Include="..\Common\Forms.Common\Forms.Common.csproj" />
     <ProjectReference Include="..\Forms.Api.DAL.Common\Forms.Api.DAL.Common.csproj" />
   </ItemGroup>
-
+  
 </Project>

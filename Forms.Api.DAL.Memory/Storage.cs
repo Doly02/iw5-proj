@@ -22,15 +22,6 @@ namespace Forms.Api.DAL.Memory;
             new("185469bb-a449-3335-2399-1af3ff276dca")
         };
 
-        private readonly IList<Guid> _responseGuids = new List<Guid>
-        {
-            new("fffb7c9f-3edb-45ef-112b-3e2a2b5d9289"),
-            new("c1dff28b-b88d-0015-8668-ba9300004321"),
-            new("11111b8b-a96f-4ee5-8899-3afbb3276dca"),
-            new("aad1223b-7114-0005-9989-339300456621"),
-            new("11246aab-aaaa-6969-2449-1af334566dca")
-        };
-        
         private readonly IList<Guid> _formGuids = new List<Guid>
         {
             new("b8f6666b-c91c-4ee5-8899-3afbb3276dca"),
@@ -38,20 +29,30 @@ namespace Forms.Api.DAL.Memory;
             new("b8f2222b-c22c-4115-8899-3afbb3276dca"),
             new("b8f3333b-c11c-4225-8899-3afbb3276dca")
         };
-        // todo lists of entities
-        public IList<UserEntity> Users { get; } = new List<UserEntity>();
-
-        public IList<QuestionEntity> Questions { get; } = new List<QuestionEntity>();
         
+        private readonly IList<Guid> _responseGuids = new List<Guid>
+        {
+            new("a62a2fb6-2b80-45b1-8f82-1401a6834abe"),
+            new("78c2a34b-1e84-40c8-bc59-49510478679d"),
+            new("fabde0cd-eefe-443f-baf6-3d96cc2cbf2e"),
+            new("a8ee7ce8-9903-4f42-afb4-b2c34dfb7ccf"),
+            new("c3542130-589c-4302-a441-a110fcadd45a"),
+        };
+        
+        public IList<UserEntity> Users { get; } = new List<UserEntity>(); 
+        public IList<FormEntity> Forms { get; } = new List<FormEntity>();
+        public IList<QuestionEntity> Questions { get; } = new List<QuestionEntity>();
         public IList<ResponseEntity> Responses { get; } = new List<ResponseEntity>();
+
 
         public Storage(bool seedData = true)
         {
             if (seedData)
             {
                 SeedUsers();
+                SeedForms();
                 SeedQuestions();
-                SeedResponse();
+                SeedResponses();
             }
         }
         
@@ -87,7 +88,47 @@ namespace Forms.Api.DAL.Memory;
                 PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-3.jpg"
             });
         }
-
+        
+        private void SeedForms()
+        {
+            Forms.Add(new FormEntity
+            {
+                Id = _formGuids[0],
+                Name = "VUT FIT",
+                Description = "Bud FIT",
+                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
+                DateClose = DateTime.Now.AddDays(30),
+                UserId = _userGuids[0],
+                User = Users[0],                                // John Doe
+                Questions = Questions.Where(q => q.FormId == _formGuids[0]).ToList()
+            });
+            
+            Forms.Add(new FormEntity
+            {
+                Id = _formGuids[1],
+                Name = "VUT FIT",
+                Description = "Bud FIT",
+                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
+                DateClose = DateTime.Now.AddDays(30),
+                UserId = _userGuids[1],
+                User = Users[1],                                // Jane Doe
+                Questions = Questions.Where(q => q.FormId == _formGuids[1]).ToList()
+            });
+            
+            Forms.Add(new FormEntity
+            {
+                Id = _formGuids[2],
+                Name = "Dovolena Form",
+                Description = "Formular pro vyber dovolene",
+                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
+                DateClose = DateTime.Now.AddDays(30),
+                UserId = _userGuids[2],
+                User = Users[2],                                // Alice Wonderland
+                Questions = Questions.Where(q => q.FormId == _formGuids[2]).ToList()
+            });
+        }
+        
+        
         private void SeedQuestions()
         {
             Questions.Add(new QuestionEntity
@@ -97,16 +138,8 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Napis",
                 QuestionType = QuestionType.OpenQuestion,
                 FormId = _formGuids[0],
-                Form = new FormEntity
-                {
-                    Id = _formGuids[0],
-                    Name = "VUT FIT",
-                    Description = "Bud FIT",
-                    DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                    DateClose = DateTime.Now.AddDays(30),
-                    UserId = _userGuids[0],
-                    User = Users[0],                                // John Doe
-                }
+                Form = Forms[0],
+                Answer = new List<string>()
             });
             
             Questions.Add(new QuestionEntity
@@ -116,16 +149,8 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Vyber jednu z moznosti",
                 QuestionType = QuestionType.Selection,
                 FormId = _formGuids[0],
-                Form = new FormEntity
-                {
-                    Id = _formGuids[0],
-                    Name = "VUT FIT",
-                    Description = "Bud FIT",
-                    DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                    DateClose = DateTime.Now.AddDays(30),
-                    UserId = _userGuids[0],
-                    User = Users[0],                                // John Doe
-                }
+                Form = Forms[0],
+                Answer = new List<string>{"Som muz", "Som zena" }
             });
             
             Questions.Add(new QuestionEntity
@@ -135,16 +160,8 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Vyber z idealniho mista dovolene :D",
                 QuestionType = QuestionType.Selection,
                 FormId = _formGuids[2],
-                Form = new FormEntity
-                {
-                    Id = _formGuids[2],
-                    Name = "Dovolena Form",
-                    Description = "Formular pro vyber dovolene",
-                    DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                    DateClose = DateTime.Now.AddDays(30),
-                    UserId = _userGuids[2],
-                    User = Users[2],                                // Alice Wonderland
-                }
+                Form = Forms[2],
+                Answer = new List<string>{"Grecko", "Taliansko", "Egypt", "Bulharsko"}
             });
             
             Questions.Add(new QuestionEntity
@@ -154,47 +171,54 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Kolik jsi mel na bodu z ISA cvika?",
                 QuestionType = QuestionType.Range,
                 FormId = _formGuids[1],
-                Form = new FormEntity
-                {
-                    Id = _formGuids[1],
-                    Name = "VUT FIT",
-                    Description = "Bud FIT",
-                    DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                    DateClose = DateTime.Now.AddDays(30),
-                    UserId = _userGuids[1],
-                    User = Users[1],                                // Jane Doe
-                }
+                Form = Forms[1],
+                Answer = new List<string>{}   // todo doplnit range odpovedi
             });
         }
-
-        private void SeedResponse()
+        
+        
+        private void SeedResponses()
         {
             Responses.Add(new ResponseEntity
             {
                 Id = _responseGuids[0],
                 UserId = _userGuids[0],
-                User = Users[0],
                 QuestionId = _questionGuids[0],
+                User = Users[0],
                 Question = Questions[0],
-                UserResponse = "VUT FIT je TOP"
+                UserResponse = new List<string>{"Napisem ti Hello World!!!"}
             });
+            
             Responses.Add(new ResponseEntity
             {
                 Id = _responseGuids[1],
-                UserId = _userGuids[1],
-                User = Users[1],
+                UserId = _userGuids[0],
                 QuestionId = _questionGuids[1],
+                User = Users[0],
                 Question = Questions[1],
-                UserResponse = "Jo, to mi vyhovuje"
+                UserResponse = new List<string>{Questions[1].Answer[1]}   // "Som zena"
             });
+            
             Responses.Add(new ResponseEntity
             {
                 Id = _responseGuids[2],
                 UserId = _userGuids[2],
-                User = Users[1],
-                QuestionId = _questionGuids[1],
+                QuestionId = _questionGuids[2],
+                User = Users[2],
                 Question = Questions[2],
-                UserResponse = "Italie vyhovuje"
+                UserResponse = new List<string>{Questions[2].Answer[0], Questions[2].Answer[2]}   // "Grecko", "Egypt"
             });
+            
+            // todo range odpoved dopisat
+            Responses.Add(new ResponseEntity
+            {
+                Id = _responseGuids[3],
+                UserId = _userGuids[1],
+                QuestionId = _questionGuids[3],
+                User = Users[1],
+                Question = Questions[3],
+                UserResponse = new List<string>{}   // odpovede
+            });
+            
         }
     }

@@ -7,6 +7,7 @@ using Forms.Api.BL.Facades;
 using Forms.Api.BL.Installers;
 using Forms.Api.DAL.Common;
 using Forms.Api.DAL.Common.Entities;
+using Forms.Api.DAL.EF;
 using Forms.Api.DAL.EF.Installers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -18,6 +19,7 @@ using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
 using Forms.Common.Models.User;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -42,6 +44,15 @@ UseLocalization(app);
 UseRouting(app);
 UseEndpoints(app);
 UseOpenApi(app);
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<FormsDbContext>();
+    
+    dbContext.Database.Migrate();
+    dbContext.SeedData();
+}
 
 app.Run();
 
@@ -94,6 +105,7 @@ void ConfigureAutoMapper(IServiceCollection serviceCollection)
 {
     serviceCollection.AddAutoMapper(typeof(EntityBase), typeof(ApiBLInstaller));
 }
+
 
 void ValidateAutoMapperConfiguration(IServiceProvider serviceProvider)
 {
