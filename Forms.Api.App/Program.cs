@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Localization;
 using Forms.Api.DAL.EF.Extensions;
 using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
+using Forms.Common.Models.Form;
 using Forms.Common.Models.User;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -36,7 +37,8 @@ ConfigureAutoMapper(builder.Services);
 
 var app = builder.Build();
 
-ValidateAutoMapperConfiguration(app.Services);
+// todo uncomment when questionmapper is ready
+//ValidateAutoMapperConfiguration(app.Services);
 
 UseDevelopmentSettings(app);
 UseSecurityFeatures(app);
@@ -120,6 +122,7 @@ void UseEndpoints(WebApplication application)
 
     // Use***Endpoints(endpointsBase);
     UseUserEndpoints(endpointsBase);
+    UseFormEndpoints(endpointsBase);
 }
 
 void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
@@ -141,6 +144,27 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
     userEndpoints.MapPost("upsert", (UserDetailModel user, IUserFacade userFacade) => userFacade.CreateOrUpdate(user));
 
     userEndpoints.MapDelete("{id:guid}", (Guid id, IUserFacade userFacade) => userFacade.Delete(id));
+}
+
+void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var formEndpoints = routeGroupBuilder.MapGroup("form")
+        .WithTags("form");
+
+    formEndpoints.MapGet("", (IFormFacade formFacade) => formFacade.GetAll());
+
+    formEndpoints.MapGet("{id:guid}", Results<Ok<FormDetailModel>, NotFound<string>> (Guid id, IFormFacade formFacade)
+        => formFacade.GetById(id) is { } form
+            ? TypedResults.Ok(form)
+            : TypedResults.NotFound($"Form with ID {id} not found"));
+
+    formEndpoints.MapPost("", (FormDetailModel form, IFormFacade formFacade) => formFacade.Create(form));
+
+    formEndpoints.MapPut("", (FormDetailModel form, IFormFacade formFacade) => formFacade.Update(form));
+
+    formEndpoints.MapPost("upsert", (FormDetailModel form, IFormFacade formFacade) => formFacade.CreateOrUpdate(form));
+
+    formEndpoints.MapDelete("{id:guid}", (Guid id, IFormFacade formFacade) => formFacade.Delete(id));
 }
 
 

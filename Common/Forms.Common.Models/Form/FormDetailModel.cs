@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using Forms.Api.DAL.Common.Entities;
 using Forms.Common.Models.Question;
+using Forms.Common.Models.User;
 
 namespace Forms.Common.Models.Form;
 
@@ -20,7 +21,7 @@ public record FormDetailModel : IWithId
     public required DateTime DateClose { get; set; }
     
     
-    public required UserEntity User { get; set; }
+    public required UserListModel User { get; set; }
     
     public IList<QuestionDetailModel> Questions { get; set; } = new List<QuestionDetailModel>();
     
