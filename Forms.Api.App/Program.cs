@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Localization;
 using Forms.Api.DAL.EF.Extensions;
 using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
+using Forms.Common.Models.Response;
 using Forms.Common.Models.User;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -120,6 +121,7 @@ void UseEndpoints(WebApplication application)
 
     // Use***Endpoints(endpointsBase);
     UseUserEndpoints(endpointsBase);
+    UseResponseEndpoints(endpointsBase);
 }
 
 void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
@@ -141,6 +143,27 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
     userEndpoints.MapPost("upsert", (UserDetailModel user, IUserFacade userFacade) => userFacade.CreateOrUpdate(user));
 
     userEndpoints.MapDelete("{id:guid}", (Guid id, IUserFacade userFacade) => userFacade.Delete(id));
+}
+
+void UseResponseEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var responseEndpoints = routeGroupBuilder.MapGroup("response")
+        .WithTags("response");
+
+    responseEndpoints.MapGet("", (IResponseFacade responseFacade) => responseFacade.GetAll());
+
+    responseEndpoints.MapGet("{id:guid}", Results<Ok<ResponseDetailModel>, NotFound<string>> (Guid id, IResponseFacade responseFacade)
+        => responseFacade.GetById(id) is { } response
+            ? TypedResults.Ok(response)
+            : TypedResults.NotFound($"Response with ID {id} not found"));
+
+    responseEndpoints.MapPost("", (ResponseDetailModel response, IResponseFacade responseFacade) => responseFacade.Create(response));
+
+    responseEndpoints.MapPut("", (ResponseDetailModel response, IResponseFacade responseFacade) => responseFacade.Update(response));
+
+    responseEndpoints.MapPost("upsert", (ResponseDetailModel response, IResponseFacade responseFacade) => responseFacade.CreateOrUpdate(response));
+
+    responseEndpoints.MapDelete("{id:guid}", (Guid id, IResponseFacade responseFacade) => responseFacade.Delete(id));
 }
 
 
