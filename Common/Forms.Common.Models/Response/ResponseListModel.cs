@@ -10,5 +10,5 @@ public record ResponseListModel : IWithId
 
     public required QuestionEntity Question { get; set; }
     
-    public List<string?>? UserResponse { get; set; }
+    public List<string>? UserResponse { get; set; }
 }
