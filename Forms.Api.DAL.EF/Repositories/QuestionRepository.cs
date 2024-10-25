@@ -38,4 +38,15 @@ public class QuestionRepository : RepositoryBase<QuestionEntity>, IQuestionRepos
 
         return null;
     }
+
+    public async Task<List<QuestionEntity>> SearchAsync(string query)
+    {
+        query = query.ToLower();
+
+        return await context.Questions
+            .Where(q => 
+                q.Name.ToLower().Contains(query) || 
+                q.Description.ToLower().Contains(query))
+            .ToListAsync();
+    }
 }
