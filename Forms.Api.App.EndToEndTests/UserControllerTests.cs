@@ -20,7 +20,7 @@ namespace Forms.Api.App.EndToEndTests
         }
 
         [Fact]
-        public async Task Get_All_Users_Returns_At_Last_One_Recipe()
+        public async Task Get_All_Users_Returns_At_Last_One_User()
         {
             var response = await _client.Value.GetAsync("/api/User");
 
