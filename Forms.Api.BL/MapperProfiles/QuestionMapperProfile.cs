@@ -10,21 +10,23 @@ public class QuestionMapperProfile : Profile
 {
     public QuestionMapperProfile()
     {
-        CreateMap<QuestionEntity, QuestionDetailModel>();
+        // Mapování z QuestionEntity na QuestionDetailModel
+        CreateMap<QuestionEntity, QuestionDetailModel>()
+            .Ignore(dest => dest.Responses);  // Ignorujeme Responses, pokud nejsou potřeba
 
+        // Mapování z QuestionEntity na QuestionListModel
         CreateMap<QuestionEntity, QuestionListModel>();
-        
-        /* Reverse Mapping */
-        CreateMap<QuestionDetailModel, QuestionEntity>()
-            .ForMember(dest => dest.Responses, opt => opt.Ignore());
 
+        // Reverzní mapování z QuestionDetailModel na QuestionEntity
+        CreateMap<QuestionDetailModel, QuestionEntity>()
+            .Ignore(dest => dest.Responses)  // Ignorujeme Responses
+            .Ignore(dest => dest.Form)       // Ignorujeme Form
+            .Ignore(dest => dest.FormId);    // Ignorujeme FormId, pokud není použit
+
+        // Reverzní mapování z QuestionListModel na QuestionEntity
         CreateMap<QuestionListModel, QuestionEntity>()
-            .ForMember(dest => dest.Responses, opt => opt.Ignore());
-        
-        CreateMap<QuestionEntity, SearchResultModel>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
-            .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Description))
-            .ForMember(dest => dest.Type, opt => opt.MapFrom(_ => "Question"))
-            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
+            .Ignore(dest => dest.Form)       // Ignorujeme Form
+            .Ignore(dest => dest.Responses)       // Ignorujeme Form
+            .Ignore(dest => dest.FormId);    // Ignorujeme FormId
     }
 }
