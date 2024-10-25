@@ -56,5 +56,18 @@ namespace Forms.Api.DAL.Memory.Repositories
         {
             return _questions.Any(question => question.Id == id);
         }
+        
+        public Task<List<QuestionEntity>> SearchAsync(string query)
+        {
+            query = query.ToLower(); 
+
+            var results = _questions
+                .Where(q => 
+                    q.Name.ToLower().Contains(query) || 
+                    q.Description.ToLower().Contains(query))
+                .ToList();
+
+            return Task.FromResult(results);
+        }
     }
 }
