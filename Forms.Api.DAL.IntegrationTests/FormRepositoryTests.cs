@@ -49,4 +49,117 @@ public class FormRepositoryTests
         Assert.Equal("Napis 2", question2.Description);
         Assert.Equal(QuestionType.Selection, question2.QuestionType);
     }
+    
+    [Fact]
+    public void Update_Saves_NewQuestion()
+    {
+        /* Arrange */
+        var formRepository = _dbFixture.GetFormRepository();
+
+        var formId = _dbFixture.FormGuids[0];
+        var form = _dbFixture.GetFormDirectly(formId);
+        Assert.Equal(_dbFixture.FormGuids[0], form.Id);
+        Assert.Equal("VUT FIT", form.Name);
+
+        var newQuestionId = Guid.NewGuid();
+        var newQuestion = new QuestionEntity
+        {
+            Id = newQuestionId,
+            Name = "Kam byste chtěli jet na dovolenou?",
+            Description = "Zadejte svůj oblíbený dovolenkový cíl.",
+            QuestionType = QuestionType.OpenQuestion,
+            FormId = formId
+        };
+
+        /* Act */
+        form.Questions.Add(newQuestion);
+        formRepository.Update(form);
+
+        /* Assert */
+        var formFromDb = _dbFixture.GetFormDirectly(formId);
+        Assert.NotNull(formFromDb);
+        Assert.Single(formFromDb.Questions, q => q.Id == newQuestionId);
+
+        var questionFromDb = formFromDb.Questions.SingleOrDefault(q => q.Id == newQuestionId);
+        Assert.NotNull(questionFromDb);
+        Assert.Equal(newQuestion.Name, questionFromDb.Name);
+        Assert.Equal(newQuestion.Description, questionFromDb.Description);
+        Assert.Equal(newQuestion.QuestionType, questionFromDb.QuestionType);
+    }
+    
+    [Fact]
+    public void RemoveQuestion_Removes_Question_From_Form()
+    {
+        /* Arrange */
+        var formRepository = _dbFixture.GetFormRepository();
+
+        var formId = _dbFixture.FormGuids[0];
+        var form = _dbFixture.GetFormDirectly(formId);
+        Assert.Equal(_dbFixture.FormGuids[0], form.Id);
+        Assert.Equal("VUT FIT", form.Name);
+
+        var questionId = Guid.NewGuid();
+
+        /* Add New Question To The Form */
+        var newQuestion = new QuestionEntity
+        {
+            Id = questionId,
+            Name = "Kam byste chtěli jet na dovolenou?",
+            Description = "Zadejte svůj oblíbený dovolenkový cíl.",
+            QuestionType = QuestionType.OpenQuestion,
+            FormId = formId
+        };
+
+        form.Questions.Add(newQuestion);
+        formRepository.Update(form);
+
+        /* Assert: Check if Question Was Added */
+        var formFromDb = _dbFixture.GetFormDirectly(formId);
+        Assert.Contains(formFromDb.Questions, q => q.Id == questionId);
+
+        /* Act: Remove Question From Form */
+        form.Questions.Remove(newQuestion);
+        formRepository.Update(form);
+
+        /* Assert: Check If Question Was Removed */
+        formFromDb = _dbFixture.GetFormDirectly(formId);
+        Assert.NotNull(formFromDb);
+        Assert.DoesNotContain(formFromDb.Questions, q => q.Id == questionId);
+
+        /* Verify That The Question Itself Is Not Found In The Form */
+        var questionFromDb = formFromDb.Questions.SingleOrDefault(q => q.Id == questionId);
+        Assert.Null(questionFromDb);
+    }
+    
+    [Fact]
+    public void UpdateQuestion_Changes_Question_Name_For_Form()
+    {
+        /* Arrange */
+        var formRepository = _dbFixture.GetFormRepository();
+        var formId = _dbFixture.FormGuids[0];
+        var form = _dbFixture.GetFormDirectly(formId);
+
+        /* Check If Form Does Have At Least One Question */
+        Assert.NotNull(form);
+        Assert.NotEmpty(form.Questions);
+
+        /* Store First Question Of The Form */ 
+        var questionToUpdate = form.Questions.First();
+        var originalQuestionId = questionToUpdate.Id;
+
+        /* Update Question's Name And Store Changes */
+        var newQuestionName = "Updated Question Name";
+        questionToUpdate.Name = newQuestionName;
+        formRepository.Update(form);
+
+        /* Act */
+        var formFromDb = _dbFixture.GetFormDirectly(formId);
+
+        /* Assert */
+        Assert.NotNull(formFromDb);
+        var updatedQuestion = formFromDb.Questions.Single(q => q.Id == originalQuestionId);
+    
+        /* Check The Success */
+        Assert.Equal(newQuestionName, updatedQuestion.Name);
+    }
 }
