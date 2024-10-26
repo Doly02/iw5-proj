@@ -75,8 +75,7 @@ public class UserRepositoryTests
                 Description = "Vyber si dovolenou",
                 DateOpen = DateTime.Now.AddDays(-5),
                 DateClose = DateTime.Now.AddDays(30),
-                UserId = userId,
-                User = user
+                UserId = userId
             };
 
         //act
@@ -110,18 +109,23 @@ public class UserRepositoryTests
             Description = "Vyber si dovolenou",
             DateOpen = DateTime.Now.AddDays(-5),
             DateClose = DateTime.Now.AddDays(30),
-            UserId = userId,
-            User = user
+            UserId = userId
         };
+
+        /* Act */
         user.Forms.Add(newForm);
         userRepository.Update(user);
+        
+        /* Assert */
+        var userFromDb = _dbFixture.GetUserDirectly(userId);
+        Assert.Contains(userFromDb.Forms, f => f.Id == formId);
 
         /* Act */
         user.Forms.Remove(newForm);
         userRepository.Update(user);
 
         /* Assert */
-        var userFromDb = _dbFixture.GetUserDirectly(userId);
+        userFromDb = _dbFixture.GetUserDirectly(userId);
         Assert.NotNull(userFromDb);
     
         /* Check If Form Was Deleted */

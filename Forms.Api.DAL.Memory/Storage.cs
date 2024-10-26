@@ -94,8 +94,7 @@ namespace Forms.Api.DAL.Memory;
                     Description = "Bud FIT",
                     DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                     DateClose = DateTime.Now.AddDays(30),
-                    UserId = _userGuids[0],
-                    User = Users[0],                                // John Doe
+                    UserId = _userGuids[0]
                 }
             });
             
@@ -113,8 +112,7 @@ namespace Forms.Api.DAL.Memory;
                     Description = "Bud FIT",
                     DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                     DateClose = DateTime.Now.AddDays(30),
-                    UserId = _userGuids[0],
-                    User = Users[0],                                // John Doe
+                    UserId = _userGuids[0]
                 }
             });
             
@@ -132,8 +130,7 @@ namespace Forms.Api.DAL.Memory;
                     Description = "Formular pro vyber dovolene",
                     DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                     DateClose = DateTime.Now.AddDays(30),
-                    UserId = _userGuids[2],
-                    User = Users[2],                                // Alice Wonderland
+                    UserId = _userGuids[2]
                 }
             });
             
@@ -151,8 +148,7 @@ namespace Forms.Api.DAL.Memory;
                     Description = "Bud FIT",
                     DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                     DateClose = DateTime.Now.AddDays(30),
-                    UserId = _userGuids[1],
-                    User = Users[1],                                // Jane Doe
+                    UserId = _userGuids[1]
                 }
             });
         }
