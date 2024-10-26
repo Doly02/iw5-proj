@@ -46,7 +46,10 @@ public class QuestionControllerTests: IAsyncDisposable
     
         // act
         var response = await _client.Value.GetAsync($"/api/Question/{questionId}");
-
+        var content = await response.Content.ReadAsStringAsync();
+        _testOutputHelper.WriteLine($"Response content: {content}");
+        
+        
         // assert
         response.EnsureSuccessStatusCode();  
         Assert.Equal(HttpStatusCode.OK, response.StatusCode); 
@@ -84,6 +87,7 @@ public class QuestionControllerTests: IAsyncDisposable
     [Fact]
     public async Task Post_Question_Returns_Success()
     {
+        var storage = new Storage();
         // arrange
         var questionModel = new QuestionDetailModel
         {
@@ -92,6 +96,7 @@ public class QuestionControllerTests: IAsyncDisposable
             Description = "Please write your answer.",
             QuestionType = QuestionType.OpenQuestion,
             Answer = null,  // open question
+            FormId = storage.Forms[0].Id,
             Responses = new List<ResponseDetailModel>()  // initialization of Response list
         };
 

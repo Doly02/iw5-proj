@@ -73,16 +73,14 @@ public class FormsDbContext : DbContext
             .Metadata.SetValueComparer(listComparer);
         
     }
-    
+
     public void SeedData()
     {
-        
         Users.RemoveRange(Users);
         Forms.RemoveRange(Forms);
         Questions.RemoveRange(Questions);
         Responses.RemoveRange(Responses);
         SaveChanges();
-        
         
         var storage = new Storage();
 

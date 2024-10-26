@@ -18,7 +18,7 @@ namespace Forms.Common.Models.Question
         public required string Description { get; set; }
         public required QuestionType QuestionType { get; set; }
         public List<string>? Answer { get; set; } 
-        
+        public Guid FormId { get; set; }
         public IList<ResponseDetailModel> Responses { get; set; } = new List<ResponseDetailModel>();
         
     }
