@@ -9,7 +9,7 @@ public class FormRepository : RepositoryBase<FormEntity>, IFormRepository
 {
     private readonly IMapper _mapper;
     
-    protected FormRepository(FormsDbContext context, IMapper mapper) : base(context)
+    public FormRepository(FormsDbContext context, IMapper mapper) : base(context)
     {
         this._mapper = mapper;
     }
