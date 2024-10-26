@@ -42,6 +42,29 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
         return DeepClone(question);
     }
     
+    public UserEntity? GetUserDirectly(Guid userId)
+    {
+        var user = _inMemoryStorage.Value.Users.SingleOrDefault(t => t.Id == userId);
+        if (null == user)
+        {
+            return null;
+        }
+        return DeepClone(user);
+    }
+
+    public FormEntity? GetFormDirectly(Guid formId)
+    {
+        var form = _inMemoryStorage.Value.Forms.SingleOrDefault(t => t.Id == formId);
+        if (null == form)
+        {
+            return null;
+        }
+        return DeepClone(form);
+    }
+    public IUserRepository GetUserRepository()
+    {
+        return new UserRepository(_inMemoryStorage.Value);
+    }
     public IList<Guid> QuestionGuids { get; } = new List<Guid>
     {
         new("23b19020-8709-1010-a200-11397aa416dc"),
@@ -59,7 +82,7 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
     };
     private Storage CreateInMemoryStorage()
     {
-        var storage = new Storage(false);
+        var storage = new Storage(true);
         SeedStorage(storage);
         return storage;
     }
@@ -85,6 +108,25 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
             }
         });
         
+        storage.Questions.Add(new QuestionEntity
+        {
+            Id = QuestionGuids[1],
+            Name = "Otazka cislo dva",
+            Description = "Napis 2",
+            QuestionType = QuestionType.OpenQuestion,
+            FormId = FormGuids[0],
+            Form = new FormEntity
+            {
+                Id = FormGuids[0],
+                Name = "VUT FIT",
+                Description = "Bud FIT",
+                DateOpen = DateTime.Now.AddDays(-5),                // Five Days Ago
+                DateClose = DateTime.Now.AddDays(30),
+                UserId = UserGuids[0],
+                User = storage.Users[0],                            // John Doe
+            }
+        });
+        
         storage.Users.Add(new UserEntity
         {
             Id = UserGuids[0],
@@ -92,7 +134,35 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
             LastName = "Doe",
             Email = "john.doe@example.com",
             PasswordHash = "hashedPassword123",
-            PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-1.jpg"
+            PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-1.jpg",
+            Forms = new List<FormEntity> { storage.Forms.First(f => f.Id == FormGuids[0]) }
+        });
+
+        storage.Forms.Add(new FormEntity
+        {
+            Id = FormGuids[0],
+            Name = "VUT FIT",
+            Description = "Bud FIT",
+            DateOpen = DateTime.Now.AddDays(-5),                // Five Days Ago
+            DateClose = DateTime.Now.AddDays(30),
+            UserId = UserGuids[0],
+            User = storage.Users[0],                            // John Doe
+            Questions = new List<QuestionEntity>    
+            {
+                storage.Questions.First(q => q.Id == QuestionGuids[0]),
+                storage.Questions.First(q => q.Id == QuestionGuids[1])
+            }
+        });
+        
+        storage.Forms.Add(new FormEntity
+        {
+            Id = FormGuids[1],
+            Name = "Novy formular",
+            Description = "Formular pro testovani",
+            DateOpen = DateTime.Now.AddDays(-3),                // Opened 3 Days Ago
+            DateClose = DateTime.Now.AddDays(30),
+            UserId = UserGuids[1],
+            User = storage.Users[1]
         });
     }
 }

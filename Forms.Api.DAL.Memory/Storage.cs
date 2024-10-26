@@ -32,7 +32,9 @@ namespace Forms.Api.DAL.Memory;
         // todo lists of entities
         public IList<UserEntity> Users { get; } = new List<UserEntity>();
 
+        public IList<FormEntity> Forms { get; } = new List<FormEntity>();
         public IList<QuestionEntity> Questions { get; } = new List<QuestionEntity>();
+        public IList<ResponseEntity> Responses { get; } = new List<ResponseEntity>();
 
         public Storage(bool seedData = true)
         {
