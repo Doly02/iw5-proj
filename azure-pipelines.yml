@@ -27,3 +27,8 @@ steps:
     inputs:
       command: 'build'
       projects: '**/Forms.Api.App.csproj'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'test'
+      projects: '**/*Tests*.csproj'
