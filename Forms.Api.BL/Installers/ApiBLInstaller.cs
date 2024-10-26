@@ -1,3 +1,4 @@
+using Forms.Api.BL.Facades;
 using Forms.Common.BL.Facades;
 using Forms.Common.Installers;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,5 +14,6 @@ public class ApiBLInstaller : IInstaller
                 .AddClasses(classes => classes.AssignableTo<IAppFacade>())
                 .AsSelfWithInterfaces()
                 .WithScopedLifetime());
+        serviceCollection.AddScoped<SearchFacade>(); 
     }
 }

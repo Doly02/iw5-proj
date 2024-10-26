@@ -150,7 +150,7 @@ void UseSearchEndpoints(RouteGroupBuilder routeGroupBuilder)
     var searchEndpoints = routeGroupBuilder.MapGroup("search")
         .WithTags("search");
 
-    searchEndpoints.MapGet("{query}", async (string query, ISearchFacade searchFacade) =>
+    searchEndpoints.MapGet("{query}", async (string query, SearchFacade searchFacade) =>
     {
         var results = await searchFacade.SearchAsync(query);
         return results.Any()

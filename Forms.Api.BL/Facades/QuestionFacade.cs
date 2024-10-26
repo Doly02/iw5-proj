@@ -58,6 +58,7 @@ namespace Forms.Api.BL.Facades
         
         public async Task<List<SearchResultModel>> SearchAsync(string query)
         {
+            Console.WriteLine("Calling questions");
             var questions = await _questionRepository.SearchAsync(query);
             return _mapper.Map<List<SearchResultModel>>(questions);
         }

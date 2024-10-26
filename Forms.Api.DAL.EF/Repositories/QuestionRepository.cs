@@ -43,10 +43,12 @@ public class QuestionRepository : RepositoryBase<QuestionEntity>, IQuestionRepos
     {
         query = query.ToLower();
 
-        return await context.Questions
+        var results = await context.Questions
             .Where(q => 
                 q.Name.ToLower().Contains(query) || 
                 q.Description.ToLower().Contains(query))
             .ToListAsync();
+        
+        return results;
     }
 }

@@ -9,16 +9,19 @@ using Forms.Api.DAL.Memory;
 using Forms.Common.Models.Search;
 using Forms.Common.Models.User;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Forms.Api.App.EndToEndTests
 {
     public class SearchControllerTests : IAsyncDisposable
     {
+        private readonly ITestOutputHelper _testOutputHelper;
         private readonly FormsApiApplicationFactory _app;
         private readonly Lazy<HttpClient> _client;
 
-        public SearchControllerTests()
+        public SearchControllerTests(ITestOutputHelper testOutputHelper)
         {
+            _testOutputHelper = testOutputHelper;
             _app = new FormsApiApplicationFactory();
             _client = new Lazy<HttpClient>(_app.CreateClient());
         }
@@ -33,7 +36,7 @@ namespace Forms.Api.App.EndToEndTests
             var expectedUser = storage.Users[0];
 
             // Act
-            var response = await _client.Value.GetAsync($"/api/Search/{query}");
+            var response = await _client.Value.GetAsync($"/api/search/{query}");
 
             // Assert
             response.EnsureSuccessStatusCode();  
@@ -62,10 +65,17 @@ namespace Forms.Api.App.EndToEndTests
             var expectedQuestion = storage.Questions[0];
 
             // Act
-            var response = await _client.Value.GetAsync($"/api/Search/{query}");
+            var response = await _client.Value.GetAsync($"/api/search/{query}");
 
             // Assert
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                _testOutputHelper.WriteLine($"Error response: {errorContent}");
+            }
+            
             response.EnsureSuccessStatusCode();  
+            
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
             var responseString = await response.Content.ReadAsStringAsync();
