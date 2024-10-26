@@ -29,7 +29,7 @@ namespace Forms.Api.App.EndToEndTests
         {
             // Arrange
             var storage = new Storage();
-            var query = storage.Users[0].FirstName; // Použijeme jméno uživatele ze seed dat jako dotaz pro vyhledávání
+            var query = storage.Users[0].FirstName;
             var expectedUser = storage.Users[0];
 
             // Act
@@ -41,13 +41,11 @@ namespace Forms.Api.App.EndToEndTests
 
             var responseString = await response.Content.ReadAsStringAsync();
 
-            // Deserialize response to a list of SearchResultModel
             var returnedResults = JsonSerializer.Deserialize<List<SearchResultModel>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
     
             Assert.NotNull(returnedResults);
             Assert.NotEmpty(returnedResults);
 
-            // Verify that at least one result matches the expected user
             var matchedResult = returnedResults.FirstOrDefault(r => r.Id == expectedUser.Id);
             Assert.NotNull(matchedResult);
             Assert.Equal(expectedUser.Id, matchedResult.Id);
@@ -60,7 +58,7 @@ namespace Forms.Api.App.EndToEndTests
         {
             // Arrange
             var storage = new Storage();
-            var query = storage.Questions[0].Name; // Použijeme jméno otázky ze seed dat jako dotaz pro vyhledávání
+            var query = storage.Questions[0].Name;
             var expectedQuestion = storage.Questions[0];
 
             // Act
@@ -72,13 +70,11 @@ namespace Forms.Api.App.EndToEndTests
 
             var responseString = await response.Content.ReadAsStringAsync();
 
-            // Deserialize response to a list of SearchResultModel
             var returnedResults = JsonSerializer.Deserialize<List<SearchResultModel>>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             Assert.NotNull(returnedResults);
             Assert.NotEmpty(returnedResults);
 
-            // Verify that at least one result matches the expected question
             var matchedResult = returnedResults.FirstOrDefault(r => r.Id == expectedQuestion.Id);
             Assert.NotNull(matchedResult);
             Assert.Equal(expectedQuestion.Id, matchedResult.Id);
