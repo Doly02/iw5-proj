@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Localization;
 using Forms.Api.DAL.EF.Extensions;
 using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
+using Forms.Common.Models.Search;
 using Forms.Common.Models.User;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -120,6 +121,7 @@ void UseEndpoints(WebApplication application)
 
     // Use***Endpoints(endpointsBase);
     UseUserEndpoints(endpointsBase);
+    UseSearchEndpoints(endpointsBase);
 }
 
 void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
@@ -141,6 +143,20 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
     userEndpoints.MapPost("upsert", (UserDetailModel user, IUserFacade userFacade) => userFacade.CreateOrUpdate(user));
 
     userEndpoints.MapDelete("{id:guid}", (Guid id, IUserFacade userFacade) => userFacade.Delete(id));
+}
+
+void UseSearchEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var searchEndpoints = routeGroupBuilder.MapGroup("search")
+        .WithTags("search");
+
+    searchEndpoints.MapGet("{query}", async (string query, ISearchFacade searchFacade) =>
+    {
+        var results = await searchFacade.SearchAsync(query);
+        return results.Any()
+            ? Results.Ok(results)
+            : Results.NotFound($"No results found for query '{query}'");
+    });
 }
 
 

@@ -1,6 +1,7 @@
 using AutoMapper;
 using Forms.Api.DAL.Common.Entities;
 using Forms.Api.DAL.Common.Repositories;
+using Forms.Common.Models.Search;
 using Forms.Common.Models.User;
 
 namespace Forms.Api.BL.Facades;
@@ -52,5 +53,11 @@ public class UserFacade : IUserFacade
     public void Delete(Guid id)
     {
         userRepository.Remove(id);
+    }
+    
+    public async Task<List<SearchResultModel>> SearchAsync(string query)
+    {
+        var users = await userRepository.SearchAsync(query);
+        return mapper.Map<List<SearchResultModel>>(users);
     }
 }

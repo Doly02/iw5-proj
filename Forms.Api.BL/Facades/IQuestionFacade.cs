@@ -5,7 +5,7 @@ using Forms.Common.Models.Question;
 
 namespace Forms.Api.BL.Facades
 {
-    public interface IQuestionFacade : IAppFacade
+    public interface IQuestionFacade : IAppFacade, ISearchFacade
     {
         List<QuestionListModel> GetAll();
         QuestionDetailModel? GetById(Guid id);

@@ -3,7 +3,7 @@ using Forms.Common.Models.User;
 
 namespace Forms.Api.BL.Facades;
 
-public interface IUserFacade : IAppFacade
+public interface IUserFacade : IAppFacade, ISearchFacade
 {
     List<UserListModel> GetAll();
     UserDetailModel? GetById(Guid id);
