@@ -1,0 +1,36 @@
+trigger:
+  branches:
+    include:
+      - master  # Pipeline se spustí při každém commitu do master větve
+
+pool:
+  vmImage: 'windows-latest'  # Můžete použít i 'ubuntu-latest' podle preferencí
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '8.x'  # Verze .NET (na obrázku je uvedeno Dotnet - v8.0)
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'restore'
+      projects: '**/*.csproj'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'build'
+      projects: '**/*.csproj'
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: 'publish'
+      projects: '**/*.csproj'
+      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: 'AzureConnectionToAppService'  # Název service connection
+      appType: 'webApp'
+      appName: 'app-iw5-2024-team-xdolak09-api'  # Název App Service (dle obrázku)
+      package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
