@@ -12,6 +12,7 @@ public interface IDatabaseFixture
     UserEntity? GetUserDirectly(Guid userId);
     FormEntity? GetFormDirectly(Guid formId);
     IUserRepository GetUserRepository();
+    IFormRepository GetFormRepository();
     IList<Guid> UserGuids { get; }
     IList<Guid> QuestionGuids { get; }
     IList<Guid> FormGuids { get; }
