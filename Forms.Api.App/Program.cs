@@ -7,6 +7,7 @@ using Forms.Api.BL.Facades;
 using Forms.Api.BL.Installers;
 using Forms.Api.DAL.Common;
 using Forms.Api.DAL.Common.Entities;
+using Forms.Api.DAL.EF;
 using Forms.Api.DAL.EF.Installers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -16,8 +17,11 @@ using Microsoft.AspNetCore.Localization;
 using Forms.Api.DAL.EF.Extensions;
 using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
+using Forms.Common.Models.Form;
+using Forms.Common.Models.Question;
 using Forms.Common.Models.User;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -34,7 +38,8 @@ ConfigureAutoMapper(builder.Services);
 
 var app = builder.Build();
 
-ValidateAutoMapperConfiguration(app.Services);
+// todo uncomment when questionmapper is ready
+//ValidateAutoMapperConfiguration(app.Services);
 
 UseDevelopmentSettings(app);
 UseSecurityFeatures(app);
@@ -42,6 +47,15 @@ UseLocalization(app);
 UseRouting(app);
 UseEndpoints(app);
 UseOpenApi(app);
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var dbContext = services.GetRequiredService<FormsDbContext>();
+    
+    dbContext.Database.Migrate();
+    dbContext.SeedData();
+}
 
 app.Run();
 
@@ -95,6 +109,7 @@ void ConfigureAutoMapper(IServiceCollection serviceCollection)
     serviceCollection.AddAutoMapper(typeof(EntityBase), typeof(ApiBLInstaller));
 }
 
+
 void ValidateAutoMapperConfiguration(IServiceProvider serviceProvider)
 {
     var mapper = serviceProvider.GetRequiredService<IMapper>();
@@ -108,6 +123,8 @@ void UseEndpoints(WebApplication application)
 
     // Use***Endpoints(endpointsBase);
     UseUserEndpoints(endpointsBase);
+    UseFormEndpoints(endpointsBase);
+    UseQuestionEndpoints(endpointsBase);
 }
 
 void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
@@ -129,6 +146,48 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
     userEndpoints.MapPost("upsert", (UserDetailModel user, IUserFacade userFacade) => userFacade.CreateOrUpdate(user));
 
     userEndpoints.MapDelete("{id:guid}", (Guid id, IUserFacade userFacade) => userFacade.Delete(id));
+}
+
+void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var formEndpoints = routeGroupBuilder.MapGroup("form")
+        .WithTags("form");
+
+    formEndpoints.MapGet("", (IFormFacade formFacade) => formFacade.GetAll());
+
+    formEndpoints.MapGet("{id:guid}", Results<Ok<FormDetailModel>, NotFound<string>> (Guid id, IFormFacade formFacade)
+        => formFacade.GetById(id) is { } form
+            ? TypedResults.Ok(form)
+            : TypedResults.NotFound($"Form with ID {id} not found"));
+
+    formEndpoints.MapPost("", (FormDetailModel form, IFormFacade formFacade) => formFacade.Create(form));
+
+    formEndpoints.MapPut("", (FormDetailModel form, IFormFacade formFacade) => formFacade.Update(form));
+
+    formEndpoints.MapPost("upsert", (FormDetailModel form, IFormFacade formFacade) => formFacade.CreateOrUpdate(form));
+
+    formEndpoints.MapDelete("{id:guid}", (Guid id, IFormFacade formFacade) => formFacade.Delete(id));
+}
+
+void UseQuestionEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var questionEndpoints = routeGroupBuilder.MapGroup("question")
+        .WithTags("question");
+
+    questionEndpoints.MapGet("", (IQuestionFacade questionFacade) => questionFacade.GetAll());
+
+    questionEndpoints.MapGet("{id:guid}", Results<Ok<QuestionDetailModel>, NotFound<string>> (Guid id, IQuestionFacade questionFacade)
+        => questionFacade.GetById(id) is { } question
+            ? TypedResults.Ok(question)
+            : TypedResults.NotFound($"Question with ID {id} not found"));
+
+    questionEndpoints.MapPost("", (QuestionDetailModel question, IQuestionFacade questionFacade) => questionFacade.Create(question));
+
+    questionEndpoints.MapPut("", (QuestionDetailModel question, IQuestionFacade questionFacade) => questionFacade.Update(question));
+
+    questionEndpoints.MapPost("upsert", (QuestionDetailModel question, IQuestionFacade questionFacade) => questionFacade.CreateOrUpdate(question));
+
+    questionEndpoints.MapDelete("{id:guid}", (Guid id, IQuestionFacade questionFacade) => questionFacade.Delete(id));
 }
 
 

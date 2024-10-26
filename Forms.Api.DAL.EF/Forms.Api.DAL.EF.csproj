@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Forms.Api.DAL.Common\Forms.Api.DAL.Common.csproj" />
+    <ProjectReference Include="..\Forms.Api.DAL.Memory\Forms.Api.DAL.Memory.csproj" />
   </ItemGroup>
 
   <ItemGroup>
