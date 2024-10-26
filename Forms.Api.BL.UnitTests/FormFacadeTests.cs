@@ -85,7 +85,8 @@ public class FormFacadeTests
                 FirstName = storage.Users[0].FirstName,
                 LastName = storage.Users[0].LastName,
                 Email = storage.Users[0].Email
-            }
+            },
+            UserId = storage.Users[0].Id
         };
         
         var updatedFormEntity = new FormEntity
@@ -95,7 +96,7 @@ public class FormFacadeTests
             Description = formModel.Description, 
             DateOpen = formModel.DateOpen,
             DateClose = formModel.DateClose,
-            User = storage.Users[0]
+            UserId = storage.Users[0].Id
         };
 
         // arrange mock
@@ -143,7 +144,8 @@ public class FormFacadeTests
                 FirstName = storage.Users[0].FirstName,
                 LastName = storage.Users[0].LastName,
                 Email = storage.Users[0].Email
-            }
+            },
+            UserId = storage.Users[0].Id
         };
         
         repositoryMock.Setup(repo => repo.GetById(formId)).Returns(formEntity);
@@ -181,7 +183,8 @@ public class FormFacadeTests
                 FirstName = storage.Users[0].FirstName,
                 LastName = storage.Users[0].LastName,
                 Email = storage.Users[0].Email
-            }
+            },
+            UserId = storage.Users[0].Id
         };
         
         var formEntity = new FormEntity
@@ -191,7 +194,6 @@ public class FormFacadeTests
             Description = formModel.Description,
             DateOpen = formModel.DateOpen,
             DateClose = formModel.DateClose,
-            User = storage.Users[0],
             UserId = formModel.User.Id
         };
         

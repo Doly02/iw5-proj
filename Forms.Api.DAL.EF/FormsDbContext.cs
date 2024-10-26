@@ -30,7 +30,8 @@ public class FormsDbContext : DbContext
 
         modelBuilder.Entity<UserEntity>()
             .HasMany(userEntity => userEntity.Forms)
-            .WithOne(formEntity => formEntity.User)
+            .WithOne()
+            .HasForeignKey(formEntity => formEntity.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<FormEntity>()

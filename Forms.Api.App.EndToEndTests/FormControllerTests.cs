@@ -59,7 +59,7 @@ public class FormControllerTests: IAsyncDisposable
         Assert.Equal(expectedForm.Id, returnedForm.Id);
         Assert.Equal(expectedForm.Name, returnedForm.Name);
         Assert.Equal(expectedForm.Description, returnedForm.Description);
-        Assert.Equal(expectedForm.User.Id, returnedForm.User.Id);
+        Assert.Equal(expectedForm.UserId, returnedForm.UserId);
     }
 
     
@@ -82,7 +82,8 @@ public class FormControllerTests: IAsyncDisposable
                 FirstName = storage.Users[0].FirstName,
                 LastName = storage.Users[0].LastName,
                 Email = storage.Users[0].Email
-            }
+            },
+            UserId = storage.Users[0].Id
         };
 
         // Serialize

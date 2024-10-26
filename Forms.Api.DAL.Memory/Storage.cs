@@ -98,7 +98,6 @@ namespace Forms.Api.DAL.Memory;
                 DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                 DateClose = DateTime.Now.AddDays(30),
                 UserId = _userGuids[0],
-                User = Users[0],                                // John Doe
                 Questions = Questions.Where(q => q.FormId == _formGuids[0]).ToList()
             });
             
@@ -110,7 +109,6 @@ namespace Forms.Api.DAL.Memory;
                 DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                 DateClose = DateTime.Now.AddDays(30),
                 UserId = _userGuids[1],
-                User = Users[1],                                // Jane Doe
                 Questions = Questions.Where(q => q.FormId == _formGuids[1]).ToList()
             });
             
@@ -122,7 +120,6 @@ namespace Forms.Api.DAL.Memory;
                 DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                 DateClose = DateTime.Now.AddDays(30),
                 UserId = _userGuids[2],
-                User = Users[2],                                // Alice Wonderland
                 Questions = Questions.Where(q => q.FormId == _formGuids[2]).ToList()
             });
         }
@@ -218,6 +215,5 @@ namespace Forms.Api.DAL.Memory;
                 Question = Questions[3],
                 UserResponse = new List<string>{}   // odpovede
             });
-            
         }
     }

@@ -22,6 +22,7 @@ public record FormDetailModel : IWithId
     
     
     public required UserListModel User { get; set; }
+    public required Guid UserId { get; set; }
     
     public IList<QuestionDetailModel> Questions { get; set; } = new List<QuestionDetailModel>();
     

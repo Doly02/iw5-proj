@@ -17,7 +17,6 @@ public class FormRepository : RepositoryBase<FormEntity>, IFormRepository
     public override FormEntity? GetById(Guid id)
     {
         return context.Forms
-            .Include(f => f.User)
             .Include(f => f.Questions)
             .FirstOrDefault(f => f.Id == id);
     }
@@ -28,7 +27,6 @@ public class FormRepository : RepositoryBase<FormEntity>, IFormRepository
         if (Exists(form.Id))
         {
             var existingForm = context.Forms
-                .Include(f => f.User)
                 .Include(f => f.Questions)
                 .Single(u => u.Id == form.Id);
             
