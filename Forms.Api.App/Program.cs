@@ -18,6 +18,7 @@ using Forms.Api.DAL.EF.Extensions;
 using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
 using Forms.Common.Models.Form;
+using Forms.Common.Models.Question;
 using Forms.Common.Models.User;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -123,6 +124,7 @@ void UseEndpoints(WebApplication application)
     // Use***Endpoints(endpointsBase);
     UseUserEndpoints(endpointsBase);
     UseFormEndpoints(endpointsBase);
+    UseQuestionEndpoints(endpointsBase);
 }
 
 void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
@@ -165,6 +167,27 @@ void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
     formEndpoints.MapPost("upsert", (FormDetailModel form, IFormFacade formFacade) => formFacade.CreateOrUpdate(form));
 
     formEndpoints.MapDelete("{id:guid}", (Guid id, IFormFacade formFacade) => formFacade.Delete(id));
+}
+
+void UseQuestionEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var questionEndpoints = routeGroupBuilder.MapGroup("question")
+        .WithTags("question");
+
+    questionEndpoints.MapGet("", (IQuestionFacade questionFacade) => questionFacade.GetAll());
+
+    questionEndpoints.MapGet("{id:guid}", Results<Ok<QuestionDetailModel>, NotFound<string>> (Guid id, IQuestionFacade questionFacade)
+        => questionFacade.GetById(id) is { } question
+            ? TypedResults.Ok(question)
+            : TypedResults.NotFound($"Question with ID {id} not found"));
+
+    questionEndpoints.MapPost("", (QuestionDetailModel question, IQuestionFacade questionFacade) => questionFacade.Create(question));
+
+    questionEndpoints.MapPut("", (QuestionDetailModel question, IQuestionFacade questionFacade) => questionFacade.Update(question));
+
+    questionEndpoints.MapPost("upsert", (QuestionDetailModel question, IQuestionFacade questionFacade) => questionFacade.CreateOrUpdate(question));
+
+    questionEndpoints.MapDelete("{id:guid}", (Guid id, IQuestionFacade questionFacade) => questionFacade.Delete(id));
 }
 
 
