@@ -21,7 +21,7 @@ public record FormDetailModel : IWithId
     public required DateTime DateClose { get; set; }
     
     
-    public required UserListModel User { get; set; }
+    public UserListModel User { get; set; }
     public required Guid UserId { get; set; }
     
     public IList<QuestionDetailModel> Questions { get; set; } = new List<QuestionDetailModel>();

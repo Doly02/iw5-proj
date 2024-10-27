@@ -76,13 +76,16 @@ public class ResponseFacadeTests
 
         var storage = new Storage();
         
-        // todo questionlistmodel doplnit
         var responseModel = new ResponseDetailModel
         {
             Id = storage.Responses[0].Id,
             Question = new QuestionListModel
             {
-                
+                Id = storage.Questions[0].Id,
+                Name = storage.Questions[0].Name,
+                Description = storage.Questions[0].Description,
+                Answer = storage.Questions[0].Answer,
+                QuestionType = storage.Questions[0].QuestionType,
             },
             User = new UserListModel
             {
@@ -133,13 +136,17 @@ public class ResponseFacadeTests
         var mapperMock = new Mock<IMapper>(MockBehavior.Strict);
 
         var storage = new Storage();
-        // todo fix questionlistmodel
+
         var responseModel = new ResponseDetailModel
         {
             Id = Guid.NewGuid(),
             Question = new QuestionListModel
             {
-                
+                Id = storage.Questions[0].Id,
+                Name = storage.Questions[0].Name,
+                Description = storage.Questions[0].Description,
+                Answer = storage.Questions[0].Answer,
+                QuestionType = storage.Questions[0].QuestionType,
             },
             User = new UserListModel
             {

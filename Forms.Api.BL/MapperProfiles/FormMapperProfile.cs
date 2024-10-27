@@ -10,7 +10,9 @@ public class FormMapperProfile : Profile
     public FormMapperProfile()
     {
         // Mapping for UserDetailModel
-        CreateMap<FormEntity, FormDetailModel>();
+        CreateMap<FormEntity, FormDetailModel>()
+            .ForMember(dest => dest.User, opt => opt.Ignore());
+;
         
         // Mapping for UserListModel
         CreateMap<FormEntity, FormListModel>();

@@ -96,7 +96,6 @@ public class SearchFacadeTests
                 Name = storage.Questions[0].Name,
                 Description = storage.Questions[0].Description,
                 QuestionType = storage.Questions[0].QuestionType,
-                Form = storage.Forms[0],
                 FormId = storage.Questions[0].FormId
             }
         };

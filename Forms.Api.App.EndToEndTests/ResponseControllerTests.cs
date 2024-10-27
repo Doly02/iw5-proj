@@ -75,12 +75,18 @@ public class ResponseControllerTests: IAsyncDisposable
     {
         // Arrange
         var storage = new Storage();
-        // todo
+
         var responseModel = new ResponseDetailModel
         {
             Id = Guid.NewGuid(),
             Question = new QuestionListModel
-                {},
+            {
+                Id = storage.Questions[0].Id,
+                Name = storage.Questions[0].Name,
+                Description = storage.Questions[0].Description,
+                Answer = storage.Questions[0].Answer,
+                QuestionType = storage.Questions[0].QuestionType,
+            },
             User = new UserListModel
             {
                 Id = storage.Users[0].Id,

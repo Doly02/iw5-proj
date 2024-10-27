@@ -182,6 +182,23 @@ namespace Forms.Api.DAL.Memory.Repositories
         {
             return users.Any(user => user.Id == id);
         }
+        
+        public async Task<List<UserEntity>> SearchAsync(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return new List<UserEntity>();
+
+            query = query.ToLower();
+
+            var result = users
+                .Where(user =>
+                    user.FirstName.ToLower().Contains(query) ||
+                    user.LastName.ToLower().Contains(query) ||
+                    user.Email.ToLower().Contains(query))
+                .ToList();
+
+            return await Task.FromResult(result);
+        }
     }
     
 }

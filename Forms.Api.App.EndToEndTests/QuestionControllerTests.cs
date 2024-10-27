@@ -77,8 +77,8 @@ public class QuestionControllerTests: IAsyncDisposable
             var returnedResponse = returnedEnumerator.Current;
         
             Assert.Equal(expectedResponse.Id, returnedResponse.Id);
-            Assert.Equal(expectedResponse.UserId, returnedResponse.UserId);
-            Assert.Equal(expectedResponse.QuestionId, returnedResponse.QuestionId);
+            Assert.Equal(expectedResponse.UserId, returnedResponse.User.Id);
+            Assert.Equal(expectedResponse.QuestionId, returnedResponse.Question.Id);
             Assert.Equal(expectedResponse.UserResponse, returnedResponse.UserResponse!);
         }
     }

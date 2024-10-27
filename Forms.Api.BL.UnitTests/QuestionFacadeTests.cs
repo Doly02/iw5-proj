@@ -42,6 +42,7 @@ public class QuestionFacadeTests
         var questions = storage.Questions.ToList();  // seed data
         var mappedQuestions = questions.Select(q => new QuestionListModel
         {
+            Id = q.Id,
             Name = q.Name,
             Description = q.Description,
             QuestionType = q.QuestionType,
