@@ -15,6 +15,7 @@ public class SqlFixture : IDatabaseFixture, IDisposable
     private readonly IUserRepository _userRepository;
     private readonly IFormRepository _formRepository;
     private readonly IQuestionRepository _questionRepository;
+    private readonly IResponseRepository _responseRepository;
     private readonly string _databaseName;
 
     public SqlFixture()
@@ -34,6 +35,7 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             new MapperConfiguration(cfg => cfg.AddProfile<FormEntityMapperProfile>()).CreateMapper());
         _questionRepository = new QuestionRepository(_context,
             new MapperConfiguration(cfg => cfg.AddProfile<QuestionMapperProfile>()).CreateMapper());
+        _responseRepository = new ResponseRepository(_context, new MapperConfiguration(cfg => cfg.AddProfile<ResponseMapperProfile>()).CreateMapper());
 
         CreateDatabase();
         SeedDatabase();
@@ -109,14 +111,41 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             FormId = form1.Id
         };
 
+        var response1 = new ResponseEntity
+        {
+            Id = ResponseGuids[0],
+            Question = question1,
+            QuestionId = question1.Id,
+            User = user1,
+            UserId = user1.Id,
+            UserResponse = ["Napisem ahoj!"]
+        };
+        
+        var response2 = new ResponseEntity
+        {
+            Id = ResponseGuids[1],
+            Question = question2,
+            QuestionId = question2.Id,
+            User = user1,
+            UserId = user1.Id,
+            UserResponse = ["Ano"]
+        };
+
         form1.Questions.Add(question1);
         form1.Questions.Add(question2);
         user1.Forms.Add(form1);
+        
+        user1.Responses.Add(response1);
+        question1.Responses.Add(response1);
+        
+        user1.Responses.Add(response2);
+        question2.Responses.Add(response2);
 
         _context.Users.AddRange(user1, user2);
         _context.Forms.Add(form1);
         _context.Forms.Add(form2);
         _context.Questions.AddRange(question1, question2);
+        _context.Responses.AddRange(response1, response2);
         _context.SaveChanges();
     }
 
@@ -128,10 +157,14 @@ public class SqlFixture : IDatabaseFixture, IDisposable
 
     public FormEntity? GetFormDirectly(Guid formId) =>
         _context.Forms.AsNoTracking().SingleOrDefault(f => f.Id == formId);
+    public ResponseEntity? GetResponseDirectly(Guid responseId) =>
+        _context.Responses.AsNoTracking().SingleOrDefault(f => f.Id == responseId);
 
+    
     public IUserRepository GetUserRepository() => _userRepository;
     public IFormRepository GetFormRepository() => _formRepository;
     public IQuestionRepository GetQuestionRepository() => _questionRepository;
+    public IResponseRepository GetResponseRepository() => _responseRepository;
 
     public IList<Guid> QuestionGuids { get; } = new List<Guid>
     {
@@ -143,6 +176,12 @@ public class SqlFixture : IDatabaseFixture, IDisposable
     {
         new("001000cd-44f4-4f44-aabb-3d96cc2cbf2e"),
         new("111000cd-44f4-4f44-aabb-3d96cc2cbf1f")
+    };
+
+    public IList<Guid> ResponseGuids { get; } = new List<Guid>
+    {
+        new("222000cd-44f4-4f44-aabb-3d96cc2cbf2a"),
+        new("333000cd-44f4-4f44-aabb-3d96cc2cbf3b")
     };
 
     public IList<Guid> UserGuids { get; } = new List<Guid>
