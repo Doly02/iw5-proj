@@ -39,7 +39,7 @@ namespace Forms.Api.DAL.Memory.Repositories
             var formEntityExisting = forms.SingleOrDefault(form => form.Id == entity.Id);
             if (formEntityExisting is null) return null;
 
-            // Aktualizace vlastností formuláře
+            /* Update Attributes of The Form */
             formEntityExisting.Name = entity.Name;
             formEntityExisting.Description = entity.Description;
             formEntityExisting.DateOpen = entity.DateOpen;
@@ -99,7 +99,7 @@ namespace Forms.Api.DAL.Memory.Repositories
 
         private void UpdateQuestions(FormEntity formEntity, IEnumerable<QuestionEntity> updatedQuestions)
         {
-            /* Detele Question That Are Not Already In The Form */
+            /* Delete Question That Are Not Already In The Form */
             var questionsToDelete = formEntity.Questions
                 .Where(existingQuestion => updatedQuestions.All(uq => uq.Id != existingQuestion.Id))
                 .ToList();
