@@ -134,7 +134,6 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Napis",
                 QuestionType = QuestionType.OpenQuestion,
                 FormId = _formGuids[0],
-                Form = Forms[0],
                 Answer = new List<string>()
             });
             
@@ -145,7 +144,6 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Vyber jednu z moznosti",
                 QuestionType = QuestionType.Selection,
                 FormId = _formGuids[0],
-                Form = Forms[0],
                 Answer = new List<string>{"Som muz", "Som zena" }
             });
             
@@ -156,7 +154,6 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Vyber z idealniho mista dovolene :D",
                 QuestionType = QuestionType.Selection,
                 FormId = _formGuids[2],
-                Form = Forms[2],
                 Answer = new List<string>{"Grecko", "Taliansko", "Egypt", "Bulharsko"}
             });
             
@@ -167,7 +164,6 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Kolik jsi mel na bodu z ISA cvika?",
                 QuestionType = QuestionType.Range,
                 FormId = _formGuids[1],
-                Form = Forms[1],
                 Answer = new List<string>{}   // todo doplnit range odpovedi
             });
         }

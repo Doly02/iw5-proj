@@ -88,7 +88,7 @@ public class QuestionFacadeTests
             Description = questionModel.Description,
             QuestionType = QuestionType.Selection,
             Answer = questionModel.Answer,
-            Form = storage.Forms[0]
+            FormId = storage.Forms[0].Id
         };
         
         // arrange mock
@@ -173,7 +173,7 @@ public class QuestionFacadeTests
             Description = questionModel.Description,
             QuestionType = QuestionType.Range,
             Answer = questionModel.Answer,
-            Form = storage.Forms[0]
+            FormId = storage.Forms[0].Id
         };
         
         repositoryMock.Setup(questionRepository => questionRepository.Insert(questionEntity)).Returns(questionEntity.Id);

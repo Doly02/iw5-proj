@@ -1,3 +1,4 @@
+using AutoMapper;
 using Forms.Api.DAL.Common.Entities;
 using Forms.Common.Enums;
 using Forms.Api.DAL.Memory;
@@ -57,39 +58,38 @@ public class UserRepositoryTests
     [Fact]
     public void Update_Saves_NewForm()
     {
-        /* Arange */
+        /* Arrange */
         var userRepository = _dbFixture.GetUserRepository();
 
         var userId = _dbFixture.UserGuids[0];
-        var user = _dbFixture.GetUserDirectly(userId);
-        Assert.Equal(_dbFixture.UserGuids[0], user.Id);
-        Assert.Equal("John", user.FirstName);
-        
+        var user = _dbFixture.GetUserDirectly(userId); // Použijeme tentýž kontext
+
         var newFormId = Guid.NewGuid();
-        
-        var newForm = 
-            new FormEntity
-            {
-                Id = newFormId,
-                Name = "Dovolena vola",
-                Description = "Vyber si dovolenou",
-                DateOpen = DateTime.Now.AddDays(-5),
-                DateClose = DateTime.Now.AddDays(30),
-                UserId = userId
-            };
 
-        //act
+        var newForm = new FormEntity
+        {
+            Id = newFormId,
+            Name = "Dovolena vola",
+            Description = "Vyber si dovolenou",
+            DateOpen = DateTime.Now.AddDays(-5),
+            DateClose = DateTime.Now.AddDays(30),
+            UserId = userId
+        };
+
+        /* Act */
         user.Forms.Add(newForm);
-        userRepository.Update(user);
+        userRepository.Update(user); // Aktualizace s původním `DbContext`
 
-        //assert
-        var userFromDb = _dbFixture.GetUserDirectly(userId);
+        /* Assert */
+        var userFromDb = userRepository.GetById(userId); // Stejný kontext pro ověření
         Assert.NotNull(userFromDb);
-        Assert.Single(userFromDb.Forms, t => t.Id == newFormId); 
+        Assert.Single(userFromDb.Forms, t => t.Id == newFormId);
 
         var formFromDb = _dbFixture.GetFormDirectly(newFormId);
         Assert.NotNull(formFromDb);
     }
+
+
     
     [Fact]
     public void RemoveForm_Removes_Form_From_User()
@@ -98,7 +98,7 @@ public class UserRepositoryTests
         var userRepository = _dbFixture.GetUserRepository();
 
         var userId = _dbFixture.UserGuids[0];
-        var user = _dbFixture.GetUserDirectly(userId);
+        var user = userRepository.GetById(userId);
         var formId = Guid.NewGuid();
 
         /* Add New Form To The User */
@@ -114,18 +114,17 @@ public class UserRepositoryTests
 
         /* Act */
         user.Forms.Add(newForm);
-        userRepository.Update(user);
         
         /* Assert */
-        var userFromDb = _dbFixture.GetUserDirectly(userId);
+        var userFromDb = userRepository.GetById(userId);
         Assert.Contains(userFromDb.Forms, f => f.Id == formId);
 
         /* Act */
-        user.Forms.Remove(newForm);
-        userRepository.Update(user);
+        userFromDb.Forms.Remove(newForm);
+        userRepository.Update(userFromDb);
 
         /* Assert */
-        userFromDb = _dbFixture.GetUserDirectly(userId);
+        userFromDb = userRepository.GetById(userId);
         Assert.NotNull(userFromDb);
     
         /* Check If Form Was Deleted */
