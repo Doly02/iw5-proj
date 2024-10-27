@@ -13,10 +13,9 @@ namespace Forms.Api.DAL.Common.Entities
         public required QuestionType QuestionType { get; set; }
         
         public Guid FormId { get; set; }
-        public required FormEntity Form { get; set; }
         public ICollection<ResponseEntity> Responses { get; set; } = new List<ResponseEntity>();
         
-        public List<string> Answer { get; set; } = new List<string>();
+        public List<string>? Answer { get; set; } 
     }
 
     public class QuestionEntityMapperProfile : Profile

@@ -1,23 +1,28 @@
 using AutoMapper;
 using Forms.Api.DAL.Common.Entities;
-using Forms.Common.Models.Question;
 using Forms.Common.Extensions;
+using Forms.Common.Models.Question;
+using Forms.Common.Models.Search;
 
-namespace Forms.Api.BL.MapperProfiles;
-
-public class QuestionMapperProfile : Profile
+namespace Forms.Api.BL.MapperProfiles
 {
-    public QuestionMapperProfile()
+    public class QuestionMapperProfile : Profile
     {
-        CreateMap<QuestionEntity, QuestionDetailModel>();
+        public QuestionMapperProfile()
+        {
+            CreateMap<QuestionEntity, QuestionDetailModel>()
+                .Ignore(dst => dst.Responses);
+            
+            CreateMap<QuestionEntity, QuestionListModel>();
 
-        CreateMap<QuestionEntity, QuestionListModel>();
-        
-        /* Reverse Mapping */
-        CreateMap<QuestionDetailModel, QuestionEntity>()
-            .ForMember(dst => dst.Responses, opt => opt.Ignore());
-
-        CreateMap<QuestionListModel, QuestionEntity>()
-            .ForMember(dst => dst.Responses, opt => opt.Ignore());
+            CreateMap<QuestionDetailModel, QuestionEntity>()
+                .ForMember(dest => dest.Responses, opt => opt.Ignore());
+            
+            CreateMap<QuestionEntity, SearchResultModel>()
+                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Type, opt => opt.MapFrom(_ => "Question"))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))             
+                .MapMember(dest => dest.Description, src => src.Description);
+        }
     }
 }

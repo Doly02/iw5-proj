@@ -41,6 +41,17 @@ public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
 
         return null;
     }
-    
-    
+
+
+    public async Task<List<UserEntity>> SearchAsync(string query)
+    {
+        query = query.ToLower();
+
+        return await context.Users
+            .Where(u => 
+                u.FirstName.ToLower().Contains(query) || 
+                u.LastName.ToLower().Contains(query) ||
+                u.Email.ToLower().Contains(query))
+            .ToListAsync();
+    }
 }

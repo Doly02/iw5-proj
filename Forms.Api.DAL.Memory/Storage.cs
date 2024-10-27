@@ -99,7 +99,6 @@ namespace Forms.Api.DAL.Memory;
                 DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                 DateClose = DateTime.Now.AddDays(30),
                 UserId = _userGuids[0],
-                User = Users[0],                                // John Doe
                 Questions = Questions.Where(q => q.FormId == _formGuids[0]).ToList()
             });
             
@@ -111,7 +110,6 @@ namespace Forms.Api.DAL.Memory;
                 DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                 DateClose = DateTime.Now.AddDays(30),
                 UserId = _userGuids[1],
-                User = Users[1],                                // Jane Doe
                 Questions = Questions.Where(q => q.FormId == _formGuids[1]).ToList()
             });
             
@@ -123,7 +121,6 @@ namespace Forms.Api.DAL.Memory;
                 DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
                 DateClose = DateTime.Now.AddDays(30),
                 UserId = _userGuids[2],
-                User = Users[2],                                // Alice Wonderland
                 Questions = Questions.Where(q => q.FormId == _formGuids[2]).ToList()
             });
         }
@@ -138,7 +135,6 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Napis",
                 QuestionType = QuestionType.OpenQuestion,
                 FormId = _formGuids[0],
-                Form = Forms[0],
                 Answer = new List<string>()
             });
             
@@ -149,7 +145,6 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Vyber jednu z moznosti",
                 QuestionType = QuestionType.Selection,
                 FormId = _formGuids[0],
-                Form = Forms[0],
                 Answer = new List<string>{"Som muz", "Som zena" }
             });
             
@@ -160,7 +155,6 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Vyber z idealniho mista dovolene :D",
                 QuestionType = QuestionType.Selection,
                 FormId = _formGuids[2],
-                Form = Forms[2],
                 Answer = new List<string>{"Grecko", "Taliansko", "Egypt", "Bulharsko"}
             });
             
@@ -171,7 +165,6 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Kolik jsi mel na bodu z ISA cvika?",
                 QuestionType = QuestionType.Range,
                 FormId = _formGuids[1],
-                Form = Forms[1],
                 Answer = new List<string>{}   // todo doplnit range odpovedi
             });
         }
@@ -219,6 +212,5 @@ namespace Forms.Api.DAL.Memory;
                 Question = Questions[3],
                 UserResponse = new List<string>{}   // odpovede
             });
-            
         }
     }
