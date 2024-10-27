@@ -20,7 +20,7 @@ public class ResponseFacadeTests
     [Fact]
     public void Response_Delete_By_Correct_Method_On_Repository()
     {
-        //arrange
+        // arrange
         var repositoryMock = new Mock<IResponseRepository>(MockBehavior.Strict);
         repositoryMock.Setup(responseRepository => responseRepository.Remove(It.IsAny<Guid>()));
 
@@ -29,10 +29,10 @@ public class ResponseFacadeTests
         var facade = new ResponseFacade(repository, mapper);
 
         var itemId = Guid.NewGuid();
-        //act
+        // act
         facade.Delete(itemId);
 
-        //assert
+        // assert
         repositoryMock.Verify(responseRepository => responseRepository.Remove(itemId));
     }
     

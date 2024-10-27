@@ -15,7 +15,7 @@ public class FormFacadeTests
     [Fact]
     public void Form_Delete_By_Correct_Method_On_Repository()
     {
-        //arrange
+        // arrange
         var repositoryMock = new Mock<IFormRepository>(MockBehavior.Strict);
         repositoryMock.Setup(formRepository => formRepository.Remove(It.IsAny<Guid>()));
 
@@ -24,10 +24,10 @@ public class FormFacadeTests
         var facade = new FormFacade(repository, mapper);
 
         var itemId = Guid.NewGuid();
-        //act
+        // act
         facade.Delete(itemId);
 
-        //assert
+        // assert
         repositoryMock.Verify(formRepository => formRepository.Remove(itemId));
     }
 
