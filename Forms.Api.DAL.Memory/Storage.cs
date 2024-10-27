@@ -5,7 +5,6 @@ namespace Forms.Api.DAL.Memory;
 
    public class Storage
     {
-        // todo guids
         private readonly IList<Guid> _userGuids = new List<Guid>
         {
             new("a23b7c9f-3edb-45ef-8a5b-3e7a2b5d9289"),
@@ -210,7 +209,7 @@ namespace Forms.Api.DAL.Memory;
                 QuestionId = _questionGuids[3],
                 User = Users[1],
                 Question = Questions[3],
-                UserResponse = new List<string>{}   // odpovede
+                UserResponse = new List<string>{}
             });
         }
     }

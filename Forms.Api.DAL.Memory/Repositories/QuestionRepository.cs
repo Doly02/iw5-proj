@@ -35,7 +35,6 @@ namespace Forms.Api.DAL.Memory.Repositories
             questionEntityExisting.Answer = entity.Answer;
             questionEntityExisting.FormId = entity.FormId;
             
-            // keep existing responses
             questionEntityExisting.Responses = GetResponsesByQuestionId(entity.Id);
 
             return questionEntityExisting.Id;
@@ -43,14 +42,12 @@ namespace Forms.Api.DAL.Memory.Repositories
 
         public void AddResponse(Guid questionId, ResponseEntity response)
         {
-            // Adds a new response to an existing question
             var question = _questions.SingleOrDefault(q => q.Id == questionId);
             if (question != null)  _responses.Add(response);
         }
         
         public void UpdateResponse(Guid responseId, ResponseEntity updatedResponse)
         {
-            // Nájde existujúcu odpoveď podľa ID a aktualizuje ju
             var response = _responses.SingleOrDefault(r => r.Id == responseId);
             if (response == null) return;
             
@@ -76,8 +73,7 @@ namespace Forms.Api.DAL.Memory.Repositories
         {
             var questionToRemove = _questions.SingleOrDefault(q => q.Id == id);
             if (questionToRemove == null) return;
-
-            // Delete Responses
+            
             var responsesToRemove = _responses.Where(response => response.QuestionId == id).ToList();
             foreach (var response in responsesToRemove)
             {

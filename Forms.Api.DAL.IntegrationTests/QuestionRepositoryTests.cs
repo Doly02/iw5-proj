@@ -85,7 +85,7 @@ public class QuestionRepositoryTests
         var questionFromDb = questionRepository.GetById(questionId);
         Assert.NotNull(questionFromDb);
         Assert.Equal(updatedName, questionFromDb.Name);
-        Assert.NotEmpty(questionFromDb.Responses); // Overenie, že odpovede zostali zachované
+        Assert.NotEmpty(questionFromDb.Responses);
     }
     
 }
