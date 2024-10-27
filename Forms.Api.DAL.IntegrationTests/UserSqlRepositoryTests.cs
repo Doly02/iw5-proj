@@ -7,15 +7,15 @@ using System;
 using System.Linq;
 using Xunit;
 
-public class UserSqlRepositoryTests : IClassFixture<SqlFixture>
+public class UserSqlRepositoryTests : IClassFixture<SqlFixture>, IDisposable
 {
     private readonly IUserRepository _userRepository;
     private readonly SqlFixture _fixture;
 
-    public UserSqlRepositoryTests(SqlFixture fixture)
+    public UserSqlRepositoryTests()
     {
-        _fixture = fixture;
-        _userRepository = fixture.GetUserRepository();
+        _fixture = new SqlFixture();
+        _userRepository = _fixture.GetUserRepository();
     }
 
     [Fact]
@@ -182,4 +182,8 @@ public class UserSqlRepositoryTests : IClassFixture<SqlFixture>
         Assert.Contains(user.Forms, f => f.Id == form.Id);
     }
 
+    public void Dispose()
+    {
+        _fixture.Dispose();
+    }
 }
