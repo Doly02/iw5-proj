@@ -79,7 +79,18 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             UserId = user1.Id,
             Questions = new List<QuestionEntity>()
         };
-
+        
+        var form2 = new FormEntity
+        {
+            Id = FormGuids[1],
+            Name = "Dovolena vola",
+            Description = "Odpocin si konecne ve sve vysnene destinaci!",
+            DateOpen = DateTime.Now.AddDays(-4),
+            DateClose = DateTime.Now.AddDays(27),
+            UserId = user2.Id,
+            Questions = new List<QuestionEntity>()
+        };
+        
         var question1 = new QuestionEntity
         {
             Id = QuestionGuids[0],
@@ -104,6 +115,7 @@ public class SqlFixture : IDatabaseFixture, IDisposable
 
         _context.Users.AddRange(user1, user2);
         _context.Forms.Add(form1);
+        _context.Forms.Add(form2);
         _context.Questions.AddRange(question1, question2);
         _context.SaveChanges();
     }
