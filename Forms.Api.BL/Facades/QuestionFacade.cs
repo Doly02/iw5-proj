@@ -4,6 +4,7 @@ using AutoMapper;
 using Forms.Api.DAL.Common.Entities;
 using Forms.Api.DAL.Common.Repositories;
 using Forms.Common.Models.Question;
+using Forms.Common.Models.Search;
 
 namespace Forms.Api.BL.Facades
 {
@@ -53,6 +54,13 @@ namespace Forms.Api.BL.Facades
         public void Delete(Guid id)
         {
             _questionRepository.Remove(id);
+        }
+        
+        public async Task<List<SearchResultModel>> SearchAsync(string query)
+        {
+            Console.WriteLine("Calling questions");
+            var questions = await _questionRepository.SearchAsync(query);
+            return _mapper.Map<List<SearchResultModel>>(questions);
         }
     }
 }

@@ -19,6 +19,7 @@ using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
 using Forms.Common.Models.Form;
 using Forms.Common.Models.Question;
+using Forms.Common.Models.Search;
 using Forms.Common.Models.User;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
@@ -38,8 +39,7 @@ ConfigureAutoMapper(builder.Services);
 
 var app = builder.Build();
 
-// todo uncomment when questionmapper is ready
-//ValidateAutoMapperConfiguration(app.Services);
+ValidateAutoMapperConfiguration(app.Services);
 
 UseDevelopmentSettings(app);
 UseSecurityFeatures(app);
@@ -125,6 +125,7 @@ void UseEndpoints(WebApplication application)
     UseUserEndpoints(endpointsBase);
     UseFormEndpoints(endpointsBase);
     UseQuestionEndpoints(endpointsBase);
+    UseSearchEndpoints(endpointsBase);
 }
 
 void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
@@ -146,6 +147,20 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
     userEndpoints.MapPost("upsert", (UserDetailModel user, IUserFacade userFacade) => userFacade.CreateOrUpdate(user));
 
     userEndpoints.MapDelete("{id:guid}", (Guid id, IUserFacade userFacade) => userFacade.Delete(id));
+}
+
+void UseSearchEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var searchEndpoints = routeGroupBuilder.MapGroup("search")
+        .WithTags("search");
+
+    searchEndpoints.MapGet("{query}", async (string query, SearchFacade searchFacade) =>
+    {
+        var results = await searchFacade.SearchAsync(query);
+        return results.Any()
+            ? Results.Ok(results)
+            : Results.NotFound($"No results found for query '{query}'");
+    });
 }
 
 void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)

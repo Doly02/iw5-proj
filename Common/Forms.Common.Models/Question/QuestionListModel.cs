@@ -3,8 +3,10 @@ using Forms.Common.Enums;
 
 namespace Forms.Common.Models.Question;
 
-public class QuestionListModel
+public record QuestionListModel : IWithId
 {
+    public required Guid Id { get; init; }
+
     public required string Name { get; set; }
         
     public required string Description { get; set; }

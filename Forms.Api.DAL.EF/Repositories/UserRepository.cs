@@ -30,7 +30,7 @@ public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
                 .Include(u => u.Responses)
                 .Include(u => u.Forms)
                 .Single(u => u.Id == user.Id);
-
+            
             mapper.Map(user, existingUser);
             
             context.Users.Update(existingUser);
@@ -40,5 +40,18 @@ public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
         }
 
         return null;
+    }
+
+
+    public async Task<List<UserEntity>> SearchAsync(string query)
+    {
+        query = query.ToLower();
+
+        return await context.Users
+            .Where(u => 
+                u.FirstName.ToLower().Contains(query) || 
+                u.LastName.ToLower().Contains(query) ||
+                u.Email.ToLower().Contains(query))
+            .ToListAsync();
     }
 }
