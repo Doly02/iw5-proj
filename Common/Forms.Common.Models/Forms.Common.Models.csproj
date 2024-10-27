@@ -36,6 +36,29 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Resources\Texts\ResponseDetailModelResources.Designer.cs">
+      <DependentUpon>ResponseDetailModelResources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Resources\Texts\ResponseDetailModelResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResponseDetailModelResources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Texts\ResponseDetailModelResources.cs.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResponseDetailModelResources.cs.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Texts\ResponseDetailModelResources.en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ResponseDetailModelResources.en.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <EmbeddedResource Update="Resources\Texts\QuestionDetailModelResources.resx">
       <LastGenOutput>QuestionDetailModelResources.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
@@ -43,6 +66,17 @@
     <EmbeddedResource Update="Resources\Texts\QuestionDetailModelResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>QuestionDetailModelResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Texts\ResponseDetailModelResources.resx">
+      <LastGenOutput>ResponseDetailModelResources.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Texts\ResponseDetailModelResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>ResponseDetailModelResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

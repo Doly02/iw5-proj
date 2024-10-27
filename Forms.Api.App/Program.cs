@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Localization;
 using Forms.Api.DAL.EF.Extensions;
 using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
+using Forms.Common.Models.Response;
 using Forms.Common.Models.Form;
 using Forms.Common.Models.Question;
 using Forms.Common.Models.Search;
@@ -123,6 +124,7 @@ void UseEndpoints(WebApplication application)
 
     // Use***Endpoints(endpointsBase);
     UseUserEndpoints(endpointsBase);
+    UseResponseEndpoints(endpointsBase);
     UseFormEndpoints(endpointsBase);
     UseQuestionEndpoints(endpointsBase);
     UseSearchEndpoints(endpointsBase);
@@ -203,6 +205,27 @@ void UseQuestionEndpoints(RouteGroupBuilder routeGroupBuilder)
     questionEndpoints.MapPost("upsert", (QuestionDetailModel question, IQuestionFacade questionFacade) => questionFacade.CreateOrUpdate(question));
 
     questionEndpoints.MapDelete("{id:guid}", (Guid id, IQuestionFacade questionFacade) => questionFacade.Delete(id));
+}
+
+void UseResponseEndpoints(RouteGroupBuilder routeGroupBuilder)
+{
+    var responseEndpoints = routeGroupBuilder.MapGroup("response")
+        .WithTags("response");
+
+    responseEndpoints.MapGet("", (IResponseFacade responseFacade) => responseFacade.GetAll());
+
+    responseEndpoints.MapGet("{id:guid}", Results<Ok<ResponseDetailModel>, NotFound<string>> (Guid id, IResponseFacade responseFacade)
+        => responseFacade.GetById(id) is { } response
+            ? TypedResults.Ok(response)
+            : TypedResults.NotFound($"Response with ID {id} not found"));
+
+    responseEndpoints.MapPost("", (ResponseDetailModel response, IResponseFacade responseFacade) => responseFacade.Create(response));
+
+    responseEndpoints.MapPut("", (ResponseDetailModel response, IResponseFacade responseFacade) => responseFacade.Update(response));
+
+    responseEndpoints.MapPost("upsert", (ResponseDetailModel response, IResponseFacade responseFacade) => responseFacade.CreateOrUpdate(response));
+
+    responseEndpoints.MapDelete("{id:guid}", (Guid id, IResponseFacade responseFacade) => responseFacade.Delete(id));
 }
 
 
