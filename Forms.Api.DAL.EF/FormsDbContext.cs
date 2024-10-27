@@ -36,7 +36,8 @@ public class FormsDbContext : DbContext
 
         modelBuilder.Entity<FormEntity>()
             .HasMany(formEntity => formEntity.Questions)
-            .WithOne(questionEntity => questionEntity.Form)
+            .WithOne()  
+            .HasForeignKey(questionEntity => questionEntity.FormId) 
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<QuestionEntity>()
