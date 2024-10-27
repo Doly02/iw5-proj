@@ -32,8 +32,6 @@ public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
                 .Single(u => u.Id == user.Id);
 
             mapper.Map(user, existingUser);
-            UpdateForms(existingUser, user.Forms);
-            UpdateResponses(existingUser, user.Responses);
             
             context.Users.Update(existingUser);
             context.SaveChanges();
@@ -42,23 +40,5 @@ public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
         }
 
         return null;
-    }
-    
-    private void UpdateForms(UserEntity existingUser, ICollection<FormEntity> newForms)
-    {
-        existingUser.Forms.Clear();
-        foreach (var form in newForms)
-        {
-            existingUser.Forms.Add(form);
-        }
-    }
-
-    private void UpdateResponses(UserEntity existingUser, ICollection<ResponseEntity> newResponses)
-    {
-        existingUser.Responses.Clear();
-        foreach (var response in newResponses)
-        {
-            existingUser.Responses.Add(response);
-        }
     }
 }
