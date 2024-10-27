@@ -32,7 +32,7 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
         return result;
     }
     
-    public QuestionEntity? GetQuestionDirect(Guid questionId)
+    public QuestionEntity? GetQuestionDirectly(Guid questionId)
     {
         var question = _inMemoryStorage.Value.Questions.SingleOrDefault(t => t.Id == questionId);
         if (null == question)
@@ -69,6 +69,12 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
     {
         return new FormRepository(_inMemoryStorage.Value);
     }
+    
+    public IQuestionRepository GetQuestionRepository()
+    {
+        return new QuestionRepository(_inMemoryStorage.Value);
+    }
+    
     public IList<Guid> QuestionGuids { get; } = new List<Guid>
     {
         new("23b19020-8709-1010-a200-11397aa416dc"),
