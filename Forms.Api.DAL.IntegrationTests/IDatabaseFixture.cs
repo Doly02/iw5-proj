@@ -7,12 +7,12 @@ namespace Forms.API.DAL.IntegrationTests;
 
 public interface IDatabaseFixture
 {
-    QuestionEntity? GetQuestionDirect(Guid userId);
-    
+    QuestionEntity? GetQuestionDirectly(Guid questionId);
     UserEntity? GetUserDirectly(Guid userId);
     FormEntity? GetFormDirectly(Guid formId);
     IUserRepository GetUserRepository();
     IFormRepository GetFormRepository();
+    IQuestionRepository GetQuestionRepository();
     IList<Guid> UserGuids { get; }
     IList<Guid> QuestionGuids { get; }
     IList<Guid> FormGuids { get; }
