@@ -152,7 +152,6 @@ namespace Forms.Api.DAL.Memory.Repositories
                     Description = question.Description,
                     QuestionType = question.QuestionType,
                     FormId = question.FormId,
-                    Form = formEntity,
                     Responses = question.Responses,
                 });
             }

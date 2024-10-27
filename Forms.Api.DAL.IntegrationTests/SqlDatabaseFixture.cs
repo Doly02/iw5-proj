@@ -113,6 +113,11 @@ public class SqlDatabaseFixture : IDatabaseFixture, IDisposable
         context.SaveChanges();
     }
 
+    public QuestionEntity? GetQuestionDirectly(Guid questionId)
+    {
+        throw new NotImplementedException();
+    }
+
     public UserEntity? GetUserDirectly(Guid userId)
     {
         return DeepClone(_context.Users
@@ -142,7 +147,17 @@ public class SqlDatabaseFixture : IDatabaseFixture, IDisposable
     {
         return new UserRepository(_context, _mapper); // Konfigurace vašeho repository s kontextem
     }
-    
+
+    public IFormRepository GetFormRepository()
+    {
+        throw new NotImplementedException();
+    }
+
+    public IQuestionRepository GetQuestionRepository()
+    {
+        throw new NotImplementedException();
+    }
+
     private T DeepClone<T>(T input)
     {
         var json = JsonConvert.SerializeObject(input);
