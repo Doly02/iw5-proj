@@ -18,8 +18,6 @@ public class FormMapperProfile : Profile
         // Reverse mapping back to UserEntity
         CreateMap<FormDetailModel, FormEntity>()
             // Ignoring Questions
-            .ForMember(dest => dest.Questions, opt => opt.Ignore())
-            // Ignoring User
-            .ForMember(dest => dest.User, opt => opt.Ignore());
+            .ForMember(dest => dest.Questions, opt => opt.Ignore());
     }
 }

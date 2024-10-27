@@ -16,11 +16,9 @@ namespace Forms.Common.Models.Question
         
         [Required(ErrorMessageResourceName = nameof(QuestionDetailModelResources.Description_Required_ErrorMessage), ErrorMessageResourceType = typeof(QuestionDetailModelResources))]
         public required string Description { get; set; }
-        
-        public List<string>? Answer { get; set; } 
-        
         public required QuestionType QuestionType { get; set; }
-        
+        public List<string>? Answer { get; set; } 
+        public Guid FormId { get; set; }
         public IList<ResponseDetailModel> Responses { get; set; } = new List<ResponseDetailModel>();
         
     }

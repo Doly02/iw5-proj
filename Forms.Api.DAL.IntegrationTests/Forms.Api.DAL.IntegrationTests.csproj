@@ -11,6 +11,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.10" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="xunit" Version="2.9.2" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
@@ -20,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Forms.Api.BL\Forms.Api.BL.csproj" />
     <ProjectReference Include="..\Forms.Api.DAL.EF\Forms.Api.DAL.EF.csproj" />
     <ProjectReference Include="..\Forms.Api.DAL.Memory\Forms.Api.DAL.Memory.csproj" />
   </ItemGroup>

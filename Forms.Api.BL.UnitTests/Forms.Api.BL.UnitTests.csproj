@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
     <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="xunit" Version="2.9.0" />
@@ -20,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Forms.Api.BL\Forms.Api.BL.csproj" />
+    <ProjectReference Include="..\Forms.Api.DAL.Memory\Forms.Api.DAL.Memory.csproj" />
     <ProjectReference Include="..\Forms.Api.DAL.Memory\Forms.Api.DAL.Memory.csproj" />
   </ItemGroup>
     <ItemGroup>

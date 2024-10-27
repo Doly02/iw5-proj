@@ -30,12 +30,14 @@ public class FormsDbContext : DbContext
 
         modelBuilder.Entity<UserEntity>()
             .HasMany(userEntity => userEntity.Forms)
-            .WithOne(formEntity => formEntity.User)
+            .WithOne()
+            .HasForeignKey(formEntity => formEntity.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<FormEntity>()
             .HasMany(formEntity => formEntity.Questions)
-            .WithOne(questionEntity => questionEntity.Form)
+            .WithOne()  
+            .HasForeignKey(questionEntity => questionEntity.FormId) 
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<QuestionEntity>()
@@ -73,16 +75,14 @@ public class FormsDbContext : DbContext
             .Metadata.SetValueComparer(listComparer);
         
     }
-    
+
     public void SeedData()
     {
-        
         Users.RemoveRange(Users);
         Forms.RemoveRange(Forms);
         Questions.RemoveRange(Questions);
         Responses.RemoveRange(Responses);
         SaveChanges();
-        
         
         var storage = new Storage();
 
