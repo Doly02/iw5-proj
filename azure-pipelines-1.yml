@@ -1,6 +1,5 @@
 trigger:
-- master  # Tato pipeline se spustí pouze na master větvi
-- test-deploy-pipeline
+- master
 
 pool:
   vmImage: 'windows-latest'
