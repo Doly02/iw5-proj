@@ -1,36 +1,40 @@
 trigger:
-  branches:
-    include:
-      - master  # Pipeline se spustí při každém commitu do master větve
+- master
 
 pool:
-  vmImage: 'windows-latest'  # Můžete použít i 'ubuntu-latest' podle preferencí
+  vmImage: 'windows-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  dotNetFramework: 'net8.0'
+  dotNetVersion: '8.0.x'
+  targetRuntime: 'win-x64'
 
 steps:
   - task: UseDotNet@2
     inputs:
-      packageType: 'sdk'
-      version: '8.x'  # Verze .NET (na obrázku je uvedeno Dotnet - v8.0)
+      version: $(dotNetVersion)
+      includePreviewVersions: true
 
   - task: DotNetCoreCLI@2
-    inputs:
-      command: 'restore'
-      projects: '**/*.csproj'
-
-  - task: DotNetCoreCLI@2
+    displayName: 'Build .NET Project'
     inputs:
       command: 'build'
-      projects: '**/*.csproj'
+      projects: '**/Forms.Api.App.csproj'
+      arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
+    displayName: 'Publish .NET Project'
     inputs:
       command: 'publish'
-      projects: '**/*.csproj'
-      arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+      publishWebProjects: true
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      zipAfterPublish: true
 
   - task: AzureWebApp@1
+    displayName: 'Deploy to Azure Web App'
     inputs:
-      azureSubscription: 'AzureConnectionToAppService'  # Název service connection
+      azureSubscription: 'AzureConnectionToAppService'
       appType: 'webApp'
-      appName: 'app-iw5-2024-team-xdolak09-api'  # Název App Service (dle obrázku)
+      appName: 'app-iw5-2024-team-xdolak09-api'
       package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
