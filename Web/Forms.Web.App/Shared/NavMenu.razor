@@ -1,0 +1,64 @@
+@namespace Forms.Web.App
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item">
+                    <NavLink href="" Match="NavLinkMatch.All" ActiveClass="active border-bottom border-success" class="nav-link font-weight-bold">
+                        Hlavní stránka
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/forms" Match="NavLinkMatch.All" ActiveClass="active border-bottom border-success" class="nav-link font-weight-bold">
+                        Formuláře
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/forms/create" Match="NavLinkMatch.All" ActiveClass="active border-bottom border-success" class="nav-link font-weight-bold">
+                        Vytvořit formulář
+                    </NavLink>
+                </li>
+                <li class="nav-item">
+                    <NavLink href="/users" Match="NavLinkMatch.All" ActiveClass="active border-bottom border-success" class="nav-link font-weight-bold">
+                        Uživatelé
+                    </NavLink>
+                </li>
+                @if (isLoggedIn)
+                {
+                    <li class="nav-item">
+                        <a href="/logout" class="nav-link btn btn-danger btn-sm">Odhlášení</a>
+                    </li>
+                }
+                else
+                {
+                    <li class="nav-item">
+
+
+                        <a href="/login" class="nav-link active btn btn-primary btn-sm mx-2">Přihlášení</a>
+                    </li>
+
+                    <li class="nav-item">
+
+                        <a href="/login" class="nav-link active btn btn-info btn-sm">Registrace</a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</nav>
+
+@code {
+    private bool isLoggedIn;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // todo
+        isLoggedIn = false;
+    }
+}

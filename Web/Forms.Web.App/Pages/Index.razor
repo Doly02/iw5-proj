@@ -1,24 +1,18 @@
 ﻿@page "/"
-@using Microsoft.Extensions.Localization
 
-<div class="position-fixed" style="
-    background-position: center; 
-    background-size: cover; 
-    min-height: 100vh; 
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;">
-</div>
-<div class="row">
-    <div class="jumbotron col-md-6 bg-transparent text-white mt-5">
-        <h1>Title</h1>
-        <p class="lead font-weight-bold mt-5 mb-4">
-            Description
-        </p>
-        <NavLink href="/users" Match="NavLinkMatch.All" class="btn btn-success btn-lg">
-            Gotousers
-        </NavLink>
 
+<div class="container mt-5">
+    
+    <div class="row justify-content-center mt-3">
+        <div class="jumbotron col-md-8 bg-light text-dark p-5">
+            <h1 class="display-4">Vítejte v mé aplikaci!</h1>
+            <p class="lead">Tvořte, upravujte a sdílejte formuláře snadno a rychle.</p>
+            <hr class="my-4">
+            <p>Začněte vytvořením nového formuláře, přihlášením nebo prohlížením existujících formulářů.</p>
+            <div class="d-flex justify-content-center flex-wrap">
+                <a href="/create" class="btn btn-primary btn-lg mb-2 mx-2">Vytvořit nový formulář</a>
+                <a href="/forms" class="btn btn-outline-secondary btn-lg mb-2 mx-2">Prohlížet formuláře</a>
+            </div>
+        </div>
     </div>
 </div>
