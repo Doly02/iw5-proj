@@ -6,10 +6,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="MapperProfiles\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\Common\Forms.Common\Forms.Common.csproj" />
       <ProjectReference Include="..\..\Forms.Api.BL\Forms.Api.BL.csproj" />
       <ProjectReference Include="..\Forms.Web.DAL\Forms.Web.DAL.csproj" />

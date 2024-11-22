@@ -13,13 +13,13 @@
     @Body
 
     <div class="position-fixed fixed-bottom m-4">
-        <OnlineStatusIndicator IsOnlineChanged="isOnline => OnlineStatusChangedAsync(isOnline)">
-            <OnlineFragment>
-                <h3 class="badge badge-success">Online</h3>
-            </OnlineFragment>
-            <OfflineFragment>
-                <h3 class="badge badge-danger">Offline</h3>
-            </OfflineFragment>
-        </OnlineStatusIndicator>
+        @if (IsOnline)
+        {
+        <h3 class="badge badge-success">Online</h3>
+        }
+        else
+        {
+        <h3 class="badge badge-danger">Offline</h3>
+        }
     </div>
 </div>
