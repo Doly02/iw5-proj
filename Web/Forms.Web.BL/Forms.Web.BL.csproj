@@ -8,11 +8,26 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\Common\Forms.Common.Models\Forms.Common.Models.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\Forms.Common.Models\Forms.Common.Models.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+=======
+      <PackageReference Include="System.Net.Http" Version="4.3.4" />
+>>>>>>> c4533101cf6da7b7ec27afe78db156dd1b9be033
     </ItemGroup>
 
 </Project>
