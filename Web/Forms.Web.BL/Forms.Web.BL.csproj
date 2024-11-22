@@ -1,33 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-    </PropertyGroup>
-
     <ItemGroup>
-      <PackageReference Include="System.Net.Http" Version="4.3.4" />
+        <PackageReference Include="Microsoft.JSInterop.WebAssembly" Version="8.0.10" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Common\Forms.Common.Models\Forms.Common.Models.csproj" />
+        <Folder Include="MapperProfiles\" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\Common\Forms.Common.Models\Forms.Common.Models.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-=======
-      <PackageReference Include="System.Net.Http" Version="4.3.4" />
->>>>>>> c4533101cf6da7b7ec27afe78db156dd1b9be033
+      <ProjectReference Include="..\..\Common\Forms.Common\Forms.Common.csproj" />
+      <ProjectReference Include="..\..\Forms.Api.BL\Forms.Api.BL.csproj" />
+      <ProjectReference Include="..\Forms.Web.DAL\Forms.Web.DAL.csproj" />
     </ItemGroup>
 
 </Project>

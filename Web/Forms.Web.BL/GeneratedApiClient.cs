@@ -25,7 +25,7 @@ namespace Forms.Web.BL
     using System = global::System;
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial interface IUserClient
+    public partial interface IUserApiClient
     {
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserListModel>> UserGetAsync(string culture);
@@ -72,7 +72,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class UserClient : IUserClient
+    public partial class UserApiClient : IUserApiClient
     {
         #pragma warning disable 8618
         private string _baseUrl;
@@ -83,7 +83,7 @@ namespace Forms.Web.BL
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public UserClient(System.Net.Http.HttpClient httpClient)
+        public UserApiClient(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             BaseUrl = "https://localhost:44378";
@@ -753,7 +753,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial interface IResponseClient
+    public partial interface IResponseApiClient
     {
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ResponseListModel>> ResponseGetAsync(string culture);
@@ -800,7 +800,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ResponseClient : IResponseClient
+    public partial class ResponseApiClient : IResponseApiClient
     {
         #pragma warning disable 8618
         private string _baseUrl;
@@ -811,7 +811,7 @@ namespace Forms.Web.BL
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public ResponseClient(System.Net.Http.HttpClient httpClient)
+        public ResponseApiClient(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             BaseUrl = "https://localhost:44378";
@@ -1481,7 +1481,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial interface IFormClient
+    public partial interface IFormApiClient
     {
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<FormListModel>> FormGetAsync(string culture);
@@ -1528,7 +1528,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class FormClient : IFormClient
+    public partial class FormApiClient : IFormApiClient
     {
         #pragma warning disable 8618
         private string _baseUrl;
@@ -1539,7 +1539,7 @@ namespace Forms.Web.BL
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public FormClient(System.Net.Http.HttpClient httpClient)
+        public FormApiClient(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             BaseUrl = "https://localhost:44378";
@@ -2209,7 +2209,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial interface IQuestionClient
+    public partial interface IQuestionApiClient
     {
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<QuestionListModel>> QuestionGetAsync(string culture);
@@ -2256,7 +2256,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class QuestionClient : IQuestionClient
+    public partial class QuestionApiClient : IQuestionApiClient
     {
         #pragma warning disable 8618
         private string _baseUrl;
@@ -2267,7 +2267,7 @@ namespace Forms.Web.BL
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public QuestionClient(System.Net.Http.HttpClient httpClient)
+        public QuestionApiClient(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             BaseUrl = "https://localhost:44378";
@@ -2937,7 +2937,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial interface ISearchClient
+    public partial interface ISearchApiClient
     {
         /// <exception cref="ApiException">A server side error occurred.</exception>
         System.Threading.Tasks.Task SearchAsync(string query, string culture);
@@ -2949,7 +2949,7 @@ namespace Forms.Web.BL
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.2.0.0 (NJsonSchema v11.1.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class SearchClient : ISearchClient
+    public partial class SearchApiClient : ISearchApiClient
     {
         #pragma warning disable 8618
         private string _baseUrl;
@@ -2960,7 +2960,7 @@ namespace Forms.Web.BL
         private Newtonsoft.Json.JsonSerializerSettings _instanceSettings;
 
     #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public SearchClient(System.Net.Http.HttpClient httpClient)
+        public SearchApiClient(System.Net.Http.HttpClient httpClient)
     #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
         {
             BaseUrl = "https://localhost:44378";
