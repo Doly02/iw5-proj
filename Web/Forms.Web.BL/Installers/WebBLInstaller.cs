@@ -26,6 +26,12 @@ namespace Forms.Web.BL.Installers
                 var client = CreateApiHttpClient(provider, apiBaseUrl);
                 return new UserApiClient(client, apiBaseUrl);
             });
+            
+            serviceCollection.AddTransient<IFormApiClient, FormApiClient>(provider =>
+            {
+                var client = CreateApiHttpClient(provider, apiBaseUrl);
+                return new FormApiClient(client, apiBaseUrl);
+            });
 
             serviceCollection.Scan(selector =>
                 selector.FromAssemblyOf<WebBLInstaller>()
