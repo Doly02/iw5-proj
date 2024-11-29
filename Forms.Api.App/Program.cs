@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using AutoMapper;
 using AutoMapper.Internal;
+using Forms.Api.App.Processors;
 using Forms.Api.BL.Facades;
 using Forms.Api.BL.Installers;
 using Forms.Api.DAL.Common;
@@ -79,8 +80,8 @@ void ConfigureLocalization(IServiceCollection serviceCollection)
 void ConfigureOpenApiDocuments(IServiceCollection serviceCollection)
 {
     serviceCollection.AddEndpointsApiExplorer();
-    // serviceCollection.AddOpenApiDocument(settings =>
-    //     settings.OperationProcessors.Add(new RequestCultureOperationProcessor()));
+     serviceCollection.AddOpenApiDocument(settings =>
+         settings.OperationProcessors.Add(new RequestCultureOperationProcessor()));
 }
 
 void ConfigureDependencies(IServiceCollection serviceCollection, IConfiguration configuration)

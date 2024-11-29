@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.JSInterop.WebAssembly" Version="8.0.10" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\Forms.Common\Forms.Common.csproj" />
+      <ProjectReference Include="..\..\Forms.Api.BL\Forms.Api.BL.csproj" />
+      <ProjectReference Include="..\Forms.Web.DAL\Forms.Web.DAL.csproj" />
+    </ItemGroup>
+
+</Project>

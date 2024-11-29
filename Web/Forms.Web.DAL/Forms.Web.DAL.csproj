@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.JSInterop" Version="8.0.10" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Common\Forms.Common.Models\Forms.Common.Models.csproj" />
+      <ProjectReference Include="..\..\Common\Forms.Common\Forms.Common.csproj" />
+    </ItemGroup>
+
+</Project>
