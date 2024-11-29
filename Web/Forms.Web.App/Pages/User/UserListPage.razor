@@ -1,0 +1,41 @@
+@page "/users"
+@namespace Forms.Web.App.Pages
+@layout ListLayout
+@using Forms.Web.App.Extensions
+@inherits PageBase
+
+
+
+<div class="d-flex flex-row justify-content-between align-items-center mb-4" >
+    <h1>Uživatelé</h1>
+</div>
+
+<div class="d-flex flex-wrap">
+    @foreach (var user in Users)
+    {
+
+        <div class="card m-1" style="width: 16rem;">
+            <img class="card-img-top" src="@user.PhotoUrl" alt="Card image cap">
+            <div class="card-body">
+                <h5 class="card-title">
+                    @{
+                        if (user.Id == Guid.Empty)
+                        {
+                            <span>@user.FirstName</span>
+                        }
+                        else
+                        {
+                            <NavLink href="@($"/user/{user.Id}")">@user.FirstName @user.LastName</NavLink>
+                        }
+                    }
+                </h5>
+                @{
+                    if (user.Id != Guid.Empty)
+                    {
+                        <p>@user.Email</p>
+                    }
+                }
+            </div>
+        </div>
+    }
+</div>
