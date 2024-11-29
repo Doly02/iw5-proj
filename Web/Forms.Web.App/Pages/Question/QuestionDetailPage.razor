@@ -1,0 +1,71 @@
+@page "/QuestionDetailPage/{id:guid}"
+@inject HttpClient Http
+@using Forms.Common.Models.Question
+
+<h3>Detail otázky</h3>
+
+@if (Question == null)
+{
+    <p>Načítání...</p>
+}
+else
+{
+    <div>
+        <h4>@Question.Name</h4>
+        <p><strong>Popis:</strong> @Question.Description</p>
+        <p><strong>Typ otázky:</strong> @Question.QuestionType</p>
+
+        @if (Question.Answer != null && Question.Answer.Any())
+        {
+            <p><strong>Odpovědi:</strong></p>
+            <ul>
+                @foreach (var answer in Question.Answer)
+                {
+                    <li>@answer</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Žádné odpovědi.</p>
+        }
+
+        <p><strong>ID Formuláře:</strong> @Question.FormId</p>
+
+        @if (Question.Responses.Any())
+        {
+            <p><strong>Odpovědi uživatelů:</strong></p>
+            <ul>
+                @foreach (var response in Question.Responses)
+                {
+                    <li>@response.UserResponse</li> <!-- Response -->
+                }
+            </ul>
+        }
+        else
+        {
+            <p>Žádné uživatelské odpovědi.</p>
+        }
+    </div>
+}
+
+@code {
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private QuestionDetailModel? Question { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        try
+        {
+            // Adjusted URL And Logic Of Question Detail
+            Question = await Http.GetFromJsonAsync<QuestionDetailModel>($"api/questions/{Id}");
+        }
+        catch (Exception ex)
+        {
+            // Error
+            Console.Error.WriteLine($"Chyba při načítání otázky: {ex.Message}");
+        }
+    }
+}
