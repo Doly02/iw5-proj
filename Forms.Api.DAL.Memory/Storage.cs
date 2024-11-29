@@ -95,8 +95,8 @@ namespace Forms.Api.DAL.Memory;
                 Id = _formGuids[0],
                 Name = "VUT FIT",
                 Description = "Bud FIT",
-                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                DateClose = DateTime.Now.AddDays(30),
+                DateOpen = new DateTime(2024, 11, 29, 10, 00, 00),
+                DateClose = new DateTime(2024, 12, 12, 10, 00, 00),
                 UserId = _userGuids[0],
                 Questions = Questions.Where(q => q.FormId == _formGuids[0]).ToList()
             });
@@ -104,10 +104,10 @@ namespace Forms.Api.DAL.Memory;
             Forms.Add(new FormEntity
             {
                 Id = _formGuids[1],
-                Name = "VUT FIT",
-                Description = "Bud FIT",
-                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                DateClose = DateTime.Now.AddDays(30),
+                Name = "VUT FIT 2",
+                Description = "Bud FIT 2",
+                DateOpen = new DateTime(2024, 12, 05, 08, 00, 00),
+                DateClose = new DateTime(2024, 12, 10, 10, 00, 00),
                 UserId = _userGuids[1],
                 Questions = Questions.Where(q => q.FormId == _formGuids[1]).ToList()
             });
@@ -117,8 +117,8 @@ namespace Forms.Api.DAL.Memory;
                 Id = _formGuids[2],
                 Name = "Dovolena Form",
                 Description = "Formular pro vyber dovolene",
-                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                DateClose = DateTime.Now.AddDays(30),
+                DateOpen = new DateTime(2024, 11, 20, 15, 30, 00),
+                DateClose = new DateTime(2024, 12, 10, 10, 00, 00),
                 UserId = _userGuids[2],
                 Questions = Questions.Where(q => q.FormId == _formGuids[2]).ToList()
             });
