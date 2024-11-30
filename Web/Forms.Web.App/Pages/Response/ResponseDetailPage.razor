@@ -1,0 +1,61 @@
+@page "/ResponseDetailPage"
+@inherits ComponentBase
+@using Forms.Common.Models.Response
+@using Forms.Web.BL.Facades;
+@inject NavigationManager NavigationManager
+
+<h3>Detail odpovědi</h3>
+
+@if (Response == null)
+{
+    <p>Načítání detailů odpovědi...</p>
+}
+else
+{
+    <div>
+        <h4>Uživatel</h4>
+        <p>@Response.User.FirstName @Response.User.LastName</p>
+
+        <h4>Otázka</h4>
+        <p>@Response.Question.Name</p>
+        <p>@Response.Question.Description</p>
+        <p><strong>Typ otázky:</strong> @Response.Question.QuestionType</p>
+
+        <h4>Odpovědi uživatele</h4>
+        @if (Response.UserResponse != null && Response.UserResponse.Any())
+        {
+        <ul>
+            @foreach (var answer in Response.UserResponse)
+            {
+            <li>@answer</li>
+            }
+        </ul>
+        }
+        else
+        {
+        <p>Žádné odpovědi</p>
+        }
+    </div>
+
+    <button @onclick="NavigateBack" class="btn btn-secondary">Zpět</button>
+}
+
+@code {
+    [Inject]
+    private ResponseFacade ResponseFacade { get; set; } = null!;
+
+    [Parameter]
+    public Guid Id { get; set; }
+
+    private ResponseDetailModel? Response { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Response = await ResponseFacade.GetByIdAsync(Id);
+    }
+
+    private void NavigateBack()
+    {
+        NavigationManager.NavigateTo("/ResponseListPage");
+    }
+}

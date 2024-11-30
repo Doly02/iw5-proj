@@ -17,7 +17,7 @@ else
 
         @if (Question.Answer != null && Question.Answer.Any())
         {
-            <p><strong>Odpovědi:</strong></p>
+            <p><strong>Možnosti:</strong></p>
             <ul>
                 @foreach (var answer in Question.Answer)
                 {
@@ -25,13 +25,7 @@ else
                 }
             </ul>
         }
-        else
-        {
-            <p>Žádné odpovědi.</p>
-        }
-
-        <p><strong>ID Formuláře:</strong> @Question.FormId</p>
-
+        
         @if (Question.Responses.Any())
         {
             <p><strong>Odpovědi uživatelů:</strong></p>
