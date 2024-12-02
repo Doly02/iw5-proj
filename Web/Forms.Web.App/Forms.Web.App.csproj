@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Forms.Web.BL\Forms.Web.BL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\Search\" />
+    </ItemGroup>
+
 </Project>

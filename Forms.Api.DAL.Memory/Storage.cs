@@ -64,7 +64,7 @@ namespace Forms.Api.DAL.Memory;
                 LastName = "Doe",
                 Email = "john.doe@example.com",
                 PasswordHash = "hashedPassword123",
-                PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-1.jpg"
+                PhotoUrl = "https://i.ibb.co/wpfLmTZ/dog.jpg"
             });
 
             Users.Add(new UserEntity
@@ -74,7 +74,7 @@ namespace Forms.Api.DAL.Memory;
                 LastName = "Doe",
                 Email = "jane.doe@example.com",
                 PasswordHash = "hashedPassword456",
-                PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-2.jpg"
+                PhotoUrl = "https://i.ibb.co/pXzRsw8/avatar1.jpg"
             });
 
             Users.Add(new UserEntity
@@ -84,7 +84,7 @@ namespace Forms.Api.DAL.Memory;
                 LastName = "Wonderland",
                 Email = "alice.wonderland@example.com",
                 PasswordHash = "hashedPassword789",
-                PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-3.jpg"
+                PhotoUrl = "https://i.ibb.co/x7wD0pY/avatar2.png"
             });
         }
         
