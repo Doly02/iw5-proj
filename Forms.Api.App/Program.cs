@@ -158,12 +158,15 @@ void UseSearchEndpoints(RouteGroupBuilder routeGroupBuilder)
         .WithTags("search");
 
     searchEndpoints.MapGet("{query}", async (string query, SearchFacade searchFacade) =>
-    {
-        var results = await searchFacade.SearchAsync(query);
-        return results.Any()
-            ? Results.Ok(results)
-            : Results.NotFound($"No results found for query '{query}'");
-    });
+        {
+            var results = await searchFacade.SearchAsync(query);
+
+            return results.Any()
+                ? Results.Ok(results) 
+                : Results.NotFound($"No results found for query '{query}'"); 
+        })
+        .Produces<List<SearchResultModel>>(StatusCodes.Status200OK) 
+        .Produces<string>(StatusCodes.Status404NotFound);
 }
 
 void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
