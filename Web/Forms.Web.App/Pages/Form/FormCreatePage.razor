@@ -1,5 +1,6 @@
 @page "/create"
 @namespace Forms.Web.App.Pages
+@using Forms.Common.Enums
 @inherits PageBase
 
 <div class="container mt-5">
@@ -55,7 +56,27 @@
                                             }
                                         </InputSelect>
                                     </div>
-                                    <button class="btn btn-danger" @onclick="() => RemoveQuestion(question)">Odstranit</button>
+
+                                    @if (question.QuestionType == QuestionType.Selection || question.QuestionType == QuestionType.Range)
+                                    {
+                                        <h5>Možné odpovědi</h5>
+                                        <ul>
+                                            @foreach (var answer in question.Answer)
+                                            {
+                                                <li class="d-flex justify-content-between align-items-center">
+                                                    <span>@answer</span>
+                                                    <button class="btn btn-danger btn-sm" @onclick="() => RemoveAnswer(question, answer)">Odstranit</button>
+                                                </li>
+                                            }
+                                        </ul>
+                                        <div class="d-flex mt-2">
+                                            <InputText class="form-control" @bind-Value="NewAnswer"/>
+                                            <button class="btn btn-primary ms-2" @onclick="() => AddAnswer(question)">Přidat odpověď</button>
+                                        </div>
+                                    }
+
+
+                                    <button class="btn btn-danger mt-3" @onclick="() => RemoveQuestion(question)">Odstranit otázku</button>
                                 </div>
                             </div>
                         }

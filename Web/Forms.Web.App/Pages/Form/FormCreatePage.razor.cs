@@ -26,14 +26,16 @@ namespace Forms.Web.App.Pages
 
         };
         
-        private QuestionDetailModel NewQuestion { get; set; } = new()
+       private QuestionDetailModel NewQuestion { get; set; } = new()
         {
             Id = Guid.NewGuid(),
             Name = "Nová otázka",
-            Description = "Zde zadej popis",
-            QuestionType = QuestionType.OpenQuestion
+            Description = "Zadejte popis otázky",
+            QuestionType = QuestionType.OpenQuestion,
+            Answer = new List<string>()
         };
-        
+
+        private string? NewAnswer { get; set; } = string.Empty;
         private string? ErrorMessage { get; set; }
 
         private async Task SaveForm()
@@ -43,14 +45,15 @@ namespace Forms.Web.App.Pages
                 await FormFacade.SaveAsync(Form);
                 NavigationManager.NavigateTo("/forms");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                ErrorMessage = $"Chyba pri ukladaní formulára.";
+                ErrorMessage = "Chyba při ukládání formuláře.";
             }
         }
-        
+
         private void AddQuestion()
         {
+            
             if (string.IsNullOrWhiteSpace(NewQuestion.Name))
             {
                 ErrorMessage = "Název otázky nesmí být prázdný.";
@@ -65,16 +68,29 @@ namespace Forms.Web.App.Pages
                 QuestionType = NewQuestion.QuestionType,
                 Answer = new List<string>()
             });
-            
-            NewQuestion = new QuestionDetailModel
-            {
-                Id = Guid.NewGuid(),
-                Name = string.Empty,
-                Description = string.Empty,
-                QuestionType = QuestionType.OpenQuestion
-            };
+
+            // Reset Question For Addition
+            ResetNewQuestion();
 
             ErrorMessage = null;
+        }
+
+        private void AddAnswer(QuestionDetailModel question)
+        {
+            if (string.IsNullOrWhiteSpace(NewAnswer))
+            {
+                ErrorMessage = "Odpověď nesmí být prázdná.";
+                return;
+            }
+
+            question.Answer.Add(NewAnswer);
+            NewAnswer = string.Empty;
+            ErrorMessage = null;
+        }
+
+        private void RemoveAnswer(QuestionDetailModel question, string answer)
+        {
+            question.Answer.Remove(answer);
         }
 
         private void RemoveQuestion(QuestionDetailModel question)
@@ -82,5 +98,16 @@ namespace Forms.Web.App.Pages
             Form.Questions.Remove(question);
         }
 
+        private void ResetNewQuestion()
+        {
+            NewQuestion = new QuestionDetailModel
+            {
+                Id = Guid.NewGuid(),
+                Name = "Nová otázka",
+                Description = "Zadejte popis otázky",
+                QuestionType = QuestionType.OpenQuestion,
+                Answer = new List<string>()
+            };
+        }
     }
 }
