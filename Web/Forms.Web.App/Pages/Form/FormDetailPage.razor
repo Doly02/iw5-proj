@@ -1,5 +1,6 @@
 @page "/form/{id:guid}"
 @namespace Forms.Web.App.Pages
+@using Forms.Common.Enums
 @inherits PageBase
 
 <div class="container mt-5">
@@ -23,12 +24,71 @@
                         <p class="card-text"><strong>Popis:</strong> @Form.Description</p>
 
                         <hr class="custom-divider my-4">
+
                         <!-- Sekcia otázok -->
-                        
-                        
+                        @if (Form.Questions == null || !Form.Questions.Any())
+                        {
+                            <p class="text-center text-muted">Formulář nemá žádné otázky.</p>
+                        }
+                        else
+                        {
+                            @foreach (var question in Form.Questions)
+                            {
+                                <div class="mb-4">
+                                    <h5>@question.Name</h5>
+                                    <p>@question.Description</p>
+
+                                    @switch (question.QuestionType)
+                                    {
+                                        case QuestionType.OpenQuestion:
+                                            <input type="text" class="form-control" placeholder="Vaše odpověď" />
+                                            break;
+                                        case QuestionType.Range:
+                                            @if (question.Answer != null)
+                                            {
+                                                @foreach (var answer in question.Answer)
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" name="@($"question-{question.Id}")" value="@answer" />
+                                                        <label class="form-check-label">
+                                                            @answer
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                            break;
+                                        case QuestionType.Selection:
+                                            @if (question.Answer != null)
+                                            {
+                                                @foreach (var answer in question.Answer)
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="@($"question-{question.Id}")" value="@answer" />
+                                                        <label class="form-check-label">
+                                                            @answer
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                            break;
+                                        default:
+                                            <p class="text-muted">Neznámý typ otázky.</p>
+                                            break;
+                                    }
+                                </div>
+                            }
+                        }
+                        <button class="btn btn-primary mt-4" @onclick="SubmitForm">Odeslat</button>
                     </div>
                 </div>
             </div>
         </div>
     }
 </div>
+
+@code {
+    private void SubmitForm()
+    {
+        Console.WriteLine("Formulář odeslán.");
+    }
+} 
