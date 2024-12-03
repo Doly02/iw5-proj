@@ -1,4 +1,6 @@
+using Forms.Common.Enums;
 using Forms.Common.Models.Form;
+using Forms.Common.Models.Question;
 using Forms.Web.BL.Facades;
 using Microsoft.AspNetCore.Components;
 
@@ -24,6 +26,14 @@ namespace Forms.Web.App.Pages
 
         };
         
+        private QuestionDetailModel NewQuestion { get; set; } = new()
+        {
+            Id = Guid.NewGuid(),
+            Name = "Nová otázka",
+            Description = "Zde zadej popis",
+            QuestionType = QuestionType.OpenQuestion
+        };
+        
         private string? ErrorMessage { get; set; }
 
         private async Task SaveForm()
@@ -37,6 +47,39 @@ namespace Forms.Web.App.Pages
             {
                 ErrorMessage = $"Chyba pri ukladaní formulára.";
             }
+        }
+        
+        private void AddQuestion()
+        {
+            if (string.IsNullOrWhiteSpace(NewQuestion.Name))
+            {
+                ErrorMessage = "Název otázky nesmí být prázdný.";
+                return;
+            }
+
+            Form.Questions.Add(new QuestionDetailModel
+            {
+                Id = Guid.NewGuid(),
+                Name = NewQuestion.Name,
+                Description = NewQuestion.Description,
+                QuestionType = NewQuestion.QuestionType,
+                Answer = new List<string>()
+            });
+            
+            NewQuestion = new QuestionDetailModel
+            {
+                Id = Guid.NewGuid(),
+                Name = string.Empty,
+                Description = string.Empty,
+                QuestionType = QuestionType.OpenQuestion
+            };
+
+            ErrorMessage = null;
+        }
+
+        private void RemoveQuestion(QuestionDetailModel question)
+        {
+            Form.Questions.Remove(question);
         }
 
     }

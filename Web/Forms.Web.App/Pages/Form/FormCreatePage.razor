@@ -31,6 +31,38 @@
                             <label for="dateClose" class="form-label">Datum uzavření</label>
                             <InputDate id="dateClose" class="form-control" @bind-Value="Form.DateClose"/>
                         </div>
+                        
+                        <h3>Otázky</h3>
+
+                        @foreach (var question in Form.Questions)
+                        {
+                            <div class="card my-2">
+                                <div class="card-body">
+                                    <div class="mb-3">
+                                        <label>Název otázky</label>
+                                        <InputText class="form-control" @bind-Value="question.Name"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Popis otázky</label>
+                                        <InputTextArea class="form-control" @bind-Value="question.Description"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label>Typ otázky</label>
+                                        <InputSelect class="form-control" @bind-Value="question.QuestionType">
+                                            @foreach (var type in Enum.GetValues(typeof(Forms.Common.Enums.QuestionType)))
+                                            {
+                                                <option value="@type">@type</option>
+                                            }
+                                        </InputSelect>
+                                    </div>
+                                    <button class="btn btn-danger" @onclick="() => RemoveQuestion(question)">Odstranit</button>
+                                </div>
+                            </div>
+                        }
+
+                        <button type="button" class="btn btn-primary mt-3" @onclick="AddQuestion">Přidat otázku</button>
+
+                        <hr/>
 
                         <button type="submit" class="btn btn-primary">Uložit formulář</button>
                     </EditForm>
