@@ -48,10 +48,11 @@ else
 
     private string GetDetailLink(SearchResultModel result)
     {
+        Console.WriteLine($"Result type: {result.Type}");
         return result.Type switch
         {
-            "user" => $"/user/{result.Id}",
-            "question" => $"/question/{result.Id}",
+            "User" => $"/user/{result.Id}",
+            "Question" => $"/question/{result.Id}",
             _ => "/"
         };
     }
