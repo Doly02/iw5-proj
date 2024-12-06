@@ -13,10 +13,10 @@ public class SearchFacade : ISearchFacade
         _questionFacade = questionFacade;
     }
 
-    public async Task<List<SearchResultModel>> SearchAsync(string query)
+    public async Task<List<SearchResultModel>> SearchAsync(string searchText)
     {
-        var userResults = await _userFacade.SearchAsync(query);
-        var questionResults = await _questionFacade.SearchAsync(query);
+        var userResults = await _userFacade.SearchAsync(searchText);
+        var questionResults = await _questionFacade.SearchAsync(searchText);
 
         return userResults.Concat(questionResults).ToList();
     }

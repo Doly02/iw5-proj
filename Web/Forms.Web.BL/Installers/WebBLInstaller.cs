@@ -7,25 +7,13 @@ namespace Forms.Web.BL.Installers
 {
     public class WebBLInstaller
     {
-        public void Install(IServiceCollection serviceCollection, string apiBaseUrl)
+        public void Install(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddTransient<IQuestionApiClient, QuestionApiClient>(provider =>
-            {
-                var client = CreateApiHttpClient(provider, apiBaseUrl);
-                return new QuestionApiClient(client, apiBaseUrl);
-            });
+            serviceCollection.AddScoped<IQuestionApiClient, QuestionApiClient>();
 
-            serviceCollection.AddTransient<IResponseApiClient, ResponseApiClient>(provider =>
-            {
-                var client = CreateApiHttpClient(provider, apiBaseUrl);
-                return new ResponseApiClient(client, apiBaseUrl);
-            });
+            serviceCollection.AddScoped<IResponseApiClient, ResponseApiClient>();
             
-            serviceCollection.AddTransient<IUserApiClient, UserApiClient>(provider =>
-            {
-                var client = CreateApiHttpClient(provider, apiBaseUrl);
-                return new UserApiClient(client, apiBaseUrl);
-            });
+            serviceCollection.AddScoped<IUserApiClient, UserApiClient>();
 
             serviceCollection.Scan(selector =>
                 selector.FromAssemblyOf<WebBLInstaller>()

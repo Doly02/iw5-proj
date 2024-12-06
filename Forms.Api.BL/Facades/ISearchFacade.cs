@@ -4,5 +4,5 @@ namespace Forms.Api.BL.Facades;
 
 public interface ISearchFacade
 {
-    Task<List<SearchResultModel>> SearchAsync(string query);
+    Task<List<SearchResultModel>> SearchAsync(string searchText);
 }
