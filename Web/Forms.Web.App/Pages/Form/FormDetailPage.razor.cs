@@ -44,7 +44,7 @@ namespace Forms.Web.App.Pages
             Form = await FormFacade.GetByIdAsync(Id);
             // Data = Form ?? GetNewFormModel(CurrentUserId);
         }
-
+    
         public async Task Save()
         {
             await FormFacade.SaveAsync(Data);

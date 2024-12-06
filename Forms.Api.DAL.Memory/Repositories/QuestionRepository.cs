@@ -53,8 +53,6 @@ namespace Forms.Api.DAL.Memory.Repositories
             
             response.UserId = updatedResponse.UserId;
             response.QuestionId = updatedResponse.QuestionId;
-            response.User = updatedResponse.User;
-            response.Question = updatedResponse.Question;
             response.UserResponse = updatedResponse.UserResponse;
         }
 

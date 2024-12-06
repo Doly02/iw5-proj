@@ -48,8 +48,8 @@ public class ResponseFacadeTests
         var mappedResponses = responses.Select(r => new ResponseListModel
         {
             Id = r.Id,
-            User = r.User,
-            Question = r.Question,
+            QuestionId = r.QuestionId,
+            UserId = r.UserId,
             UserResponse = r.UserResponse
         }).ToList();
 
@@ -100,8 +100,6 @@ public class ResponseFacadeTests
         var updatedResponseEntity = new ResponseEntity
         {
             Id = responseModel.Id,
-            User = storage.Users[0],
-            Question = storage.Questions[0],
             UserResponse = responseModel.UserResponse
         };
 
@@ -119,8 +117,6 @@ public class ResponseFacadeTests
     
         repositoryMock.Verify(repo => repo.Update(It.Is<ResponseEntity>(f => 
             f.Id == updatedResponseEntity.Id &&
-            f.User == updatedResponseEntity.User &&
-            f.Question == updatedResponseEntity.Question &&
             f.UserResponse != null &&
             f.UserResponse.Contains("testUpdatedResponse")
         )), Times.Once);
@@ -162,8 +158,6 @@ public class ResponseFacadeTests
         {
             Id = responseModel.Id, 
             QuestionId = storage.Questions[0].Id,
-            Question = storage.Questions[0],
-            User = storage.Users[0],
             UserId = responseModel.User.Id,
             UserResponse = responseModel.UserResponse
         };

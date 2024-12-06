@@ -176,8 +176,6 @@ namespace Forms.Api.DAL.Memory;
                 Id = _responseGuids[0],
                 UserId = _userGuids[0],
                 QuestionId = _questionGuids[0],
-                User = Users[0],
-                Question = Questions[0],
                 UserResponse = new List<string>{"Napisem ti Hello World!!!"}
             });
             
@@ -186,8 +184,6 @@ namespace Forms.Api.DAL.Memory;
                 Id = _responseGuids[1],
                 UserId = _userGuids[0],
                 QuestionId = _questionGuids[1],
-                User = Users[0],
-                Question = Questions[1],
                 UserResponse = new List<string>{Questions[1].Answer[1]}   // "Som zena"
             });
             
@@ -196,8 +192,6 @@ namespace Forms.Api.DAL.Memory;
                 Id = _responseGuids[2],
                 UserId = _userGuids[2],
                 QuestionId = _questionGuids[2],
-                User = Users[2],
-                Question = Questions[2],
                 UserResponse = new List<string>{Questions[2].Answer[0], Questions[2].Answer[2]}   // "Grecko", "Egypt"
             });
             
@@ -207,8 +201,6 @@ namespace Forms.Api.DAL.Memory;
                 Id = _responseGuids[3],
                 UserId = _userGuids[1],
                 QuestionId = _questionGuids[3],
-                User = Users[1],
-                Question = Questions[3],
                 UserResponse = new List<string>{}
             });
         }

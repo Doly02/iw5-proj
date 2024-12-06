@@ -23,9 +23,6 @@ else
         @foreach (var response in Responses)
         {
             <tr>
-                <td>@response.User.FirstName</td>
-                <td>@response.User.LastName</td>
-                <td>@response.Question.Name</td> 
                 <td>
                     @if (response.UserResponse != null && response.UserResponse.Any())
                     {

@@ -114,9 +114,7 @@ public class SqlFixture : IDatabaseFixture, IDisposable
         var response1 = new ResponseEntity
         {
             Id = ResponseGuids[0],
-            Question = question1,
             QuestionId = question1.Id,
-            User = user1,
             UserId = user1.Id,
             UserResponse = ["Napisem ahoj!"]
         };
@@ -124,9 +122,7 @@ public class SqlFixture : IDatabaseFixture, IDisposable
         var response2 = new ResponseEntity
         {
             Id = ResponseGuids[1],
-            Question = question2,
             QuestionId = question2.Id,
-            User = user1,
             UserId = user1.Id,
             UserResponse = ["Ano"]
         };

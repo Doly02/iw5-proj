@@ -65,7 +65,7 @@ public class ResponseControllerTests: IAsyncDisposable
         Assert.Equal(expectedResponse.Id, returnedResponse.Id);
         // todo w8 for qlistmodel
         // Assert.Equal(expectedResponse.Question.Id, returnedResponse.Question.Id);
-        Assert.Equal(expectedResponse.User.Id, returnedResponse.User.Id);
+        Assert.Equal(expectedResponse.UserId, returnedResponse.User.Id);
         Assert.Equal(expectedResponse.UserResponse, returnedResponse.UserResponse);
     }
 

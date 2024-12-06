@@ -22,12 +22,7 @@ public class FormsDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<UserEntity>()
-            .HasMany(userEntity => userEntity.Responses)
-            .WithOne(responseEntity => responseEntity.User)
-            .OnDelete(DeleteBehavior.Restrict);
-
+        
         modelBuilder.Entity<UserEntity>()
             .HasMany(userEntity => userEntity.Forms)
             .WithOne()
@@ -39,12 +34,7 @@ public class FormsDbContext : DbContext
             .WithOne()  
             .HasForeignKey(questionEntity => questionEntity.FormId) 
             .OnDelete(DeleteBehavior.Cascade);
-
-        modelBuilder.Entity<QuestionEntity>()
-            .HasMany(questionEntity => questionEntity.Responses)
-            .WithOne(responseEntity => responseEntity.Question)
-            .OnDelete(DeleteBehavior.Cascade);
-
+        
 
         // Entity Framework doesn’t know how to compare the List<string> properties (Answer and UserResponse) when checking for changes
         // Create a reusable ValueComparer for List<string>

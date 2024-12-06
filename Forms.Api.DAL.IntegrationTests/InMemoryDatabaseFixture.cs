@@ -201,9 +201,7 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
     {
         Id = ResponseGuids[0],
         UserId = UserGuids[0],
-        User = storage.Users[0],
         QuestionId = QuestionGuids[0],
-        Question = storage.Questions[0],
         UserResponse = new List<string> { "Odpoved od Johna na Otazku 1" }
     });
 
@@ -211,9 +209,7 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
     {
         Id = ResponseGuids[1],
         UserId = UserGuids[1],
-        User = storage.Users[1],
         QuestionId = QuestionGuids[0],
-        Question = storage.Questions[0],
         UserResponse = new List<string> { "Odpoved od Jane na Otazku 1" }
     });
 
@@ -221,9 +217,7 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
     {
         Id = ResponseGuids[2],
         UserId = UserGuids[0],
-        User = storage.Users[0],
         QuestionId = QuestionGuids[1],
-        Question = storage.Questions[1],
         UserResponse = new List<string> { "Ano od Johna" }
     });
 
@@ -231,9 +225,7 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
     {
         Id = ResponseGuids[3],
         UserId = UserGuids[1],
-        User = storage.Users[1],
         QuestionId = QuestionGuids[1],
-        Question = storage.Questions[1],
         UserResponse = new List<string> { "Nie od Jane" }
     });
     

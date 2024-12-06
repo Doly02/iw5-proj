@@ -30,8 +30,6 @@ namespace Forms.Api.DAL.Memory.Repositories
 
             responseEntityExisting.UserId = entity.UserId;
             responseEntityExisting.QuestionId = entity.QuestionId;
-            responseEntityExisting.User = entity.User;
-            responseEntityExisting.Question = entity.Question;
             responseEntityExisting.UserResponse = entity.UserResponse;
 
             return responseEntityExisting.Id;

@@ -17,8 +17,6 @@ public class ResponseRepository : RepositoryBase<ResponseEntity>, IResponseRepos
     public override ResponseEntity? GetById(Guid id)
     {
         return context.Responses
-            .Include(r => r.User) 
-            .Include(r => r.Question)
             .FirstOrDefault(r => r.Id == id); 
     }
 
@@ -27,8 +25,6 @@ public class ResponseRepository : RepositoryBase<ResponseEntity>, IResponseRepos
         if (Exists(response.Id))
         {
             var existingResponse = context.Responses
-                .Include(r => r.User)
-                .Include(r => r.Question)
                 .Single(u => u.Id == response.Id);
             
             _mapper.Map(response, existingResponse);

@@ -15,12 +15,8 @@ public class ResponseMapperProfile : Profile
         CreateMap<ResponseEntity, ResponseListModel>();
         
         /* Reverse Mapping */
-        CreateMap<ResponseDetailModel, ResponseEntity>()
-            .ForMember(dst => dst.User, opt => opt.Ignore())
-            .ForMember(dst => dst.Question, opt => opt.Ignore());
-
-        CreateMap<ResponseListModel, ResponseEntity>()
-            .ForMember(dst => dst.User, opt => opt.Ignore())
-            .ForMember(dst => dst.Question, opt => opt.Ignore());
+        CreateMap<ResponseDetailModel, ResponseEntity>();
+        
+        CreateMap<ResponseListModel, ResponseEntity>();
     }
 }

@@ -7,9 +7,6 @@ namespace Forms.Api.DAL.Common.Entities
         public Guid UserId { get; set; }
         public Guid QuestionId { get; set; }
         
-        public required UserEntity User { get; set; }
-        public required QuestionEntity Question { get; set; }
-        
         public List<string>? UserResponse { get; set; }
     }
     
