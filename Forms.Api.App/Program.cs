@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using AutoMapper;
 using AutoMapper.Internal;
+using Forms.Api.App;
 using Forms.Api.App.Processors;
 using Forms.Api.BL.Facades;
 using Forms.Api.BL.Installers;
@@ -18,11 +19,13 @@ using Microsoft.AspNetCore.Localization;
 using Forms.Api.DAL.EF.Extensions;
 using Forms.Common.Extensions;
 using Forms.Api.DAL.Memory.Installers;
+using Forms.Common;
 using Forms.Common.Models.Response;
 using Forms.Common.Models.Form;
 using Forms.Common.Models.Question;
 using Forms.Common.Models.Search;
 using Forms.Common.Models.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +41,7 @@ ConfigureLocalization(builder.Services);
 ConfigureOpenApiDocuments(builder.Services);
 ConfigureDependencies(builder.Services, builder.Configuration);
 ConfigureAutoMapper(builder.Services);
+ConfigureAuthentication(builder.Services, builder.Configuration.GetSection("IdentityServer")["Url"]);
 
 var app = builder.Build();
 
@@ -47,6 +51,7 @@ UseDevelopmentSettings(app);
 UseSecurityFeatures(app);
 UseLocalization(app);
 UseRouting(app);
+UseAuthorization(app);
 UseEndpoints(app);
 UseOpenApi(app);
 
@@ -111,11 +116,43 @@ void ConfigureAutoMapper(IServiceCollection serviceCollection)
     serviceCollection.AddAutoMapper(typeof(EntityBase), typeof(ApiBLInstaller));
 }
 
+void ConfigureAuthentication(IServiceCollection serviceCollection, string identityServerUrl)
+{
+    serviceCollection.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        .AddJwtBearer(options =>
+        {
+            options.Authority = identityServerUrl;
+            options.TokenValidationParameters.ValidateAudience = false;
+        });
+
+    serviceCollection.AddAuthorization(
+        options =>
+        {
+            options.AddPolicy(ApiPolicies.Admin, policy => 
+                policy.RequireRole(AppRoles.Admin));
+            
+            options.AddPolicy(ApiPolicies.OwnerOrAdmin, policy =>
+                policy.RequireAssertion(context =>
+                {
+                    var userId = context.User.FindFirst("sub")?.Value; 
+                    var formOwnerId = context.Resource as string; 
+                    return userId == formOwnerId || context.User.IsInRole(AppRoles.Admin);
+                }));
+        });
+    serviceCollection.AddHttpContextAccessor();
+}
+
 
 void ValidateAutoMapperConfiguration(IServiceProvider serviceProvider)
 {
     var mapper = serviceProvider.GetRequiredService<IMapper>();
     mapper.ConfigurationProvider.AssertConfigurationIsValid();
+}
+
+void UseAuthorization(WebApplication application)
+{
+    application.UseAuthentication();
+    application.UseAuthorization();
 }
 
 void UseEndpoints(WebApplication application)

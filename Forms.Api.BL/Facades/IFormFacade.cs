@@ -7,8 +7,8 @@ public interface IFormFacade : IAppFacade
 {
     List<FormListModel> GetAll();
     FormDetailModel? GetById(Guid id);
-    Guid CreateOrUpdate(FormDetailModel formModel);
-    Guid Create(FormDetailModel formModel);
-    Guid? Update(FormDetailModel formModel);
-    void Delete(Guid id);
+    Guid CreateOrUpdate(FormDetailModel formModel, string? ownerId = null);
+    Guid Create(FormDetailModel formModel, string? ownerId = null);
+    Guid? Update(FormDetailModel formModel, string? ownerId = null);
+    void Delete(Guid id, string? ownerId = null);
 }

@@ -16,11 +16,12 @@ public class ResponseMapperProfile : Profile
         
         /* Reverse Mapping */
         CreateMap<ResponseDetailModel, ResponseEntity>()
+            .Ignore(entity => entity.OwnerId)
             .ForMember(dst => dst.User, opt => opt.Ignore())
             .ForMember(dst => dst.Question, opt => opt.Ignore());
-
-        CreateMap<ResponseListModel, ResponseEntity>()
-            .ForMember(dst => dst.User, opt => opt.Ignore())
-            .ForMember(dst => dst.Question, opt => opt.Ignore());
+        //
+        // CreateMap<ResponseListModel, ResponseEntity>()
+        //     .ForMember(dst => dst.User, opt => opt.Ignore())
+        //     .ForMember(dst => dst.Question, opt => opt.Ignore());
     }
 }
