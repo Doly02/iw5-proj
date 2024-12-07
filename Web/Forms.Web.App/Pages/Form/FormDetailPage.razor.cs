@@ -1,4 +1,5 @@
 using Forms.Api.DAL.Common.Entities;
+using Forms.Common.Enums;
 using Forms.Common.Models.Form;
 using Forms.Common.Models.Response;
 using Forms.Web.BL.Facades;
@@ -46,6 +47,20 @@ namespace Forms.Web.App.Pages
             // Inicializace dat formuláře
             Form = await FormFacade.GetByIdAsync(Id);
             // Data = Form ?? GetNewFormModel(CurrentUserId);
+            
+            // Inicializácia UserResponses pre každú otázku
+            if (Form?.Questions != null)
+            {
+                foreach (var question in Form.Questions)
+                {
+                    if (!UserResponses.ContainsKey(question.Id))
+                    {
+                        UserResponses[question.Id] = question.QuestionType == QuestionType.OpenQuestion
+                            ? new List<string> { string.Empty } // Pridanie prázdnej odpovede pre OpenQuestion
+                            : new List<string>();
+                    }
+                }
+            }
         }
 
         public async Task Save()

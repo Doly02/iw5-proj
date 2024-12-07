@@ -44,7 +44,7 @@
                                     @switch (question.QuestionType)
                                     {
                                         case QuestionType.OpenQuestion:
-                                            <input type="text" class="form-control" @bind="UserResponses[question.Id]" placeholder="Vaše odpověď" />
+                                            <input type="text" class="form-control" @bind="UserResponses[question.Id][0]" placeholder="Vaše odpověď" />
                                             break;
                                         case QuestionType.Range:
                                             @if (question.Answer != null)

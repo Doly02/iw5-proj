@@ -70,13 +70,14 @@
                                             }
                                         </ul>
                                         <div class="d-flex mt-2">
-                                            <InputText class="form-control" @bind-Value="NewAnswer"/>
-                                            <button class="btn btn-primary ms-2" @onclick="() => AddAnswer(question)">Přidat odpověď</button>
+                                            <InputText class="form-control" @bind-Value="NewAnswer" />
+                                            <button type="button" class="btn btn-primary ms-2" @onclick="() => AddAnswer(question)">Přidat odpověď</button>
                                         </div>
+
                                     }
 
 
-                                    <button class="btn btn-danger mt-3" @onclick="() => RemoveQuestion(question)">Odstranit otázku</button>
+                                    <button type="button" class="btn btn-danger mt-3" @onclick="() => RemoveQuestion(question)">Odstranit otázku</button>
                                 </div>
                             </div>
                         }

@@ -11,4 +11,9 @@
       <ProjectReference Include="..\Forms.Web.BL\Forms.Web.BL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Question\QuestionDetailPage.razor" />
+      <_ContentIncludedByDefault Remove="Pages\Question\QuestionListPage.razor" />
+    </ItemGroup>
+
 </Project>
