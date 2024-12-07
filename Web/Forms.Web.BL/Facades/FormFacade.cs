@@ -49,7 +49,7 @@ public class FormFacade : FacadeBase<FormDetailModel, FormListModel>
             Id = response.Id,
             UserId = response.User.Id,
             QuestionId = response.Question.Id,
-            UserResponse = response.UserResponse != null ? string.Join(";", response.UserResponse) : null
+            UserResponse = response.UserResponse
         };
 
         // Uložení do repository
