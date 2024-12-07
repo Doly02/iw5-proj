@@ -15,14 +15,15 @@ public class UserMapperProfile : Profile
         CreateMap<UserEntity, UserListModel>();
 
         CreateMap<UserDetailModel, UserEntity>()
+            .Ignore(entity => entity.OwnerId)
             .ForMember(dest => dest.Responses, opt => opt.Ignore()) // Ignorujeme Responses
             .ForMember(dest => dest.Forms, opt => opt.Ignore()); // Ignorujeme Forms
 
-        CreateMap<UserListModel, UserEntity>()
-            .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) // Ignorujeme PasswordHash
-            .ForMember(dest => dest.Responses, opt => opt.Ignore()) // Ignorujeme Responses
-            .ForMember(dest => dest.Forms, opt => opt.Ignore()); // Ignorujeme Forms
-        
+        // CreateMap<UserListModel, UserEntity>()
+        //     .ForMember(dest => dest.PasswordHash, opt => opt.Ignore()) // Ignorujeme PasswordHash
+        //     .ForMember(dest => dest.Responses, opt => opt.Ignore()) // Ignorujeme Responses
+        //     .ForMember(dest => dest.Forms, opt => opt.Ignore()); // Ignorujeme Forms
+        //
         CreateMap<UserEntity, SearchResultModel>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
             .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Email))

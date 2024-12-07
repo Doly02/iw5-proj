@@ -16,6 +16,7 @@ namespace Forms.Api.BL.MapperProfiles
             CreateMap<QuestionEntity, QuestionListModel>();
 
             CreateMap<QuestionDetailModel, QuestionEntity>()
+                .Ignore(entity => entity.OwnerId)
                 .ForMember(dest => dest.Responses, opt => opt.Ignore());
             
             CreateMap<QuestionEntity, SearchResultModel>()

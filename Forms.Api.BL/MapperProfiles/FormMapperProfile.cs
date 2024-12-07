@@ -1,5 +1,6 @@
 using AutoMapper;
 using Forms.Api.DAL.Common.Entities;
+using Forms.Common.Extensions;
 using Forms.Common.Models.Form;
 using Forms.Common.Models.User;
 
@@ -20,6 +21,7 @@ public class FormMapperProfile : Profile
         // Reverse mapping back to UserEntity
         CreateMap<FormDetailModel, FormEntity>()
             // Ignoring Questions
+            .Ignore(entity => entity.OwnerId)
             .ForMember(dest => dest.Questions, opt => opt.Ignore());
     }
 }
