@@ -1,5 +1,6 @@
 using AutoMapper;
 using Forms.Web.BL.Options;
+using Forms.Common.BL.Facades;
 using Forms.Web.DAL.Repositories;
 using Forms.Common.Models.Question;
 using Microsoft.Extensions.Options;
@@ -9,7 +10,7 @@ namespace Forms.Web.BL.Facades
     public class QuestionFacade : FacadeBase<QuestionDetailModel, QuestionListModel>
     {
         private readonly IQuestionApiClient apiClient;
-
+        private readonly IMapper mapper;
         public QuestionFacade(
             IQuestionApiClient apiClient,
             QuestionRepository questionRepository,
@@ -18,6 +19,7 @@ namespace Forms.Web.BL.Facades
             : base(questionRepository, mapper, localDbOptions)
         {
             this.apiClient = apiClient;
+            this.mapper = mapper;
         }
 
         public override async Task<List<QuestionListModel>> GetAllAsync()
@@ -43,6 +45,13 @@ namespace Forms.Web.BL.Facades
         public override async Task DeleteAsync(Guid id)
         {
             await apiClient.QuestionDeleteAsync(id, culture);
+        }
+        
+        public async Task<List<QuestionListModel>> GetByFormIdAsync(Guid formId)
+        {
+            var culture = System.Globalization.CultureInfo.CurrentCulture.Name;
+            var questionsFromApi = await apiClient.QuestionGetByFormIdAsync(formId, culture);
+            return mapper.Map<List<QuestionListModel>>(questionsFromApi);
         }
     }
 }

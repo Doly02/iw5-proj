@@ -209,10 +209,15 @@ void UseQuestionEndpoints(RouteGroupBuilder routeGroupBuilder)
     questionEndpoints.MapPost("upsert", (QuestionDetailModel question, IQuestionFacade questionFacade) => questionFacade.CreateOrUpdate(question));
 
     questionEndpoints.MapDelete("{id:guid}", (Guid id, IQuestionFacade questionFacade) => questionFacade.Delete(id));
+    
+    questionEndpoints.MapGet("form/{formId:guid}", Results<Ok<List<QuestionListModel>>, NotFound<string>> (Guid formId, IQuestionFacade questionFacade)
+        => questionFacade.GetByFormId(formId) is { } questions && questions.Any()
+            ? TypedResults.Ok(questions)
+            : TypedResults.NotFound($"No questions found for FormId {formId}"));
 }
 
 void UseResponseEndpoints(RouteGroupBuilder routeGroupBuilder)
-{
+{   
     var responseEndpoints = routeGroupBuilder.MapGroup("response")
         .WithTags("response");
 
@@ -230,6 +235,11 @@ void UseResponseEndpoints(RouteGroupBuilder routeGroupBuilder)
     responseEndpoints.MapPost("upsert", (ResponseDetailModel response, IResponseFacade responseFacade) => responseFacade.CreateOrUpdate(response));
 
     responseEndpoints.MapDelete("{id:guid}", (Guid id, IResponseFacade responseFacade) => responseFacade.Delete(id));
+    
+    responseEndpoints.MapGet("question/{questionId:guid}", Results<Ok<List<ResponseDetailModel>>, NotFound<string>> (Guid questionId, IResponseFacade responseFacade)
+        => responseFacade.GetByQuestionId(questionId) is { } responses && responses.Any()
+            ? TypedResults.Ok(responses)
+            : TypedResults.NotFound($"No responses found for QuestionId {questionId}"));
 }
 
 

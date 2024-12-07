@@ -54,5 +54,15 @@ namespace Forms.Api.BL.Facades
         {
             _responseRepository.Remove(id);
         }
+        
+        public List<ResponseDetailModel> GetByQuestionId(Guid questionId)
+        {
+            var responseEntities = _responseRepository
+                .GetAll()
+                .Where(r => r.QuestionId == questionId)
+                .ToList();
+
+            return _mapper.Map<List<ResponseDetailModel>>(responseEntities);
+        }
     }
 }

@@ -1,10 +1,10 @@
-@page "/questions"
+@page "/questions/{FormId:guid}"
 @namespace Forms.Web.App.Pages
 @layout ListLayout
 @inherits PageBase
 
 <div>
-    <h1>Otázky</h1>
+    <h1>Odpovědi na otázky</h1>
 
     @if (Questions == null || !Questions.Any())
     {
@@ -12,44 +12,42 @@
     }
     else
     {
-        <table class="table">
-            <thead>
-            <tr>
-                <th>Název</th>
-                <th>Popis</th>
-                <th>Typ otázky</th>
-                <th>Odpovědi</th>
-                <th>Akce</th>
-            </tr>
-            </thead>
-            <tbody>
-            @foreach (var question in Questions)
-            {
-                <tr>
-                    <td>@question.Name</td>
-                    <td>@question.Description</td>
-                    <td>@question.QuestionType</td>
-                    <td>
-                        @if (question.Answer != null && question.Answer.Any())
+        @foreach (var question in Questions)
+        {
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>@question.Name</h5>
+                    <small>@question.Description</small>
+                </div>
+                <div class="card-body">
+                    <p><strong>Typ otázky:</strong> @question.QuestionType</p>
+
+                    @if (Responses.ContainsKey(question.Id) && Responses[question.Id] != null && Responses[question.Id].Any())
+                    {
+                        <h6>Odpovědi:</h6>
+                        @foreach (var response in Responses[question.Id])
                         {
-                            <ul>
-                                @foreach (var answer in question.Answer)
-                                {
-                                    <li>@answer</li>
-                                }
-                            </ul>
+                            @if (response.UserResponse != null && response.UserResponse.Any())
+                            {
+                                <ul>
+                                    @foreach (var userResponse in response.UserResponse)
+                                    {
+                                        <li>@userResponse</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <p>Bez odpovědi</p>
+                            }
                         }
-                        else
-                        {
-                            <span>Žádné odpovědi</span>
-                        }
-                    </td>
-                    <td>
-                        <a href="/questions/@question.Id" class="btn btn-primary">Detail</a>
-                    </td>
-                </tr>
-            }
-            </tbody>
-        </table>
+                    }
+                    else
+                    {
+                        <h6>Žádné odpovědi:</h6>
+                    }
+                </div>
+            </div>
+        }
     }
 </div>
