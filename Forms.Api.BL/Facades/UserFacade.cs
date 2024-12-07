@@ -6,12 +6,13 @@ using Forms.Common.Models.User;
 
 namespace Forms.Api.BL.Facades;
 
-public class UserFacade : IUserFacade
+public class UserFacade : FacadeBase<IUserRepository, UserEntity>, IUserFacade
 {
     private readonly IUserRepository userRepository;
     private readonly IMapper mapper;
 
     public UserFacade(IUserRepository userRepository, IMapper mapper)
+        : base(userRepository) 
     {
         this.userRepository = userRepository;
         this.mapper = mapper;
@@ -29,10 +30,10 @@ public class UserFacade : IUserFacade
         return mapper.Map<UserDetailModel>(userEntity);
     }
 
-    public Guid CreateOrUpdate(UserDetailModel userModel)
+    public Guid CreateOrUpdate(UserDetailModel userModel, string? ownerId)
     {
         return userRepository.Exists(userModel.Id)
-            ? Update(userModel)!.Value
+            ? Update(userModel, ownerId)!.Value
             : Create(userModel);
     }
 
@@ -40,18 +41,25 @@ public class UserFacade : IUserFacade
     public Guid Create(UserDetailModel userModel)
     {
         var userEntity = mapper.Map<UserEntity>(userModel);
+        userEntity.OwnerId = userModel.Id.ToString();
+        
         return userRepository.Insert(userEntity);
     }
 
-    public Guid? Update(UserDetailModel userModel)
+    public Guid? Update(UserDetailModel userModel, string? ownerId)
     {
+        ThrowIfWrongOwner(userModel.Id, ownerId);
+        
         var userEntity = mapper.Map<UserEntity>(userModel);
+        
         var result = userRepository.Update(userEntity);
         return result;
     }
 
-    public void Delete(Guid id)
+    public void Delete(Guid id, string? ownerId)
     {
+        ThrowIfWrongOwner(id, ownerId);
+        
         userRepository.Remove(id);
     }
     

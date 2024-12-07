@@ -61,7 +61,6 @@ namespace Forms.Api.App.EndToEndTests
             Assert.Equal(expectedUser.FirstName, returnedUser.FirstName);
             Assert.Equal(expectedUser.LastName, returnedUser.LastName);
             Assert.Equal(expectedUser.Email, returnedUser.Email);
-            Assert.Equal(expectedUser.PasswordHash, returnedUser.PasswordHash);
             Assert.Equal(expectedUser.PhotoUrl, returnedUser.PhotoUrl);
         }
         
@@ -75,7 +74,6 @@ namespace Forms.Api.App.EndToEndTests
                 FirstName = "Test",
                 LastName = "User",
                 Email = "test.user@example.com",
-                PasswordHash = "hashedPassword123",
                 PhotoUrl = "https://example.com/photo.jpg"
             };
             

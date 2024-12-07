@@ -1,12 +1,16 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+using System.Globalization;
 using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Test;
+using Forms.Common.Models.User;
 using Forms.IdentityProvider.BL.Facades;
 using Forms.IdentityProvider.BL.Models;
+using Forms.Web.BL;
+using Forms.Web.BL.Facades;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,15 +25,19 @@ public class Index : PageModel
     private readonly IAppUserFacade appUserFacade;
 
     private readonly IIdentityServerInteractionService _interaction;
+    private readonly IUserApiClient _userApiClient;
+
 
     [BindProperty]
     public InputModel Input { get; set; } = default!;
 
     public Index(
         IIdentityServerInteractionService interaction,
-        IAppUserFacade appUserFacade )
+        IAppUserFacade appUserFacade,
+        IUserApiClient userApiClient)
     {
         this.appUserFacade = appUserFacade;
+        this._userApiClient = userApiClient;
 
         _interaction = interaction;
     }
@@ -76,18 +84,34 @@ public class Index : PageModel
         {
             ModelState.AddModelError("Input.Username", "Invalid username");
         }
+        
+        // if ((await appUserFacade.GetUserByEmailAsync(Input.Email)) != null)
+        // {
+        //     ModelState.AddModelError("Input.Email", "Email is already in use");
+        // }
 
         if (ModelState.IsValid)
         {
             var appUserCreateModel = new AppUserCreateModel
             {
                 UserName = Input.Username,
-                Password = Input.Password,
+                Password = Input.Password!,
                 Email = Input.Email,
                 Subject = Input.Username,
             };
             var user = await appUserFacade.CreateAppUserAsync(appUserCreateModel);
 
+            var userModel = new UserDetailModel
+            { 
+                Id = user!.Value,
+                Email = Input.Email,
+                FirstName = Input.FirstName,
+                LastName = Input.LastName,
+                PhotoUrl = Input.PhotoUrl
+            };
+            
+            await _userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", userModel);
+            
             // issue authentication cookie with subject ID and username
             //var issuer = new IdentityServerUser(user.Subject)
             //{

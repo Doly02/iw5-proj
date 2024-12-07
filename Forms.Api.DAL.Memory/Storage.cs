@@ -63,7 +63,6 @@ namespace Forms.Api.DAL.Memory;
                 FirstName = "John",
                 LastName = "Doe",
                 Email = "john.doe@example.com",
-                PasswordHash = "hashedPassword123",
                 PhotoUrl = "https://i.ibb.co/wpfLmTZ/dog.jpg"
             });
 
@@ -73,7 +72,6 @@ namespace Forms.Api.DAL.Memory;
                 FirstName = "Jane",
                 LastName = "Doe",
                 Email = "jane.doe@example.com",
-                PasswordHash = "hashedPassword456",
                 PhotoUrl = "https://i.ibb.co/pXzRsw8/avatar1.jpg"
             });
 
@@ -83,7 +81,6 @@ namespace Forms.Api.DAL.Memory;
                 FirstName = "Alice",
                 LastName = "Wonderland",
                 Email = "alice.wonderland@example.com",
-                PasswordHash = "hashedPassword789",
                 PhotoUrl = "https://i.ibb.co/x7wD0pY/avatar2.png"
             });
         }

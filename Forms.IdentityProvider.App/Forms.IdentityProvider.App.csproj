@@ -18,6 +18,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Forms.IdentityProvider.BL\Forms.IdentityProvider.BL.csproj" />
+      <ProjectReference Include="..\Web\Forms.Web.BL\Forms.Web.BL.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -78,5 +79,7 @@
       <UpToDateCheckInput Remove="Pages\Shared\_ValidationSummary.cshtml" />
       <UpToDateCheckInput Remove="Pages\_ViewImports.cshtml" />
       <UpToDateCheckInput Remove="Pages\_ViewStart.cshtml" />
+      <UpToDateCheckInput Remove="Pages\Account\Logout\Index.cshtml" />
+      <UpToDateCheckInput Remove="Pages\Account\Logout\LoggedOut.cshtml" />
     </ItemGroup>
 </Project>

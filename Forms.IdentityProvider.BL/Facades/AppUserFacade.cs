@@ -21,7 +21,15 @@ public class AppUserFacade(
 
         var appUserEntity = mapper.Map<AppUserEntity>(appUserModel);
         await userManager.CreateAsync(appUserEntity, appUserModel.Password);
-        return (await userManager.FindByNameAsync(appUserModel.UserName))?.Id;
+
+        var appUserId = (await userManager.FindByNameAsync(appUserModel.UserName))?.Id;
+
+        if (appUserId is null)
+        {
+            return null;
+        }
+
+        return appUserId;
     }
 
     public async Task<bool> ValidateCredentialsAsync(string userName, string password)

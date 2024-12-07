@@ -45,7 +45,6 @@ namespace Forms.Api.DAL.Memory.Repositories
         userEntityExisting.FirstName = entity.FirstName;
         userEntityExisting.LastName = entity.LastName;
         userEntityExisting.Email = entity.Email;
-        userEntityExisting.PasswordHash = entity.PasswordHash;
         userEntityExisting.PhotoUrl = entity.PhotoUrl;
 
         UpdateResponses(userEntityExisting, entity.Responses);

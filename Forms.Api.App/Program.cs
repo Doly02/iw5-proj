@@ -4,6 +4,7 @@ using System.Globalization;
 using AutoMapper;
 using AutoMapper.Internal;
 using Forms.Api.App;
+using Forms.Api.App.Endpoints;
 using Forms.Api.App.Processors;
 using Forms.Api.BL.Facades;
 using Forms.Api.BL.Installers;
@@ -173,20 +174,70 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
     var userEndpoints = routeGroupBuilder.MapGroup("user")
         .WithTags("user");
 
-    userEndpoints.MapGet("", (IUserFacade userFacade) => userFacade.GetAll());
+    userEndpoints.MapGet("", (IUserFacade userFacade) => userFacade.GetAll())
+        .AllowAnonymous();
 
+    userEndpoints.MapPost("", Results<Ok<Guid>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
+    {
+        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+
+        try
+        {
+            return TypedResults.Ok(userFacade.Create(user));
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return TypedResults.Forbid();
+        }
+    });
+
+    userEndpoints.MapPost("upsert",  Results<Ok<Guid>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
+    {
+        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+
+        try
+        {
+            return TypedResults.Ok(userFacade.CreateOrUpdate(user, userId));
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return TypedResults.Forbid();
+        }
+    });
+
+    
     userEndpoints.MapGet("{id:guid}", Results<Ok<UserDetailModel>, NotFound<string>> (Guid id, IUserFacade userFacade)
         => userFacade.GetById(id) is { } user
             ? TypedResults.Ok(user)
             : TypedResults.NotFound($"User with ID {id} not found"));
-
-    userEndpoints.MapPost("", (UserDetailModel user, IUserFacade userFacade) => userFacade.Create(user));
-
-    userEndpoints.MapPut("", (UserDetailModel user, IUserFacade userFacade) => userFacade.Update(user));
-
-    userEndpoints.MapPost("upsert", (UserDetailModel user, IUserFacade userFacade) => userFacade.CreateOrUpdate(user));
-
-    userEndpoints.MapDelete("{id:guid}", (Guid id, IUserFacade userFacade) => userFacade.Delete(id));
+    
+    userEndpoints.MapPut("", Results<Ok<Guid?>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
+    {
+        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        try
+        {
+            return TypedResults.Ok(userFacade.Update(user, userId));
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return TypedResults.Forbid();
+        }
+        
+    });
+    
+    userEndpoints.MapDelete("{id:guid}", Results<Ok, ForbidHttpResult> (Guid id, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
+    {
+        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        try
+        {
+            userFacade.Delete(id, userId);
+            return TypedResults.Ok();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return TypedResults.Forbid();
+        }
+    });
 }
 
 void UseSearchEndpoints(RouteGroupBuilder routeGroupBuilder)

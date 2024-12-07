@@ -28,7 +28,7 @@ public class UserFacadeTests
         var itemId = Guid.NewGuid();
         
         /* Act */
-        facade.Delete(itemId);
+        facade.Delete(itemId, null);
         
         /* Assert */
         repositoryMock.Verify(userRepo => userRepo.Remove(itemId));
@@ -48,8 +48,7 @@ public class UserFacadeTests
                 Id = Guid.NewGuid(),
                 FirstName = "John",
                 LastName = "Doe",
-                Email = "john.doe@example.com",
-                PasswordHash = "hashed_password"
+                Email = "john.doe@example.com"
             }
         };
 
@@ -91,8 +90,7 @@ public class UserFacadeTests
             Id = Guid.NewGuid(),
             FirstName = "John",
             LastName = "Novak",
-            Email = "john.novak@example.com",
-            PasswordHash = "hashed_password",
+            Email = "john.novak@example.com"
         };
         
         var userEntity = new UserEntity
@@ -101,7 +99,6 @@ public class UserFacadeTests
             FirstName = userModel.FirstName,
             LastName = userModel.LastName,
             Email = userModel.Email,
-            PasswordHash = userModel.PasswordHash,
         };
         
         repositoryMock.Setup(repo => repo.Insert(userEntity)).Returns(userEntity.Id);
@@ -117,8 +114,7 @@ public class UserFacadeTests
             user.Id == userModel.Id &&
             user.FirstName == userModel.FirstName &&
             user.LastName == userModel.LastName &&
-            user.Email == userModel.Email &&
-            user.PasswordHash == userModel.PasswordHash
+            user.Email == userModel.Email
         )), Times.Once);
         mapperMock.Verify(m => m.Map<UserEntity>(userModel), Times.Once);
     }
@@ -135,8 +131,7 @@ public class UserFacadeTests
             Id = Guid.NewGuid(),
             FirstName = "John",
             LastName = "Doe",
-            Email = "john.doe@example.com",
-            PasswordHash = "hashed_password"
+            Email = "john.doe@example.com"
         };
 
         var userEntity = new UserEntity
@@ -145,7 +140,6 @@ public class UserFacadeTests
             FirstName = "John",
             LastName = "Doe",
             Email = "john.doe@example.com",
-            PasswordHash = "hashed_password"
         };
 
         repositoryMock.Setup(repo => repo.Update(userEntity)).Returns(userModel.Id);
@@ -154,7 +148,7 @@ public class UserFacadeTests
         var facade = new UserFacade(repositoryMock.Object, mapperMock.Object);
 
         /* Act */
-        var result = facade.Update(userModel);
+        var result = facade.Update(userModel, null);
 
         /* Assert */
         Assert.Equal(userModel.Id, result);

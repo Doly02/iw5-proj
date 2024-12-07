@@ -13,20 +13,18 @@ namespace Forms.Web.BL.Installers
 
             serviceCollection.AddScoped<IResponseApiClient, ResponseApiClient>();
             
-            serviceCollection.AddScoped<IUserApiClient, UserApiClient>();
+            serviceCollection.AddScoped<IUserApiClient, UserApiClient>(sp =>
+            {
+                var clientFactory = sp.GetRequiredService<IHttpClientFactory>();
+                var client = clientFactory.CreateClient("AnonymousApi"); 
+                return new UserApiClient(client);
+            });
 
             serviceCollection.Scan(selector =>
                 selector.FromAssemblyOf<WebBLInstaller>()
                     .AddClasses(classes => classes.AssignableTo<IAppFacade>())
                     .AsSelfWithInterfaces()
                     .WithTransientLifetime());
-        }
-
-        public HttpClient CreateApiHttpClient(IServiceProvider serviceProvider, string apiBaseUrl)
-        {
-            var client = new HttpClient() { BaseAddress = new Uri(apiBaseUrl) };
-            client.BaseAddress = new Uri(apiBaseUrl);
-            return client;
         }
     }
 }

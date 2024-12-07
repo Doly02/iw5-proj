@@ -28,6 +28,12 @@ builder.Services.AddHttpClient("api", client => client.BaseAddress = new Uri(api
         ?.ConfigureHandler(
             authorizedUrls: new[] { apiBaseUrl },
             scopes: new[] { "formsapi" }));
+
+builder.Services.AddHttpClient("AnonymousApi", client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+});
+
 builder.Services.AddScoped<HttpClient>(serviceProvider => serviceProvider.GetService<IHttpClientFactory>().CreateClient("api"));
 
 builder.Services.AddAutoMapper(configuration =>

@@ -10,7 +10,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Common\Forms.Common.BL\Forms.Common.BL.csproj" />
       <ProjectReference Include="..\Common\Forms.Common.Models\Forms.Common.Models.csproj" />
-      <ProjectReference Include="..\Forms.Api.BL\Forms.Api.BL.csproj" />
+      <ProjectReference Include="..\Forms.Api.DAL.EF\Forms.Api.DAL.EF.csproj" />
       <ProjectReference Include="..\Forms.IdentityProvider.DAL\Forms.IdentityProvider.DAL.csproj" />
     </ItemGroup>
 

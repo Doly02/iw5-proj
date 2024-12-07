@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Forms.Api.DAL.EF.Installers;
 using Forms.Common.Extensions;
 using Forms.IdentityProvider.App;
 using Forms.IdentityProvider.App.Endpoints;

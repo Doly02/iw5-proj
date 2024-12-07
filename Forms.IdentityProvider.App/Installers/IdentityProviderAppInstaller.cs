@@ -1,6 +1,9 @@
 ﻿using Forms.Common.Installers;
 using Forms.IdentityProvider.DAL;
 using Forms.IdentityProvider.DAL.Entities;
+using Forms.Web.BL;
+using Forms.Web.DAL.Repositories;
+using Forms.Web.BL.Facades;
 using Microsoft.AspNetCore.Identity;
 
 namespace Forms.IdentityProvider.App.Installers;
@@ -22,5 +25,8 @@ public class IdentityProviderAppInstaller : IInstaller
 
             options.SignIn.RequireConfirmedEmail = true;
         });
+    
+        serviceCollection.AddScoped<IUserApiClient, UserApiClient>();
     }
+    
 }

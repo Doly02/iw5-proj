@@ -17,5 +17,6 @@ public class IdentityProviderBLInstaller : IInstaller
                 .AddClasses(classes => classes.AssignableTo<IAppFacade>())
                 .AsSelfWithInterfaces()
                 .WithScopedLifetime());
+        
     }
 }

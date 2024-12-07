@@ -33,6 +33,15 @@ private UserDetailModel? User { get; set; }
 
 protected override async Task OnInitializedAsync()
 {
-User = await UserFacade.GetByIdAsync(Id);
+    Console.WriteLine($"Fetching user with ID: {Id}");
+    try
+    {
+        User = await UserFacade.GetByIdAsync(Id);
+        Console.WriteLine($"User fetched: {User?.FirstName} {User?.LastName}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error fetching user: {ex.Message}");
+    }
 }
 }
