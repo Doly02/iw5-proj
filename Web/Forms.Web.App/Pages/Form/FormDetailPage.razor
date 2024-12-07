@@ -1,6 +1,9 @@
 @page "/form/{id:guid}"
 @namespace Forms.Web.App.Pages
 @using Forms.Common.Enums
+@using Forms.Common.Models.Question
+@using Forms.Common.Models.Response
+@using Forms.Common.Models.User
 @inherits PageBase
 
 <div class="container mt-5">
@@ -41,7 +44,7 @@
                                     @switch (question.QuestionType)
                                     {
                                         case QuestionType.OpenQuestion:
-                                            <input type="text" class="form-control" placeholder="Vaše odpověď" />
+                                            <input type="text" class="form-control" @bind="UserResponses[question.Id]" placeholder="Vaše odpověď" />
                                             break;
                                         case QuestionType.Range:
                                             @if (question.Answer != null)
@@ -49,7 +52,7 @@
                                                 @foreach (var answer in question.Answer)
                                                 {
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="@($"question-{question.Id}")" value="@answer" />
+                                                        <input class="form-check-input" type="checkbox" name="@($"question-{question.Id}")" value="@answer" @onchange="(e) => UpdateCheckboxResponse(question, e.Value.ToString(), e)" />
                                                         <label class="form-check-label">
                                                             @answer
                                                         </label>
@@ -63,7 +66,7 @@
                                                 @foreach (var answer in question.Answer)
                                                 {
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="@($"question-{question.Id}")" value="@answer" />
+                                                        <input class="form-check-input" type="checkbox" name="@($"question-{question.Id}")" value="@answer" @onchange="(e) => UpdateCheckboxResponse(question, e.Value.ToString(), e)" />
                                                         <label class="form-check-label">
                                                             @answer
                                                         </label>
@@ -78,6 +81,8 @@
                                 </div>
                             }
                         }
+
+                        <!-- Tlačítko mimo smyčku -->
                         <button class="btn btn-primary mt-4" @onclick="SubmitForm">Odeslat</button>
                     </div>
                 </div>
@@ -87,8 +92,56 @@
 </div>
 
 @code {
-    private void SubmitForm()
+    private Dictionary<Guid, List<string>> UserResponses { get; set; } = new();
+    
+    private void UpdateCheckboxResponse(QuestionDetailModel question, string answer, ChangeEventArgs e)
     {
-        Console.WriteLine("Formulář odeslán.");
+        if (!UserResponses.ContainsKey(question.Id))
+        {
+            UserResponses[question.Id] = new List<string>();
+        }
+
+        if ((bool)e.Value)
+        {
+            UserResponses[question.Id].Add(answer);
+        }
+        else
+        {
+            UserResponses[question.Id].Remove(answer);
+        }
+    }
+    
+    private async Task SubmitForm()
+    {
+        if (Form?.Questions == null)
+            return;
+
+        foreach (var question in Form.Questions)
+        {
+            var response = new ResponseDetailModel
+            {
+                Id = Guid.NewGuid(),
+                User = new UserListModel
+                {
+                    Id = CurrentUserId,
+                    FirstName = "TODO",
+                    LastName = "TODO",
+                    Email = "TODO"
+                },
+                Question = new QuestionListModel
+                {
+                    Id = question.Id,
+                    Name = question.Name,
+                    Description = question.Description,
+                    QuestionType = question.QuestionType,
+                    Answer = question.Answer
+                },
+                UserResponse = UserResponses.ContainsKey(question.Id) ? UserResponses[question.Id] : new List<string>()
+            };
+
+            await SaveResponseAsync(response);
+        }
+
+        Console.WriteLine("Formulář byl úspěšně odeslán.");
     }
 } 

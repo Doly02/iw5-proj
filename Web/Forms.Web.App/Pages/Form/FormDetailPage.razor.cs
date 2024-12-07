@@ -1,4 +1,6 @@
+using Forms.Api.DAL.Common.Entities;
 using Forms.Common.Models.Form;
+using Forms.Common.Models.Response;
 using Forms.Web.BL.Facades;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -18,6 +20,7 @@ namespace Forms.Web.App.Pages
 
         public FormDetailModel Data { get; set; } = null!;
         private FormDetailModel? Form { get; set; }
+        
         private Guid CurrentUserId { get; set; }
         public EventCallback OnModification { get; set; }
 
@@ -57,7 +60,7 @@ namespace Forms.Web.App.Pages
             await FormFacade.DeleteAsync(Id);
             await NotifyOnModification();
         }
-
+        
         private async Task NotifyOnModification()
         {
             if (OnModification.HasDelegate)
@@ -66,6 +69,12 @@ namespace Forms.Web.App.Pages
             }
         }
 
+        public async Task SaveResponseAsync(ResponseDetailModel response)
+        {
+            // Delegování na metodu v `FormFacade`
+            await FormFacade.SaveResponseAsync(response);
+        }
+        
         private FormDetailModel GetNewFormModel(Guid userId)
             => new()
             {

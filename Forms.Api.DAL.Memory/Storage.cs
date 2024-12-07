@@ -164,7 +164,14 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Kolik jsi mel na bodu z ISA cvika?",
                 QuestionType = QuestionType.Range,
                 FormId = _formGuids[1],
-                Answer = new List<string>{}   // todo doplnit range odpovedi
+                Answer = new List<string>
+                {
+                    "0-10 bodů",
+                    "11-20 bodů",
+                    "21-30 bodů",
+                    "31-40 bodů",
+                    "41-50 bodů"
+                }
             });
         }
         
