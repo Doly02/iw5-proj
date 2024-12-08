@@ -85,8 +85,8 @@
                                 </div>
                             }
                         }
-                        
-                        <button class="btn btn-primary mt-4" @onclick="SubmitForm">Odeslat</button>
+
+                        <button class="btn btn-primary" @onclick="SubmitResponses">Odeslat odpovědi</button>
                     </div>
                 </div>
             </div>
@@ -139,48 +139,43 @@
         Console.WriteLine($"Aktualizované odpovědi pro otázku {question.Name}: {string.Join(", ", UserResponses[question.Id])}");
     }
         
-    private async Task SubmitForm()
+    public async Task SubmitResponses()
     {
         if (Form?.Questions == null)
             return;
 
         foreach (var question in Form.Questions)
         {
-            if (UserResponses.ContainsKey(question.Id))
+            // Pokud uživatel odpověděl na otázku
+            if (UserResponses.TryGetValue(question.Id, out var responses) && responses.Any())
             {
-                Console.WriteLine($"Otázka: {question.Name}, Odpovědi: {string.Join(", ", UserResponses[question.Id])}");
-            }
-            else
-            {
-                Console.WriteLine($"Otázka: {question.Name}, Odpovědi: žádné odpovědi.");
-            }
-
-            var response = new ResponseDetailModel
-            {
-                Id = Guid.NewGuid(),
-                User = new UserListModel
+                // Vytvoření ResponseDetailModel pro danou otázku
+                var response = new ResponseDetailModel
                 {
-                    Id = CurrentUserId,
-                    FirstName = "TODO",
-                    LastName = "TODO",
-                    Email = "TODO"
-                },
-                Question = new QuestionListModel
-                {
-                    Id = question.Id,
-                    Name = question.Name,
-                    Description = question.Description,
-                    QuestionType = question.QuestionType,
-                    Answer = question.Answer
-                },
-                UserResponse = UserResponses.ContainsKey(question.Id) 
-                    ? new List<string>(UserResponses[question.Id]) // Copy of The List
-                    : new List<string>()
-            };
+                    Id = Guid.NewGuid(), // Nové ID odpovědi
+                    User = new UserListModel
+                    {
+                        Id = CurrentUserId, // ID aktuálního uživatele
+                        FirstName = "TODO", // Volitelně: načíst z autentizace
+                        LastName = "TODO",  // Volitelně: načíst z autentizace
+                        Email = "TODO"      // Volitelně: načíst z autentizace
+                    },
+                    Question = new QuestionListModel
+                    {
+                        Id = question.Id,
+                        Name = question.Name,
+                        Description = question.Description,
+                        QuestionType = question.QuestionType,
+                        Answer = question.Answer
+                    },
+                    UserResponse = new List<string>(responses) // Kopie odpovědí uživatele
+                };
 
-            await SaveResponseAsync(response);
+                // Uložení odpovědi do databáze pomocí facade
+                await SaveResponseAsync(response);
+            }
         }
 
-        Console.WriteLine("Formulář byl úspěšně odeslán.");
+        Console.WriteLine("Všechny odpovědi byly úspěšně odeslány.");
     }
 } 

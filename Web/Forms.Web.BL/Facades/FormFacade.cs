@@ -13,10 +13,13 @@ namespace Forms.Web.BL.Facades;
 public class FormFacade : FacadeBase<FormDetailModel, FormListModel>
 {
     private readonly IFormApiClient _apiClient;
+    
+    private readonly IResponseApiClient _responseApiClient;
 
     private readonly ResponseRepository _responseRepository;
     public FormFacade(
         IFormApiClient apiClient,
+        IResponseApiClient responseApiClient,
         FormRepository formRepository,
         ResponseRepository responseRepository,
         IMapper mapper,
@@ -24,6 +27,7 @@ public class FormFacade : FacadeBase<FormDetailModel, FormListModel>
         : base(formRepository, mapper, localDbOptions)
     {
         this._apiClient = apiClient;
+        this._responseApiClient = responseApiClient;
         _responseRepository = responseRepository;
     }
     
@@ -53,9 +57,9 @@ public class FormFacade : FacadeBase<FormDetailModel, FormListModel>
         return await _apiClient.UpsertAsync(culture, data);
     }
 
-    public async Task SaveResponseAsync(ResponseDetailModel response)
+    public async Task<Guid> SaveResponseAsync(ResponseDetailModel response,string culture)
     {
-        await _responseRepository.InsertAsync(response);
+        return await _responseApiClient.UpsertAsync(culture, response);
     }
     public override async Task DeleteAsync(Guid id)
     {

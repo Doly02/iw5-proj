@@ -21,7 +21,7 @@ namespace Forms.Web.App.Pages
 
         public FormDetailModel Data { get; set; } = null!;
         private FormDetailModel? Form { get; set; }
-        
+        private readonly string culture = "en-US";
         private Guid CurrentUserId { get; set; }
         public EventCallback OnModification { get; set; }
 
@@ -61,6 +61,7 @@ namespace Forms.Web.App.Pages
                     }
                 }
             }
+            CurrentUserId = Guid.Parse("b3f62b8b-291c-42e5-b8d9-3afbb3276dca");
         }
 
         public async Task Save()
@@ -86,7 +87,7 @@ namespace Forms.Web.App.Pages
 
         public async Task SaveResponseAsync(ResponseDetailModel response)
         {
-            await FormFacade.SaveResponseAsync(response);
+            await FormFacade.SaveResponseAsync(response, culture);
         }
         
         private FormDetailModel GetNewFormModel(Guid userId)
