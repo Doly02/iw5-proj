@@ -22,6 +22,7 @@
                             @if (DateTime.Now >= @form.DateOpen && DateTime.Now <= @form.DateClose)
                             {
                                 <a href="/form/@form.Id" class="btn btn-primary">Zobrazit detail</a>
+                                <a href="/questions/@form.Id" class="btn btn-secondary">Zobrazit odpovědi</a>
                             }
                             else
                             {

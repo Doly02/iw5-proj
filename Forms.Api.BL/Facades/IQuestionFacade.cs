@@ -13,5 +13,6 @@ namespace Forms.Api.BL.Facades
         Guid Create(QuestionDetailModel questionModel);
         Guid? Update(QuestionDetailModel questionModel);
         void Delete(Guid id);
+        List<QuestionListModel> GetByFormId(Guid formId);
     }
 }

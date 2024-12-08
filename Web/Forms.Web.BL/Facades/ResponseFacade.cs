@@ -9,6 +9,7 @@ namespace Forms.Web.BL.Facades
     public class ResponseFacade : FacadeBase<ResponseDetailModel, ResponseListModel>
     {
         private readonly IResponseApiClient apiClient;
+        private readonly IMapper mapper;
 
         public ResponseFacade(
             IResponseApiClient apiClient,
@@ -18,6 +19,7 @@ namespace Forms.Web.BL.Facades
             : base(responseRepository, mapper, localDbOptions)
         {
             this.apiClient = apiClient;
+            this.mapper = mapper;
         }
 
         public override async Task<List<ResponseListModel>> GetAllAsync()
@@ -43,6 +45,18 @@ namespace Forms.Web.BL.Facades
         public override async Task DeleteAsync(Guid id)
         {
             await apiClient.ResponseDeleteAsync(id, culture);
+        }
+        public async Task<ICollection<ResponseDetailModel>> GetByQuestionIdAsync(Guid questionId)
+        {
+            var culture = System.Globalization.CultureInfo.CurrentCulture.Name; // Nastavení aktuální kultury
+            var responsesFromApi = await apiClient.ResponseGetByQuestionIdAsync(questionId, culture);
+
+            if (responsesFromApi == null)
+            {
+                throw new NullReferenceException($"API did not return responses for questionId: {questionId}");
+            }
+
+            return mapper.Map<ICollection<ResponseDetailModel>>(responsesFromApi);
         }
     }
 }
