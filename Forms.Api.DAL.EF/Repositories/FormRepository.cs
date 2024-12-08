@@ -18,6 +18,9 @@ public class FormRepository : RepositoryBase<FormEntity>, IFormRepository
     {
         return context.Forms
             .Include(f => f.Questions)
+            .ThenInclude(q => q.Responses)
+            .ThenInclude(r => r.User)
+
             .FirstOrDefault(f => f.Id == id);
     }
     
@@ -28,6 +31,9 @@ public class FormRepository : RepositoryBase<FormEntity>, IFormRepository
         {
             var existingForm = context.Forms
                 .Include(f => f.Questions)
+                .ThenInclude(q => q.Responses)
+                .ThenInclude(r => r.User)
+
                 .Single(u => u.Id == form.Id);
             
             _mapper.Map(form, existingForm);

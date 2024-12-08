@@ -5,6 +5,8 @@ using Forms.Common.Models.Form;
 using Forms.Common.Models.User;
 using System.Text.Json;
 using Forms.Api.DAL.Memory;
+using Forms.Common.Enums;
+using Forms.Common.Models.Question;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -121,5 +123,87 @@ public class FormControllerTests: IAsyncDisposable
     {
         await _app.DisposeAsync();
     }
+    
+    [Fact]
+public async Task Edit_Form_Adds_New_Questions_Successfully()
+{
+    // Arrange
+    var storage = new Storage();
+    var existingForm = storage.Forms[0]; // Vyber existujúci formulár
+    var existingFormId = existingForm.Id;
+
+    // Vytvor nové otázky na pridanie
+    var newQuestions = new List<QuestionDetailModel>
+    {
+        new QuestionDetailModel
+        {
+            Id = Guid.NewGuid(),
+            Name = "Favorite Color", // Povinné pole
+            Description = "Select your favorite color from the options.", // Povinné pole
+            QuestionType = QuestionType.Selection, // Povinné pole (Enum)
+            Answer = new List<string> { "Red", "Blue", "Green" }, // Nepovinné pole
+            FormId = existingForm.Id // Prepojenie otázky s formulárom
+        },
+        new QuestionDetailModel
+        {
+            Id = Guid.NewGuid(),
+            Name = "Age", // Povinné pole
+            Description = "Enter your age in years.", // Povinné pole
+            QuestionType = QuestionType.OpenQuestion, // Povinné pole (Enum)
+            FormId = existingForm.Id // Prepojenie otázky s formulárom
+        }
+    };
+
+    // Upravený formulár s novými otázkami
+    var updatedForm = new FormDetailModel
+    {
+        Id = existingForm.Id,
+        Name = existingForm.Name,
+        Description = existingForm.Description,
+        DateOpen = existingForm.DateOpen,
+        DateClose = existingForm.DateClose,
+        UserId = existingForm.UserId,
+        Questions = newQuestions // Pridanie nových otázok
+    };
+
+    // Serialize
+    var jsonContent = new StringContent(
+        JsonSerializer.Serialize(updatedForm),
+        Encoding.UTF8,
+        "application/json");
+
+    // Act
+    var response = await _client.Value.PutAsync("/api/form", jsonContent);
+
+    // Assert
+    if (!response.IsSuccessStatusCode)
+    {
+        var errorContent = await response.Content.ReadAsStringAsync();
+        _testOutputHelper.WriteLine($"Error: {response.StatusCode}");
+        _testOutputHelper.WriteLine($"Response content: {errorContent}");
+    }
+
+    response.EnsureSuccessStatusCode();
+    Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+    // Overenie, že otázky boli pridané
+    var getResponse = await _client.Value.GetAsync($"/api/Form/{existingFormId}");
+    getResponse.EnsureSuccessStatusCode();
+    
+    var responseString = await getResponse.Content.ReadAsStringAsync();
+    var returnedForm = JsonSerializer.Deserialize<FormDetailModel>(
+        responseString, 
+        new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+    
+    Assert.NotNull(returnedForm);
+    Assert.Equal(updatedForm.Questions.Count, returnedForm.Questions.Count);
+
+    foreach (var newQuestion in newQuestions)
+    {
+        Assert.Contains(returnedForm.Questions, q => q.Id == newQuestion.Id);
+    }
+}
+
+    
 
 }
