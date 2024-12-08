@@ -9,6 +9,8 @@ using Forms.Common.Models.User;
 using System.Text.Json;
 using Forms.Api.DAL.Memory;
 using Microsoft.IdentityModel.Tokens;
+using Forms.Common.Enums;
+using Forms.Common.Models.Question;
 using Xunit;
 using Xunit.Abstractions;
 

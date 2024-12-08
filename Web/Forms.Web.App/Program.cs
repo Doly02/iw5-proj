@@ -24,7 +24,7 @@ builder.Configuration.AddJsonFile("appsettings.json");
 var apiBaseUrl = builder.Configuration.GetValue<string>("ApiBaseUrl");
 
 builder.Services.AddInstaller<WebDALInstaller>();
-builder.Services.AddInstaller<WebBLInstaller>();
+builder.Services.AddInstaller<WebBLInstaller>(apiBaseUrl);
 
 builder.Services.AddHttpClient("api", client => client.BaseAddress = new Uri(apiBaseUrl))
     .AddHttpMessageHandler(serviceProvider

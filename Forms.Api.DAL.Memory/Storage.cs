@@ -92,8 +92,8 @@ namespace Forms.Api.DAL.Memory;
                 Id = _formGuids[0],
                 Name = "VUT FIT",
                 Description = "Bud FIT",
-                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                DateClose = DateTime.Now.AddDays(30),
+                DateOpen = new DateTime(2024, 11, 29, 10, 00, 00),
+                DateClose = new DateTime(2024, 12, 12, 10, 00, 00),
                 UserId = _userGuids[0],
                 Questions = Questions.Where(q => q.FormId == _formGuids[0]).ToList()
             });
@@ -101,10 +101,10 @@ namespace Forms.Api.DAL.Memory;
             Forms.Add(new FormEntity
             {
                 Id = _formGuids[1],
-                Name = "VUT FIT",
-                Description = "Bud FIT",
-                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                DateClose = DateTime.Now.AddDays(30),
+                Name = "VUT FIT 2",
+                Description = "Bud FIT 2",
+                DateOpen = new DateTime(2024, 12, 05, 08, 00, 00),
+                DateClose = new DateTime(2024, 12, 10, 10, 00, 00),
                 UserId = _userGuids[1],
                 Questions = Questions.Where(q => q.FormId == _formGuids[1]).ToList()
             });
@@ -114,8 +114,8 @@ namespace Forms.Api.DAL.Memory;
                 Id = _formGuids[2],
                 Name = "Dovolena Form",
                 Description = "Formular pro vyber dovolene",
-                DateOpen = DateTime.Now.AddDays(-5),            // Five Days Ago
-                DateClose = DateTime.Now.AddDays(30),
+                DateOpen = new DateTime(2024, 11, 20, 15, 30, 00),
+                DateClose = new DateTime(2024, 12, 10, 10, 00, 00),
                 UserId = _userGuids[2],
                 Questions = Questions.Where(q => q.FormId == _formGuids[2]).ToList()
             });
@@ -161,7 +161,24 @@ namespace Forms.Api.DAL.Memory;
                 Description = "Kolik jsi mel na bodu z ISA cvika?",
                 QuestionType = QuestionType.Range,
                 FormId = _formGuids[1],
-                Answer = new List<string>{}   // todo doplnit range odpovedi
+                Answer = new List<string>
+                {
+                    "0-10 bodů",
+                    "11-20 bodů",
+                    "21-30 bodů",
+                    "31-40 bodů",
+                    "41-50 bodů"
+                }
+            });
+            
+            Questions.Add(new QuestionEntity
+            {
+                Id = _questionGuids[4],
+                Name = "Question 5",
+                Description = "Proc?",
+                QuestionType = QuestionType.OpenQuestion,
+                FormId = _formGuids[2],
+                Answer = new List<string>()
             });
         }
         
@@ -207,6 +224,16 @@ namespace Forms.Api.DAL.Memory;
                 User = Users[1],
                 Question = Questions[3],
                 UserResponse = new List<string>{}
+            });
+            
+            Responses.Add(new ResponseEntity
+            {
+                Id = _responseGuids[4],
+                UserId = _userGuids[1],
+                QuestionId = _questionGuids[2],
+                User = Users[1],
+                Question = Questions[2],
+                UserResponse = new List<string>{Questions[2].Answer[1], Questions[2].Answer[2]}   // "Grecko", "Egypt"
             });
         }
     }

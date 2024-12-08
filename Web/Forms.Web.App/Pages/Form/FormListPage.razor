@@ -1,0 +1,38 @@
+@page "/forms"
+@namespace Forms.Web.App.Pages
+@layout ListLayout
+@inherits PageBase
+
+<div class="container">
+    <h1 class="mb-4">Formuláře</h1>
+    @if (Forms == null || Forms.Count == 0)
+    {
+        <p>Žádné formuláře na zobrazení.</p>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var form in Forms)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="icons/document.png" class="card-img-top w-50 h-50" alt="Formulář">
+                        <div class="card-body">
+                            <h4 class="card-title">@form.Name</h4>
+                            @if (DateTime.Now >= @form.DateOpen && DateTime.Now <= @form.DateClose)
+                            {
+                                <a href="/form/@form.Id" class="btn btn-primary">Zobrazit detail</a>
+                                <a href="/questions/@form.Id" class="btn btn-secondary">Zobrazit odpovědi</a>
+                            }
+                            else
+                            {
+                                <img src="icons/lock.png" class="h-auto" style="width: 37px;" alt="Zamknuto">
+                            }
+                            <a href="/form/edit/@form.Id" class="btn btn-primary">Editovať</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>

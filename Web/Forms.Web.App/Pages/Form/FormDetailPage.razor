@@ -1,0 +1,147 @@
+@page "/form/{id:guid}"
+@namespace Forms.Web.App.Pages
+@using Forms.Common.Enums
+@using Forms.Common.Models.Question
+@using Forms.Common.Models.Response
+@using Forms.Common.Models.User
+@inherits PageBase
+
+<div class="container mt-5">
+    @if (Form == null)
+    {
+        <div class="text-center">
+            <p class="mt-3">Načítám data formuláře...</p>
+        </div>
+    }
+    else
+    {
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="card-title mb-0">@Form.Name</h2>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text"><strong>Datum otevření:</strong> @Form.DateOpen.ToString("dd.MM.yyyy")</p>
+                        <p class="card-text"><strong>Datum uzavření:</strong> @Form.DateClose.ToString("dd.MM.yyyy")</p>
+                        <p class="card-text"><strong>Popis:</strong> @Form.Description</p>
+
+                        <hr class="custom-divider my-4">
+
+                        <!-- Sekcia otázok -->
+                        @if (Form.Questions == null || !Form.Questions.Any())
+                        {
+                            <p class="text-center text-muted">Formulář nemá žádné otázky.</p>
+                        }
+                        else
+                        {
+                            @foreach (var question in Form.Questions)
+                            {
+                                <div class="mb-4">
+                                    <h5>@question.Name</h5>
+                                    <p>@question.Description</p>
+
+                                    @switch (question.QuestionType)
+                                    {
+                                        case QuestionType.OpenQuestion:
+                                            <input type="text" class="form-control" @bind="UserResponses[question.Id][0]" placeholder="Vaše odpověď" />
+                                            break;
+                                        case QuestionType.Range:
+                                            @if (question.Answer != null)
+                                            {
+                                                @foreach (var answer in question.Answer)
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="@($"question-{question.Id}")" value="@answer" @onchange="(e) => UpdateCheckboxResponse(question, e.Value.ToString(), e)" />
+                                                        <label class="form-check-label">
+                                                            @answer
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                            break;
+                                        case QuestionType.Selection:
+                                            @if (question.Answer != null)
+                                            {
+                                                @foreach (var answer in question.Answer)
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" name="@($"question-{question.Id}")" value="@answer" @onchange="(e) => UpdateCheckboxResponse(question, e.Value.ToString(), e)" />
+                                                        <label class="form-check-label">
+                                                            @answer
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                            break;
+                                        default:
+                                            <p class="text-muted">Neznámý typ otázky.</p>
+                                            break;
+                                    }
+                                </div>
+                            }
+                        }
+
+                        <!-- Tlačítko mimo smyčku -->
+                        <button class="btn btn-primary mt-4" @onclick="SubmitForm">Odeslat</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private Dictionary<Guid, List<string>> UserResponses { get; set; } = new();
+    
+    private void UpdateCheckboxResponse(QuestionDetailModel question, string answer, ChangeEventArgs e)
+    {
+        if (!UserResponses.ContainsKey(question.Id))
+        {
+            UserResponses[question.Id] = new List<string>();
+        }
+
+        if ((bool)e.Value)
+        {
+            UserResponses[question.Id].Add(answer);
+        }
+        else
+        {
+            UserResponses[question.Id].Remove(answer);
+        }
+    }
+    
+    private async Task SubmitForm()
+    {
+        if (Form?.Questions == null)
+            return;
+
+        foreach (var question in Form.Questions)
+        {
+            var response = new ResponseDetailModel
+            {
+                Id = Guid.NewGuid(),
+                User = new UserListModel
+                {
+                    Id = CurrentUserId,
+                    FirstName = "TODO",
+                    LastName = "TODO",
+                    Email = "TODO"
+                },
+                Question = new QuestionListModel
+                {
+                    Id = question.Id,
+                    Name = question.Name,
+                    Description = question.Description,
+                    QuestionType = question.QuestionType,
+                    Answer = question.Answer
+                },
+                UserResponse = UserResponses.ContainsKey(question.Id) ? UserResponses[question.Id] : new List<string>()
+            };
+
+            await SaveResponseAsync(response);
+        }
+
+        Console.WriteLine("Formulář byl úspěšně odeslán.");
+    }
+} 

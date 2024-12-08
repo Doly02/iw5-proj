@@ -1,0 +1,48 @@
+@page "/ResponseListPage"
+@namespace Forms.Web.App.Pages
+@layout ListLayout
+@inherits PageBase
+
+<h3>ResponseListPage</h3>
+
+@if (Responses == null || !Responses.Any())
+{
+    <p>Načítání odpovědí...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Uživatel</th>
+            <th>Otázka</th>
+            <th>Odpovědi</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var response in Responses)
+        {
+            <tr>
+                <td>@response.User.FirstName</td>
+                <td>@response.User.LastName</td>
+                <td>@response.Question.Name</td> 
+                <td>
+                    @if (response.UserResponse != null && response.UserResponse.Any())
+                    {
+                        <ul>
+                            @foreach (var userResponse in response.UserResponse)
+                            {
+                                <li>@userResponse</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <span>Žádná odpověď</span>
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

@@ -19,7 +19,7 @@ namespace Forms.Api.App.EndToEndTests
         {
             _testOutputHelper = testOutputHelper;
             _app = new FormsApiApplicationFactory();
-            _client = new Lazy<HttpClient>(_app.CreateClient());
+            _client = new Lazy<HttpClient>(_app.CreateClient());    
         }
 
         [Fact]

@@ -1,0 +1,59 @@
+@page "/search"
+@namespace Forms.Web.App.Pages
+@layout ListLayout
+@using Forms.Common.Models.Search
+@using Forms.Web.BL.Facades
+@inherits PageBase
+@inject SearchFacade SearchFacade
+
+<h1>Vyhledávání</h1>
+
+<div class="mb-4">
+    <input type="text" @bind="Query" class="form-control" placeholder="Zadejte hledaný text..." />
+    <button class="btn btn-primary mt-2" @onclick="Search">Vyhledat</button>
+</div>
+
+@if (Results is null)
+{
+    <p>Zadejte text pro vyhledávání.</p>
+}
+else if (!Results.Any())
+{
+    <p>Nebyly nalezeny žádné výsledky.</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var result in Results)
+        {
+            <li class="list-group-item">
+                <a href="@GetDetailLink(result)">@result.Name</a><br />
+                <small>@result.Description</small>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string Query { get; set; } = string.Empty;
+    private ICollection<SearchResultModel>? Results { get; set; }
+
+    private async Task Search()
+    {
+        if (!string.IsNullOrWhiteSpace(Query))
+        {
+            Results = await SearchFacade.SearchAsync(Query);
+        }
+    }
+
+    private string GetDetailLink(SearchResultModel result)
+    {
+        Console.WriteLine($"Result type: {result.Type}");
+        return result.Type switch
+        {
+            "User" => $"/user/{result.Id}",
+            "Question" => $"/question/{result.Id}",
+            _ => "/"
+        };
+    }
+}
