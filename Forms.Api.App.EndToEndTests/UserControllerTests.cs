@@ -65,6 +65,27 @@ namespace Forms.Api.App.EndToEndTests
         }
         
         [Fact]
+        public async Task Delete_User()
+        {
+            /* Arrange */
+            var storage = new Storage();
+            var userId = storage.Users[0].Id;
+
+            /* Act */
+            var response = await _client.Value.DeleteAsync($"/api/User/{userId}");
+            var content = await response.Content.ReadAsStringAsync();
+            _testOutputHelper.WriteLine($"Response content: {content}");
+
+            /* Assert */
+            response.EnsureSuccessStatusCode();
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            
+            /* Act */
+            response = await _client.Value.GetAsync($"/api/User/{userId}");
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
+        }
+        
+        [Fact]
         public async Task Post_User_Returns_Success()
         {
             /* Arrange */

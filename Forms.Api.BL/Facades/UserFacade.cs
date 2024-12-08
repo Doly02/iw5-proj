@@ -37,7 +37,6 @@ public class UserFacade : FacadeBase<IUserRepository, UserEntity>, IUserFacade
             : Create(userModel);
     }
 
-    // todo hashovani hesla
     public Guid Create(UserDetailModel userModel)
     {
         var userEntity = mapper.Map<UserEntity>(userModel);

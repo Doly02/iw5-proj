@@ -12,13 +12,8 @@ namespace Forms.Web.BL.Installers
             serviceCollection.AddScoped<IQuestionApiClient, QuestionApiClient>();
 
             serviceCollection.AddScoped<IResponseApiClient, ResponseApiClient>();
-            
-            serviceCollection.AddScoped<IUserApiClient, UserApiClient>(sp =>
-            {
-                var clientFactory = sp.GetRequiredService<IHttpClientFactory>();
-                var client = clientFactory.CreateClient("AnonymousApi"); 
-                return new UserApiClient(client);
-            });
+
+            serviceCollection.AddScoped<IUserApiClient, UserApiClient>();
 
             serviceCollection.Scan(selector =>
                 selector.FromAssemblyOf<WebBLInstaller>()

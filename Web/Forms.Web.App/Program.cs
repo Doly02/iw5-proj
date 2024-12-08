@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using AutoMapper.Internal;
 using Forms.Common.Extensions;
 using Forms.Web.App;
@@ -12,6 +14,8 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.JSInterop;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap["role"] = ClaimTypes.Role;
+
 builder.RootComponents.Add<App>("app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
@@ -29,10 +33,10 @@ builder.Services.AddHttpClient("api", client => client.BaseAddress = new Uri(api
             authorizedUrls: new[] { apiBaseUrl },
             scopes: new[] { "formsapi" }));
 
-builder.Services.AddHttpClient("AnonymousApi", client =>
-{
-    client.BaseAddress = new Uri(apiBaseUrl);
-});
+// builder.Services.AddHttpClient("AnonymousApi", client =>
+// {
+//     client.BaseAddress = new Uri(apiBaseUrl);
+// });
 
 builder.Services.AddScoped<HttpClient>(serviceProvider => serviceProvider.GetService<IHttpClientFactory>().CreateClient("api"));
 

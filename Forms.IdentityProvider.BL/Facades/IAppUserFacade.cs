@@ -17,4 +17,5 @@ public interface IAppUserFacade : IAppFacade
     Task<AppUserDetailModel> CreateExternalAppUserAsync(AppUserExternalCreateModel appUserModel);
     Task<bool> ActivateUserAsync(string securityCode, string email);
     Task<bool> IsEmailConfirmedAsync(string userName);
+    Task<IEnumerable<string>> GetUserRolesByIdAsync(Guid userId);
 }

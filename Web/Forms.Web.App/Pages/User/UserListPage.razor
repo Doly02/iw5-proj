@@ -2,6 +2,8 @@
 @namespace Forms.Web.App.Pages
 @layout ListLayout
 @using Forms.Web.App.Extensions
+@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @inherits PageBase
 
 
@@ -34,6 +36,10 @@
                     {
                         <p>@user.Email</p>
                     }
+                }
+                @if (IsAdmin)
+                {
+                <button class="btn btn-danger mt-2" @onclick="() => DeleteUser(user.Id)">Smazat</button>
                 }
             </div>
         </div>

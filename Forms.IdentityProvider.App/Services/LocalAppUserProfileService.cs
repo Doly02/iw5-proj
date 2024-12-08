@@ -4,6 +4,7 @@ using Forms.IdentityProvider.BL.Models;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
+using IdentityModel;
 
 namespace Forms.IdentityProvider.App.Services;
 
@@ -23,6 +24,7 @@ public class LocalAppUserProfileService : IProfileService
     public async Task GetProfileDataAsync(ProfileDataRequestContext context)
     {
         var subjectId = context.Subject.GetSubjectId();
+        Console.WriteLine($"Getting user info {subjectId}");
 
         AppUserDetailModel? user;
 
@@ -51,9 +53,20 @@ public class LocalAppUserProfileService : IProfileService
                 }).ToList();
 
                 claims.Add(new Claim("username", user.UserName));
+                
+                var userRoles = await appUserFacade.GetUserRolesByIdAsync(user.Id);
+                Console.WriteLine($"Roles for user {user.UserName}: {string.Join(", ", userRoles)}");
+                foreach (var role in userRoles)
+                {
+                    Console.WriteLine($"adding role {role}");
+                    claims.Add(new Claim(JwtClaimTypes.Role, role));
+                }
+                
                 context.AddRequestedClaims(claims);
             }
         }
+        Console.WriteLine("Getting user infooooo");
+
     }
 
     public async Task IsActiveAsync(IsActiveContext context)

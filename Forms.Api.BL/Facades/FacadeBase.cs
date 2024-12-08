@@ -23,5 +23,7 @@ public class FacadeBase<TRepository, TEntity>
             throw new UnauthorizedAccessException();
         }
     }
+    
+
 }
 

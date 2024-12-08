@@ -48,6 +48,6 @@ public class UserFacade : FacadeBase<UserDetailModel, UserListModel>
 
     public override async Task DeleteAsync(Guid id)
     {
-        // await apiClient.UserDeleteAsync(id, culture);
+        await apiClient.UserDeleteAsync(id, culture);
     }
 }

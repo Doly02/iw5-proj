@@ -134,4 +134,16 @@ public class AppUserFacade(
         var users = await appUserRepository.SearchAsync(searchString);
         return mapper.Map<List<AppUserListModel>>(users);
     }
+    
+    public async Task<IEnumerable<string>> GetUserRolesByIdAsync(Guid userId)
+    {
+        var user = await userManager.FindByIdAsync(userId.ToString());
+        if (user == null)
+        {
+            throw new Exception($"User with ID {userId} not found.");
+        }
+
+        var roles = await userManager.GetRolesAsync(user);
+        return roles;
+    }
 }

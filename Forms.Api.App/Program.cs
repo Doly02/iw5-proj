@@ -225,7 +225,12 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
     
     userEndpoints.MapDelete("{id:guid}", Results<Ok, ForbidHttpResult> (Guid id, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
     {
-        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        string? userId = null;
+        if (!EndpointsBase.IsAdmin(httpContextAccessor))
+        {
+        userId = EndpointsBase.GetUserId(httpContextAccessor);
+        }
+        
         try
         {
             userFacade.Delete(id, userId);

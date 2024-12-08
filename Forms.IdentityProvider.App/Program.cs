@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Forms.Api.DAL.EF.Installers;
+using Forms.Common;
 using Forms.Common.Extensions;
 using Forms.IdentityProvider.App;
 using Forms.IdentityProvider.App.Endpoints;
 using Forms.IdentityProvider.App.Installers;
 using Forms.IdentityProvider.BL.Installers;
+using Forms.IdentityProvider.DAL.Entities;
 using Forms.IdentityProvider.DAL.Installers;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()
@@ -37,6 +40,12 @@ try
     app.MapGroup("api")
         .AllowAnonymous()
         .UseUserEndpoints();
+    
+    using (var scope = app.Services.CreateScope())
+    {
+        var serviceProvider = scope.ServiceProvider;
+        await SeedRolesAndUsersAsync(serviceProvider);
+    }
 
     app.Run();
 }
@@ -48,4 +57,75 @@ finally
 {
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
+}
+
+async Task SeedRolesAndUsersAsync(IServiceProvider serviceProvider)
+{
+    var roleManager = serviceProvider.GetRequiredService<RoleManager<AppRoleEntity>>();
+    var userManager = serviceProvider.GetRequiredService<UserManager<AppUserEntity>>();
+
+    // 1. Vytvoření rolí
+    var roles = new[] { AppRoles.Admin, AppRoles.User };
+
+    foreach (var roleName in roles)
+    {
+        if (!await roleManager.RoleExistsAsync(roleName))
+        {
+            var role = new AppRoleEntity { Name = roleName };
+            await roleManager.CreateAsync(role);
+        }
+    }
+
+    // 2. Vytvoření admin uživatele
+    var adminEmail = "admin@example.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+    if (adminUser == null)
+    {
+        adminUser = new AppUserEntity
+        {
+            Id = Guid.NewGuid(),
+            UserName = "admin",
+            Subject = "admin",
+            Email = adminEmail
+        };
+
+        var result = await userManager.CreateAsync(adminUser, "AdminPassword123!");
+        if (!result.Succeeded)
+        {
+            throw new Exception($"Failed to create admin user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+        }
+    }
+
+    if (!await userManager.IsInRoleAsync(adminUser, AppRoles.Admin))
+    {
+        await userManager.AddToRoleAsync(adminUser, AppRoles.Admin);
+    }
+
+    // 3. Vytvoření normálního uživatele
+    var userEmail = "user@example.com";
+    var normalUser = await userManager.FindByEmailAsync(userEmail);
+    if (normalUser == null)
+    {
+        normalUser = new AppUserEntity
+        {
+            Id = Guid.NewGuid(),
+            UserName = "user",
+            Email = userEmail,
+            Subject = "user",
+        };
+
+        var result = await userManager.CreateAsync(normalUser, "UserPassword123!");
+        
+        if (!result.Succeeded)
+        {
+            throw new Exception($"Failed to create normal user: {string.Join(", ", result.Errors.Select(e => e.Description))}");
+        }
+    }
+
+    if (!await userManager.IsInRoleAsync(normalUser, AppRoles.User))
+    {
+        await userManager.AddToRoleAsync(normalUser, AppRoles.User);
+    }
+
+    Console.WriteLine("Seeding completed: Roles and users created.");
 }

@@ -1,4 +1,5 @@
-﻿using Duende.IdentityServer;
+﻿using System.Security.Claims;
+using Duende.IdentityServer;
 using Duende.IdentityServer.Models;
 using IdentityModel;
 
@@ -12,6 +13,7 @@ public static class Config
         {
             var profileIdentityResources = new IdentityResources.Profile();
             profileIdentityResources.UserClaims.Add("username");
+            profileIdentityResources.UserClaims.Add(JwtClaimTypes.Role);
                 
             return
             [

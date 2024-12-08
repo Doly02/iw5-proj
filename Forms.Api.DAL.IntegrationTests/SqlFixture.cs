@@ -133,10 +133,10 @@ public class SqlFixture : IDatabaseFixture, IDisposable
         form1.Questions.Add(question2);
         user1.Forms.Add(form1);
         
-        user1.Responses.Add(response1);
+        // user1.Responses.Add(response1);
         question1.Responses.Add(response1);
         
-        user1.Responses.Add(response2);
+        // user1.Responses.Add(response2);
         question2.Responses.Add(response2);
 
         _context.Users.AddRange(user1, user2);
