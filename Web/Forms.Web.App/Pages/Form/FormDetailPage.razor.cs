@@ -86,7 +86,6 @@ namespace Forms.Web.App.Pages
 
         public async Task SaveResponseAsync(ResponseDetailModel response)
         {
-            // Delegování na metodu v `FormFacade`
             await FormFacade.SaveResponseAsync(response);
         }
         

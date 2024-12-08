@@ -49,14 +49,18 @@
                                         case QuestionType.Range:
                                             @if (question.Answer != null)
                                             {
-                                                @foreach (var answer in question.Answer)
+                                                @foreach (var item in question.Answer)
                                                 {
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="@($"question-{question.Id}")" value="@answer" @onchange="(e) => UpdateCheckboxResponse(question, e.Value.ToString(), e)" />
-                                                        <label class="form-check-label">
-                                                            @answer
-                                                        </label>
-                                                    </div>
+                                                var answer = item; // Lokální kopie odpovědi
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox"
+                                                           name="@($"question-{question.Id}")"
+                                                           value="@answer"
+                                                           @onchange="(e) => UpdateCheckboxResponse(question, answer, e)" />
+                                                    <label class="form-check-label">
+                                                        @answer
+                                                    </label>
+                                                </div>
                                                 }
                                             }
                                             break;
@@ -81,8 +85,7 @@
                                 </div>
                             }
                         }
-
-                        <!-- Tlačítko mimo smyčku -->
+                        
                         <button class="btn btn-primary mt-4" @onclick="SubmitForm">Odeslat</button>
                     </div>
                 </div>
@@ -93,24 +96,49 @@
 
 @code {
     private Dictionary<Guid, List<string>> UserResponses { get; set; } = new();
-    
+
     private void UpdateCheckboxResponse(QuestionDetailModel question, string answer, ChangeEventArgs e)
     {
+        Console.WriteLine($"Zpracovávám odpověď: {answer}, Stav: {e.Value}");
+    
+        // Initialize The List of Answers For Question
         if (!UserResponses.ContainsKey(question.Id))
         {
             UserResponses[question.Id] = new List<string>();
         }
 
-        if ((bool)e.Value)
+        // Validation of Checkbox's Actual State
+        var isChecked = e.Value?.ToString().ToLower() == "true";
+
+        if (isChecked)
         {
-            UserResponses[question.Id].Add(answer);
+            // If Checkbox Is Checked, Add Answer If It's Not In UserResponse
+            if (!UserResponses[question.Id].Contains(answer))
+            {
+                UserResponses[question.Id].Add(answer);
+                Console.WriteLine($"Přidávám odpověď '{answer}' pro otázku {question.Name}.");
+            }
+            else
+            {
+                Console.WriteLine($"Odpověď '{answer}' již existuje pro otázku {question.Name}.");
+            }
         }
         else
         {
-            UserResponses[question.Id].Remove(answer);
+            // If Checkbox Is Not Checked, Removed Answer If Exists
+            if (UserResponses[question.Id].Contains(answer))
+            {
+                UserResponses[question.Id].Remove(answer);
+                Console.WriteLine($"Odebírám odpověď '{answer}' pro otázku {question.Name}.");
+            }
+            else
+            {
+                Console.WriteLine($"Odpověď '{answer}' neexistuje pro otázku {question.Name}, nic se neodstraní.");
+            }
         }
+        Console.WriteLine($"Aktualizované odpovědi pro otázku {question.Name}: {string.Join(", ", UserResponses[question.Id])}");
     }
-    
+        
     private async Task SubmitForm()
     {
         if (Form?.Questions == null)
@@ -118,6 +146,15 @@
 
         foreach (var question in Form.Questions)
         {
+            if (UserResponses.ContainsKey(question.Id))
+            {
+                Console.WriteLine($"Otázka: {question.Name}, Odpovědi: {string.Join(", ", UserResponses[question.Id])}");
+            }
+            else
+            {
+                Console.WriteLine($"Otázka: {question.Name}, Odpovědi: žádné odpovědi.");
+            }
+
             var response = new ResponseDetailModel
             {
                 Id = Guid.NewGuid(),
@@ -136,7 +173,9 @@
                     QuestionType = question.QuestionType,
                     Answer = question.Answer
                 },
-                UserResponse = UserResponses.ContainsKey(question.Id) ? UserResponses[question.Id] : new List<string>()
+                UserResponse = UserResponses.ContainsKey(question.Id) 
+                    ? new List<string>(UserResponses[question.Id]) // Copy of The List
+                    : new List<string>()
             };
 
             await SaveResponseAsync(response);
