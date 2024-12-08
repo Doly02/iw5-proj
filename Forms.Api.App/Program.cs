@@ -179,8 +179,6 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
 
     userEndpoints.MapPost("", Results<Ok<Guid>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
     {
-        var userId = EndpointsBase.GetUserId(httpContextAccessor);
-
         try
         {
             return TypedResults.Ok(userFacade.Create(user));
@@ -265,15 +263,63 @@ void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
         => formFacade.GetById(id) is { } form
             ? TypedResults.Ok(form)
             : TypedResults.NotFound($"Form with ID {id} not found"));
+    
+    var formModifyingEndpoints = formEndpoints.MapGroup("")
+            .RequireAuthorization()
+        ;
 
-    formEndpoints.MapPost("", (FormDetailModel form, IFormFacade formFacade) => formFacade.Create(form));
+    formModifyingEndpoints.MapPost("", Results<Ok<Guid>, ForbidHttpResult> (FormDetailModel form, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
+    {
+        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return TypedResults.Forbid();
+        }
 
-    formEndpoints.MapPut("", (FormDetailModel form, IFormFacade formFacade) => formFacade.Update(form));
+        var createdFormId = formFacade.Create(form, userId);
+        return TypedResults.Ok(createdFormId);
+    });
 
-    formEndpoints.MapPost("upsert", (FormDetailModel form, IFormFacade formFacade) => formFacade.CreateOrUpdate(form));
+    formModifyingEndpoints.MapPut("", Results<Ok<Guid?>, ForbidHttpResult> (FormDetailModel form, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
+    {
+        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        try
+        {
+            return TypedResults.Ok(formFacade.Update(form, userId));
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return TypedResults.Forbid();
+        }
+    });
 
-    formEndpoints.MapDelete("{id:guid}", (Guid id, IFormFacade formFacade) => formFacade.Delete(id));
+    formModifyingEndpoints.MapPost("upsert", Results<Ok<Guid>, ForbidHttpResult> (FormDetailModel form, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
+    {
+        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        if (string.IsNullOrEmpty(userId))
+        {
+            return TypedResults.Forbid();
+        }
+
+        var formId = formFacade.CreateOrUpdate(form, userId);
+        return TypedResults.Ok(formId);
+    });
+
+    formModifyingEndpoints.MapDelete("{id:guid}", Results<NoContent, ForbidHttpResult> (Guid id, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
+    {
+        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        try
+        {
+            formFacade.Delete(id, userId);
+            return TypedResults.NoContent();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return TypedResults.Forbid();
+        }
+    });
 }
+
 
 void UseQuestionEndpoints(RouteGroupBuilder routeGroupBuilder)
 {
