@@ -12,6 +12,8 @@
     }
     else
     {
+        int responseIndex = 1; // Inicializace číslování
+
         @foreach (var question in Questions)
         {
             <div class="card mb-4">
@@ -24,27 +26,30 @@
 
                     @if (Responses.ContainsKey(question.Id) && Responses[question.Id] != null && Responses[question.Id].Any())
                     {
-                        <h6>Odpovědi:</h6>
                         @foreach (var response in Responses[question.Id])
                         {
-                            @if (response.UserResponse != null && response.UserResponse.Any())
-                            {
-                                <ul>
-                                    @foreach (var userResponse in response.UserResponse)
-                                    {
-                                        <li>@userResponse</li>
-                                    }
-                                </ul>
-                            }
-                            else
-                            {
-                                <p>Bez odpovědi</p>
-                            }
+                            <div>
+                                <strong>Odpověď @responseIndex:</strong>
+                                @if (response.UserResponse != null && response.UserResponse.Any())
+                                {
+                                    <ul>
+                                        @foreach (var userResponse in response.UserResponse)
+                                        {
+                                            <li>@userResponse</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p>Bez odpovědi</p>
+                                }
+                            </div>
+                            responseIndex++;
                         }
                     }
                     else
                     {
-                        <h6>Žádné odpovědi:</h6>
+                        <h6>Žádné odpovědi</h6>
                     }
                 </div>
             </div>

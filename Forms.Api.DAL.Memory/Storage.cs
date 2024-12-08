@@ -228,5 +228,15 @@ namespace Forms.Api.DAL.Memory;
                 Question = Questions[3],
                 UserResponse = new List<string>{}
             });
+            
+            Responses.Add(new ResponseEntity
+            {
+                Id = _responseGuids[4],
+                UserId = _userGuids[1],
+                QuestionId = _questionGuids[2],
+                User = Users[1],
+                Question = Questions[2],
+                UserResponse = new List<string>{Questions[2].Answer[1], Questions[2].Answer[2]}   // "Grecko", "Egypt"
+            });
         }
     }
