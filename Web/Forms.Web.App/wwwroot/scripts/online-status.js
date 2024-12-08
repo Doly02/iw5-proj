@@ -9,11 +9,12 @@ window.OnlineStatus = {
         window.addEventListener("online", handler);
         window.addEventListener("offline", handler);
 
-        interop.invokeMethodAsync("OnlineStatus.StatusChanged", navigator.onLine);
-        console.log("Initial online status:", navigator.onLine);
+        handler(navigator.onLine);
     },
     Dispose: function () {
-        if (handler) {
+
+        if (handler !== undefined && handler !== null) {
+
             window.removeEventListener("online", handler);
             window.removeEventListener("offline", handler);
         }

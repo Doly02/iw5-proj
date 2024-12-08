@@ -61,8 +61,28 @@ namespace Forms.Api.App.EndToEndTests
             Assert.Equal(expectedUser.FirstName, returnedUser.FirstName);
             Assert.Equal(expectedUser.LastName, returnedUser.LastName);
             Assert.Equal(expectedUser.Email, returnedUser.Email);
-            Assert.Equal(expectedUser.PasswordHash, returnedUser.PasswordHash);
             Assert.Equal(expectedUser.PhotoUrl, returnedUser.PhotoUrl);
+        }
+        
+        [Fact]
+        public async Task Delete_User()
+        {
+            /* Arrange */
+            var storage = new Storage();
+            var userId = storage.Users[0].Id;
+
+            /* Act */
+            var response = await _client.Value.DeleteAsync($"/api/User/{userId}");
+            var content = await response.Content.ReadAsStringAsync();
+            _testOutputHelper.WriteLine($"Response content: {content}");
+
+            /* Assert */
+            response.EnsureSuccessStatusCode();
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            
+            /* Act */
+            response = await _client.Value.GetAsync($"/api/User/{userId}");
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
         
         [Fact]
@@ -75,7 +95,6 @@ namespace Forms.Api.App.EndToEndTests
                 FirstName = "Test",
                 LastName = "User",
                 Email = "test.user@example.com",
-                PasswordHash = "hashedPassword123",
                 PhotoUrl = "https://example.com/photo.jpg"
             };
             

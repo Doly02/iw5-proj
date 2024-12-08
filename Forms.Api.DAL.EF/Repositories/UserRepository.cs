@@ -13,12 +13,56 @@ public class UserRepository : RepositoryBase<UserEntity>, IUserRepository
     {
         this.mapper = mapper;
     }
+    
+    public virtual void Remove(Guid id)
+    {
+        var entity = GetById(id);
+
+        if (entity is not null)
+        {
+            Console.WriteLine($"Deleting entity with ID: {id}");
+
+            // Explicitní odstranění navázaných entit
+            DeleteRelatedEntities(id);
+            context.SaveChanges();
+
+            context.Users.Remove(entity);
+
+            try
+            {
+                context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Console.WriteLine($"Concurrency exception: {ex.Message}");
+                throw;
+            }
+        }
+        else
+        {
+            throw new KeyNotFoundException($"Entity with ID {id} not found.");
+        }
+    }
+
+    private void DeleteRelatedEntities(Guid userId)
+    {
+        // Smazání všech formulářů přidružených k uživateli
+        var forms = context.Set<FormEntity>().Where(f => f.UserId == userId).ToList();
+        if (forms.Any())
+        {
+            Console.WriteLine($"Deleting {forms.Count} related forms.");
+            context.Set<FormEntity>().RemoveRange(forms);
+        }
+        
+    }
+
 
     public override UserEntity? GetById(Guid id)
     {
         return context.Users
             .Include(u => u.Responses) 
             .Include(u => u.Forms)
+            .ThenInclude(f => f.Questions)
             .FirstOrDefault(u => u.Id == id); 
     }
 

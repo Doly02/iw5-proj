@@ -33,7 +33,6 @@ public class SearchFacadeTests
                 FirstName = storage.Users[0].FirstName,
                 LastName = storage.Users[0].LastName,
                 Email = storage.Users[0].Email,
-                PasswordHash = storage.Users[0].PasswordHash
             }
         };
 

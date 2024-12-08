@@ -137,7 +137,6 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
         FirstName = "John",
         LastName = "Doe",
         Email = "john.doe@example.com",
-        PasswordHash = "hashedPassword123",
         PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-1.jpg",
         Forms = new List<FormEntity>() 
     });
@@ -148,7 +147,6 @@ public class InMemoryDatabaseFixture : IDatabaseFixture
         FirstName = "Jane",
         LastName = "Smith",
         Email = "jane.smith@example.com",
-        PasswordHash = "hashedPassword456",
         PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-2.jpg",
         Forms = new List<FormEntity>()
     });

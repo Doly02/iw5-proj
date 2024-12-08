@@ -17,7 +17,7 @@ namespace Forms.Api.DAL.EF.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.10")
+                .HasAnnotation("ProductVersion", "8.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -41,6 +41,9 @@ namespace Forms.Api.DAL.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -58,7 +61,6 @@ namespace Forms.Api.DAL.EF.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Answer")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
@@ -70,6 +72,9 @@ namespace Forms.Api.DAL.EF.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("QuestionType")
@@ -87,6 +92,9 @@ namespace Forms.Api.DAL.EF.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("OwnerId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
@@ -124,8 +132,7 @@ namespace Forms.Api.DAL.EF.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
+                    b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhotoUrl")
@@ -138,24 +145,20 @@ namespace Forms.Api.DAL.EF.Migrations
 
             modelBuilder.Entity("Forms.Api.DAL.Common.Entities.FormEntity", b =>
                 {
-                    b.HasOne("Forms.Api.DAL.Common.Entities.UserEntity", "User")
+                    b.HasOne("Forms.Api.DAL.Common.Entities.UserEntity", null)
                         .WithMany("Forms")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Forms.Api.DAL.Common.Entities.QuestionEntity", b =>
                 {
-                    b.HasOne("Forms.Api.DAL.Common.Entities.FormEntity", "Form")
+                    b.HasOne("Forms.Api.DAL.Common.Entities.FormEntity", null)
                         .WithMany("Questions")
                         .HasForeignKey("FormId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Form");
                 });
 
             modelBuilder.Entity("Forms.Api.DAL.Common.Entities.ResponseEntity", b =>

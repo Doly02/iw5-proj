@@ -7,8 +7,8 @@ public interface IUserFacade : IAppFacade, ISearchFacade
 {
     List<UserListModel> GetAll();
     UserDetailModel? GetById(Guid id);
-    Guid CreateOrUpdate(UserDetailModel recipeModel);
-    Guid Create(UserDetailModel recipeModel);
-    Guid? Update(UserDetailModel recipeModel);
-    void Delete(Guid id);
+    Guid CreateOrUpdate(UserDetailModel userModel, string? ownerId);
+    Guid Create(UserDetailModel userModel);
+    Guid? Update(UserDetailModel userModel, string? ownerId);
+    void Delete(Guid id, string? ownerId);
 }

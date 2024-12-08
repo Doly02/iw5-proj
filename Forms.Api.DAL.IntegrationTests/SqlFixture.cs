@@ -55,7 +55,6 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             FirstName = "John",
             LastName = "Doe",
             Email = "john.doe@example.com",
-            PasswordHash = "hashedPassword123",
             PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-1.jpg",
             Forms = new List<FormEntity>()
         };
@@ -66,7 +65,6 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             FirstName = "Jane",
             LastName = "Smith",
             Email = "jane.smith@example.com",
-            PasswordHash = "hashedPassword456",
             PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-2.jpg",
             Forms = new List<FormEntity>()
         };
@@ -135,10 +133,10 @@ public class SqlFixture : IDatabaseFixture, IDisposable
         form1.Questions.Add(question2);
         user1.Forms.Add(form1);
         
-        user1.Responses.Add(response1);
+        // user1.Responses.Add(response1);
         question1.Responses.Add(response1);
         
-        user1.Responses.Add(response2);
+        // user1.Responses.Add(response2);
         question2.Responses.Add(response2);
 
         _context.Users.AddRange(user1, user2);

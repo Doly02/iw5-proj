@@ -1,0 +1,47 @@
+@page "/user/{Id:guid}"
+@inject UserFacade UserFacade
+
+@namespace Forms.Web.App.Pages
+@using Forms.Common.Models.User
+@using Forms.Web.BL.Facades
+@inherits PageBase
+
+
+<h1>Detail uživatele</h1>
+
+@if (User is null)
+{
+<p>Načítám data...</p>
+}
+else
+{
+<div class="card text-center">
+    <img src="@User.PhotoUrl" class="card-img-top mx-auto" alt="Uživatelský obrázek" style="width: 16rem;">
+    <div class="card-body">
+        <h5 class="card-title">@User.FirstName @User.LastName</h5>
+        <p>Email: @User.Email</p>
+        <!--todo * ZDE FormsList s formulare od uzivatele *-->
+    </div>
+</div>
+}
+
+@code {
+[Parameter]
+public Guid Id { get; set; }
+
+private UserDetailModel? User { get; set; }
+
+protected override async Task OnInitializedAsync()
+{
+    Console.WriteLine($"Fetching user with ID: {Id}");
+    try
+    {
+        User = await UserFacade.GetByIdAsync(Id);
+        Console.WriteLine($"User fetched: {User?.FirstName} {User?.LastName}");
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Error fetching user: {ex.Message}");
+    }
+}
+}
