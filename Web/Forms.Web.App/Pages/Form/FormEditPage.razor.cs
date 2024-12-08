@@ -17,6 +17,9 @@ namespace Forms.Web.App.Pages
         [Inject]
         private FormFacade FormFacade { get; set; } = null!;
 
+        [Inject]
+        private QuestionFacade QuestionFacade { get; set; } = null!;
+
         private FormDetailModel? Form { get; set; }
 
         private string? NewAnswer { get; set; } = string.Empty;
@@ -81,11 +84,11 @@ namespace Forms.Web.App.Pages
             Form?.Questions.Remove(question);
         }
 
-        private void AddQuestion()
+        private async Task AddQuestionAsync()
         {
             if (Form != null)
             {
-                Form.Questions.Add(new QuestionDetailModel
+                var newQuestion = new QuestionDetailModel
                 {
                     Id = Guid.NewGuid(),
                     Name = "Nová otázka",
@@ -93,9 +96,43 @@ namespace Forms.Web.App.Pages
                     QuestionType = QuestionType.OpenQuestion,
                     Answer = new List<string>(),
                     FormId = Form.Id
-                });
-                ErrorMessage = null;
+                };
+
+                try
+                {
+                    await QuestionFacade.SaveAsync(newQuestion);
+                    
+                    Form.Questions.Add(newQuestion);
+
+                    ErrorMessage = null;
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage = $"Chyba při přidávání otázky: {ex.Message}";
+                }
             }
         }
+        
+        private async Task DeleteFormAsync()
+        {
+            try
+            {
+                if (Form != null)
+                {
+                    await FormFacade.DeleteAsync(Form.Id);
+                    NavigationManager.NavigateTo("/forms");
+                }
+                else
+                {
+                    ErrorMessage = "Formulář není načtený, nelze jej odstranit.";
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Chyba při mazání formuláře: {ex.Message}";
+            }
+        }
+
+
     }
 }
