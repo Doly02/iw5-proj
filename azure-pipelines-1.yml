@@ -20,7 +20,7 @@ steps:
     displayName: 'Build .NET Project for API'
     inputs:
       command: 'build'
-      projects: 'Forms.Api.App/Forms.Api.App.csproj'
+      projects: './Forms.Api.App/Forms.Api.App.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
@@ -51,7 +51,7 @@ steps:
     displayName: 'Publish .NET Project for Web App'
     inputs:
       command: 'publish'
-      projects: 'Web/Forms.Web.App/Forms.Web.App.csproj'
+      projects: './Web/Forms.Web.App/Forms.Web.App.csproj'
       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/web-app'
       zipAfterPublish: true
 
