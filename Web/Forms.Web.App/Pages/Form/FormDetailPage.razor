@@ -49,7 +49,6 @@
                                         case QuestionType.Selection:
                                             @if (question.Answer != null)
                                             {
-                                                <h5>@question.Name (@question.QuestionType)</h5>
                                                 @foreach (var answer in question.Answer)
                                                 {
                                                     <div class="form-check">
