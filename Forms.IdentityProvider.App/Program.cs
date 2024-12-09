@@ -142,29 +142,29 @@ async Task SeedRolesAndUsersAsync(IServiceProvider serviceProvider)
         await userManager.AddToRoleAsync(normalUser, AppRoles.User);
     }
     
-    var userApiClient = serviceProvider.GetRequiredService<IUserApiClient>();
-    
-    var adminModel = new UserDetailModel
-    { 
-        Id = adminUser.Id,
-        Email = adminUser.Email,
-        FirstName = "Admin",
-        LastName = "Adminovic",
-        PhotoUrl = string.Empty
-    };
-            
-    await userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", adminModel);
-
-    var userModel = new UserDetailModel
-    { 
-        Id = normalUser.Id,
-        Email = normalUser.Email,
-        FirstName = "User",
-        LastName = "Userovic",
-        PhotoUrl = string.Empty
-    };
-            
-    await userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", userModel);
+    // var userApiClient = serviceProvider.GetRequiredService<IUserApiClient>();
+    //
+    // var adminModel = new UserDetailModel
+    // { 
+    //     Id = adminUser.Id,
+    //     Email = adminUser.Email,
+    //     FirstName = "Admin",
+    //     LastName = "Adminovic",
+    //     PhotoUrl = string.Empty
+    // };
+    //         
+    // await userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", adminModel);
+    //
+    // var userModel = new UserDetailModel
+    // { 
+    //     Id = normalUser.Id,
+    //     Email = normalUser.Email,
+    //     FirstName = "User",
+    //     LastName = "Userovic",
+    //     PhotoUrl = string.Empty
+    // };
+    //         
+    // await userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", userModel);
 
 
     
