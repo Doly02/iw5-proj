@@ -6,6 +6,7 @@ using Forms.Api.DAL.EF;
 using Forms.Api.DAL.EF.Repositories;
 using Forms.Common.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Forms.API.DAL.IntegrationTests;
 
@@ -28,7 +29,15 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             .UseSqlServer(connectionString)
             .Options;
 
-        _context = new FormsDbContext(options);
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                { "DALSelectionOptions:SeedDemoData", "true" }, 
+                { "DALSelectionOptions:RecreateDatabaseEachTime", "true" } 
+            }!)
+            .Build();
+
+        _context = new FormsDbContext(options, configuration);
 
         _userRepository = new UserRepository(_context, new MapperConfiguration(cfg => cfg.AddProfile<UserMapperProfile>()).CreateMapper());
         _formRepository = new FormRepository(_context,
