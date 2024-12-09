@@ -120,7 +120,7 @@ namespace Forms.Web.App.Pages
                 if (Form != null)
                 {
                     await FormFacade.DeleteAsync(FormId);
-                    NavigationManager.NavigateTo("/forms");
+                    NavigationManager.NavigateTo("/");
                 }
                 else
                 {
@@ -132,7 +132,5 @@ namespace Forms.Web.App.Pages
                 ErrorMessage = $"Chyba při mazání formuláře: {ex.Message}";
             }
         }
-
-
     }
 }

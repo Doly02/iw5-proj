@@ -7,7 +7,7 @@
     <h1 class="mb-4">Formuláře</h1>
     @if (Forms == null || Forms.Count == 0)
     {
-        <p>Žádné formuláře na zobrazení.</p>
+        <p class="text-muted">Žádné formuláře na zobrazení.</p>
     }
     else
     {
@@ -15,20 +15,51 @@
             @foreach (var form in Forms)
             {
                 <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="icons/document.png" class="card-img-top w-50 h-50" alt="Formulář">
-                        <div class="card-body">
-                            <h4 class="card-title">@form.Name</h4>
-                            @if (DateTime.Now >= @form.DateOpen && DateTime.Now <= @form.DateClose)
-                            {
-                                <a href="/form/@form.Id" class="btn btn-primary">Zobrazit detail</a>
-                                <a href="/questions/@form.Id" class="btn btn-secondary">Zobrazit odpovědi</a>
-                            }
-                            else
-                            {
-                                <img src="icons/lock.png" class="h-auto" style="width: 37px;" alt="Zamknuto">
-                            }
-                            <a href="/form/edit/@form.Id" class="btn btn-primary">Editovať</a>
+                    <div class="card h-100 shadow-sm">
+                        <img src="icons/document.png" class="card-img-top mx-auto mt-3" style="width: 50px; height: 50px;" alt="Formulář">
+                        <div class="card-body d-flex flex-column">
+                            <h4 class="card-title text-center mb-3">@form.Name</h4>
+                            <div class="mt-auto">
+                                @if (IsAdmin)
+                                {
+                                    <div class="btn-group d-flex mb-2" role="group">
+                                        <a href="/questions/@form.Id" class="btn btn-outline-secondary flex-grow-1">Zobrazit odpovědi</a>
+                                        <a href="/form/edit/@form.Id" class="btn btn-primary flex-grow-1">Editovať</a>
+                                    </div>
+                                    @if (DateTime.Now >= @form.DateOpen && DateTime.Now <= @form.DateClose)
+                                    {
+                                        <a href="/form/@form.Id" class="btn btn-success w-100">Vyplnit formulář</a>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center mt-2">
+                                            <img src="icons/lock.png" class="h-auto" style="width: 37px;" alt="Zamknuto">
+                                            <p class="text-muted mt-1 mb-0">Formulář je zamknutý</p>
+                                        </div>
+                                    }
+                                }
+                                else if (form.UserId == CurrentUserId)
+                                {
+                                    <div class="btn-group d-flex mb-2" role="group">
+                                        <a href="/questions/@form.Id" class="btn btn-outline-secondary flex-grow-1">Zobrazit odpovědi</a>
+                                        <a href="/form/edit/@form.Id" class="btn btn-primary flex-grow-1">Editovať</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    @if (DateTime.Now >= @form.DateOpen && DateTime.Now <= @form.DateClose)
+                                    {
+                                        <a href="/form/@form.Id" class="btn btn-success w-100">Vyplnit formulář</a>
+                                    }
+                                    else
+                                    {
+                                        <div class="text-center mt-2">
+                                            <img src="icons/lock.png" class="h-auto" style="width: 37px;" alt="Zamknuto">
+                                            <p class="text-muted mt-1 mb-0">Formulář je zamknutý</p>
+                                        </div>
+                                    }
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -190,8 +190,12 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
 
     userEndpoints.MapPost("upsert",  Results<Ok<Guid>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
     {
-        var userId = EndpointsBase.GetUserId(httpContextAccessor);
-
+        string? userId = null;
+        if (!EndpointsBase.IsAdmin(httpContextAccessor))
+        {
+            userId = EndpointsBase.GetUserId(httpContextAccessor);
+        }
+        
         try
         {
             return TypedResults.Ok(userFacade.CreateOrUpdate(user, userId));
@@ -214,7 +218,12 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
     
     userModifyingEndpoints.MapPut("", Results<Ok<Guid?>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
     {
-        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        string? userId = null;
+        if (!EndpointsBase.IsAdmin(httpContextAccessor))
+        {
+            userId = EndpointsBase.GetUserId(httpContextAccessor);
+        }
+        
         try
         {
             return TypedResults.Ok(userFacade.Update(user, userId));
@@ -278,7 +287,12 @@ void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
 
     formModifyingEndpoints.MapPost("", Results<Ok<Guid>, ForbidHttpResult> (FormDetailModel form, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
     {
-        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        string? userId = null;
+        if (!EndpointsBase.IsAdmin(httpContextAccessor))
+        {
+            userId = EndpointsBase.GetUserId(httpContextAccessor);
+        }
+        
         if (string.IsNullOrEmpty(userId))
         {
             return TypedResults.Forbid();
@@ -290,7 +304,12 @@ void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
 
     formModifyingEndpoints.MapPut("", Results<Ok<Guid?>, ForbidHttpResult> (FormDetailModel form, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
     {
-        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        string? userId = null;
+        if (!EndpointsBase.IsAdmin(httpContextAccessor))
+        {
+            userId = EndpointsBase.GetUserId(httpContextAccessor);
+        }
+        
         try
         {
             return TypedResults.Ok(formFacade.Update(form, userId));
@@ -303,7 +322,12 @@ void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
 
     formModifyingEndpoints.MapPost("upsert", Results<Ok<Guid>, ForbidHttpResult> (FormDetailModel form, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
     {
-        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        string? userId = null;
+        if (!EndpointsBase.IsAdmin(httpContextAccessor))
+        {
+            userId = EndpointsBase.GetUserId(httpContextAccessor);
+        }
+        
         if (string.IsNullOrEmpty(userId))
         {
             return TypedResults.Forbid();
@@ -315,7 +339,12 @@ void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
 
     formModifyingEndpoints.MapDelete("{id:guid}", Results<NoContent, ForbidHttpResult> (Guid id, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
     {
-        var userId = EndpointsBase.GetUserId(httpContextAccessor);
+        string? userId = null;
+        if (!EndpointsBase.IsAdmin(httpContextAccessor))
+        {
+            userId = EndpointsBase.GetUserId(httpContextAccessor);
+        }
+        
         try
         {
             formFacade.Delete(id, userId);
