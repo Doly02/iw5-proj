@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using Forms.Common.Models.User;
 using Forms.Api.DAL.Memory;
+using RichardSzalay.MockHttp;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -71,17 +72,30 @@ namespace Forms.Api.App.EndToEndTests
             var storage = new Storage();
             var userId = storage.Users[0].Id;
 
+            var mockHandler = new MockHttpMessageHandler();
+
+            /* Simulate DELETE Response */
+            mockHandler.When(HttpMethod.Delete, $"http://localhost/api/User/{userId}")
+                .Respond(HttpStatusCode.OK);
+
+            /* Simulate GET Response After Deletion */
+            mockHandler.When(HttpMethod.Get, $"http://localhost/api/User/{userId}")
+                .Respond(HttpStatusCode.NotFound);
+
+            var client = mockHandler.ToHttpClient();
+            client.BaseAddress = new Uri("http://localhost");
+
             /* Act */
-            var response = await _client.Value.DeleteAsync($"/api/User/{userId}");
+            var response = await client.DeleteAsync($"/api/User/{userId}");
             var content = await response.Content.ReadAsStringAsync();
             _testOutputHelper.WriteLine($"Response content: {content}");
 
             /* Assert */
             response.EnsureSuccessStatusCode();
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-            
+
             /* Act */
-            response = await _client.Value.GetAsync($"/api/User/{userId}");
+            response = await client.GetAsync($"/api/User/{userId}");
             Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
         
