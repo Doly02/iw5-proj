@@ -34,24 +34,24 @@ steps:
       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api-app'
       zipAfterPublish: true
 
-  # Build IdentityProvider projektu
-  - task: DotNetCoreCLI@2
-    displayName: 'Build .NET Project for IdentityProvider'
+  # Uložení artefaktů (zip souborů)
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish API Artifact'
     inputs:
-      command: 'build'
-      projects: './Forms.IdentityProvider.App/Forms.IdentityProvider.App.csproj'
-      arguments: '--configuration $(buildConfiguration)'
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/api-app'
+      ArtifactName: 'api-app-artifact'
+      publishLocation: 'Container'
 
-  # Publish IdentityProvider projektu
-  - task: DotNetCoreCLI@2
-    displayName: 'Publish .NET Project for IdentityProvider'
+  # Nasazení na Azure Web App
+  - task: AzureWebApp@1
+    displayName: 'Deploy API to Azure Web App'
     inputs:
-      command: 'publish'
-      projects: './Forms.IdentityProvider.App/Forms.IdentityProvider.App.csproj'
-      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/identity-provider'
-      zipAfterPublish: true
+      azureSubscription: 'AzureConnectionToAppService'
+      appType: 'webApp'
+      appName: 'app-iw5-2024-team-xdolak09-api'
+      package: '$(Build.ArtifactStagingDirectory)/api-app/**/*.zip'
 
-  # Build Web projektu
+ # Build Web projektu
   - task: DotNetCoreCLI@2
     displayName: 'Build .NET Project for Web App'
     inputs:
@@ -68,22 +68,6 @@ steps:
       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/web-app'
       zipAfterPublish: true
 
-  # Uložení artefaktů (API)
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish API Artifact'
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/api-app'
-      ArtifactName: 'api-app-artifact'
-      publishLocation: 'Container'
-
-  # Uložení artefaktů (IdentityProvider)
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish IdentityProvider Artifact'
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/identity-provider'
-      ArtifactName: 'identity-provider-artifact'
-      publishLocation: 'Container'
-
   # Uložení artefaktů (Web)
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Web Artifact'
@@ -92,25 +76,7 @@ steps:
       ArtifactName: 'web-app-artifact'
       publishLocation: 'Container'
 
-  # Nasazení na Azure Web App (API)
-  - task: AzureWebApp@1
-    displayName: 'Deploy API to Azure Web App'
-    inputs:
-      azureSubscription: 'AzureConnectionToAppService'
-      appType: 'webApp'
-      appName: 'app-iw5-2024-team-xdolak09-api'
-      package: '$(Build.ArtifactStagingDirectory)/api-app/**/*.zip'
-
-  # Nasazení na Azure Web App (IdentityProvider)
-  - task: AzureWebApp@1
-    displayName: 'Deploy IdentityProvider to Azure Web App'
-    inputs:
-      azureSubscription: 'AzureConnectionToAppService'
-      appType: 'webApp'
-      appName: 'app-iw5-2024-team-xdolak09-identity'
-      package: '$(Build.ArtifactStagingDirectory)/identity-provider/**/*.zip'
-
-  # Nasazení na Azure Web App (Web)
+  # Nasazení Web App na Azure App Service
   - task: AzureWebApp@1
     displayName: 'Deploy Web App to Azure Web App'
     inputs:
