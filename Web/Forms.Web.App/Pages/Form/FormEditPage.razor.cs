@@ -119,7 +119,7 @@ namespace Forms.Web.App.Pages
             {
                 if (Form != null)
                 {
-                    await FormFacade.DeleteAsync(Form.Id);
+                    await FormFacade.DeleteAsync(FormId);
                     NavigationManager.NavigateTo("/forms");
                 }
                 else

@@ -50,13 +50,13 @@ public class FormFacade : FacadeBase<IFormRepository, FormEntity>, IFormFacade
         ThrowIfWrongOwner(formModel.Id, ownerId);
         
         var formEntity = mapper.Map<FormEntity>(formModel);
+        formEntity.OwnerId = ownerId;
         return formRepository.Update(formEntity);
     }
 
     public void Delete(Guid id, string? ownerId = null)
     {
         ThrowIfWrongOwner(id, ownerId);
-
         
         formRepository.Remove(id);
     }

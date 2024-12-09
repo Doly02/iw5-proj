@@ -81,12 +81,6 @@ namespace Forms.Web.App.Pages
             Data = GetNewFormModel(CurrentUserId);
             await NotifyOnModification();
         }
-
-        public async Task Delete()
-        {
-            await FormFacade.DeleteAsync(Id);
-            await NotifyOnModification();
-        }
         
         private async Task NotifyOnModification()
         {
