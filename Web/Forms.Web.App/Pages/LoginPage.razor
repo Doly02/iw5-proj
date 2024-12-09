@@ -1,0 +1,45 @@
+@page "/login"
+@inject NavigationManager NavigationManager
+
+<h3>Přihlášení</h3>
+
+<EditForm OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="email">E-mail</label>
+        <InputText id="email" class="form-control"  />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Heslo</label>
+        <InputText id="password" type="password" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Přihlásit se</button>
+</EditForm>
+
+@if (ErrorMessage != null)
+{
+    <div class="alert alert-danger mt-2">@ErrorMessage</div>
+}
+
+@code {
+    private string? ErrorMessage;
+
+    private async Task HandleLogin()
+    {
+        ErrorMessage = null;
+
+        // var success = await AuthService.LoginAsync(LoginModel);
+        // if (!success)
+        // {
+        //     ErrorMessage = "Nesprávné uživatelské jméno nebo heslo.";
+        // }
+        // else
+        // {
+        //     NavigationManager.NavigateTo("/");
+        // }
+    }
+}

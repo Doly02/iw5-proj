@@ -66,7 +66,6 @@ public class UserSqlRepositoryTests : IClassFixture<SqlFixture>, IDisposable
             FirstName = "New",
             LastName = "User",
             Email = "new.user@example.com",
-            PasswordHash = "hashedPassword789",
             PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-3.jpg"
         };
 
@@ -106,7 +105,6 @@ public class UserSqlRepositoryTests : IClassFixture<SqlFixture>, IDisposable
             FirstName = "Ghost",
             LastName = "User",
             Email = "ghost.user@example.com",
-            PasswordHash = "hashedPasswordGhost"
         };
 
         // Act
