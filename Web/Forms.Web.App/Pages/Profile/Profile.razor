@@ -15,29 +15,29 @@
 }
 else
 {
-    <EditForm Model="User" OnValidSubmit="UpdateProfile">
+    <EditForm Model="EditUser" OnValidSubmit="UpdateProfile">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
         <div class="card text-center">
-            <img src="@User.PhotoUrl" class="card-img-top mx-auto" alt="Profilová fotografie" style="width: 16rem;">
+            <img src="@(!string.IsNullOrWhiteSpace(User.PhotoUrl) ? User.PhotoUrl : "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg?20200418092106")" class="card-img-top mx-auto" alt="Profilová fotografie" style="width: 16rem;">
             <div class="card-body">
                 <h5 class="card-title">@User.FirstName @User.LastName</h5>
                 <p>Email: @User.Email</p>
 
                 <div class="form-group mb-3">
                     <label for="firstName">Jméno</label>
-                    <InputText id="firstName" class="form-control" @bind-Value="User.FirstName" />
+                    <InputText id="firstName" class="form-control" @bind-Value="EditUser.FirstName" />
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="lastName">Příjmení</label>
-                    <InputText id="lastName" class="form-control" @bind-Value="User.LastName" />
+                    <InputText id="lastName" class="form-control" @bind-Value="EditUser.LastName" />
                 </div>
 
                 <div class="form-group mb-3">
                     <label for="photoUrl">URL Profilové fotografie</label>
-                    <InputText id="photoUrl" class="form-control" @bind-Value="User.PhotoUrl" />
+                    <InputText id="photoUrl" class="form-control" @bind-Value="EditUser.PhotoUrl" />
                 </div>
 
                 <button type="submit" class="btn btn-primary">Uložit změny</button>
@@ -54,6 +54,7 @@ else
 
 @code {
     private UserDetailModel? User { get; set; }
+    private UserDetailModel? EditUser { get; set; }
     private string StatusMessage { get; set; } = string.Empty;
     private string ErrorMessage { get; set; } = string.Empty;
 
@@ -82,6 +83,17 @@ else
             {
                 ErrorMessage = "Uživatel nebyl nalezen.";
             }
+            else
+            {
+                EditUser = new UserDetailModel
+                {
+                    Id = User.Id,
+                    Email = User.Email,
+                    FirstName = User.FirstName,
+                    LastName = User.LastName,
+                    PhotoUrl = User.PhotoUrl
+                };
+            }
         }
         catch (Exception ex)
         {
@@ -93,8 +105,12 @@ else
     {
         try
         {
-            if (User != null)
+            if (User != null && EditUser != null)
             {
+                User.FirstName = EditUser.FirstName;
+                User.LastName = EditUser.LastName;
+                User.PhotoUrl = EditUser.PhotoUrl;
+
                 await UserFacade.SaveAsync(User);
                 StatusMessage = "Změny byly úspěšně uloženy.";
             }
