@@ -1,7 +1,10 @@
 @page "/create"
 @namespace Forms.Web.App.Pages
 @using Forms.Common.Enums
+@using Microsoft.AspNetCore.Authorization
 @inherits PageBase
+@attribute [Authorize]
+
 
 <div class="container mt-5">
     <h1 class="text-center">Vytvořit nový formulář</h1>
