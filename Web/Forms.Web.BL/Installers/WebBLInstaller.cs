@@ -10,35 +10,15 @@ namespace Forms.Web.BL.Installers
     {
         public void Install(IServiceCollection serviceCollection, string apiBaseUrl)
         {
-            serviceCollection.AddTransient<IQuestionApiClient, QuestionApiClient>(provider =>
-            {
-                var client = CreateApiHttpClient(provider, apiBaseUrl);
-                return new QuestionApiClient(client, apiBaseUrl);
-            });
+            serviceCollection.AddScoped<IQuestionApiClient, QuestionApiClient>();
 
-            serviceCollection.AddTransient<IResponseApiClient, ResponseApiClient>(provider =>
-            {
-                var client = CreateApiHttpClient(provider, apiBaseUrl);
-                return new ResponseApiClient(client, apiBaseUrl);
-            });
+            serviceCollection.AddScoped<IResponseApiClient, ResponseApiClient>();
             
-            serviceCollection.AddTransient<IUserApiClient, UserApiClient>(provider =>
-            {
-                var client = CreateApiHttpClient(provider, apiBaseUrl);
-                return new UserApiClient(client, apiBaseUrl);
-            });
+            serviceCollection.AddScoped<IUserApiClient, UserApiClient>();
             
-            serviceCollection.AddTransient<IFormApiClient, FormApiClient>(provider =>
-            {
-                var client = CreateApiHttpClient(provider, apiBaseUrl);
-                return new FormApiClient(client, apiBaseUrl);
-            });
+            serviceCollection.AddScoped<IFormApiClient, FormApiClient>();
             
-            serviceCollection.AddTransient<ISearchApiClient, SearchApiClient>(provider =>
-            {
-                var client = CreateApiHttpClient(provider, apiBaseUrl);
-                return new SearchApiClient(client);
-            });
+            serviceCollection.AddScoped<ISearchApiClient, SearchApiClient>();
 
             serviceCollection.Scan(selector =>
                 selector.FromAssemblyOf<WebBLInstaller>()
@@ -53,12 +33,6 @@ namespace Forms.Web.BL.Installers
                 return new AppUserFacade(client);
             });
         }
-
-        public HttpClient CreateApiHttpClient(IServiceProvider serviceProvider, string apiBaseUrl)
-        {
-            var client = new HttpClient() { BaseAddress = new Uri(apiBaseUrl) };
-            client.BaseAddress = new Uri(apiBaseUrl);
-            return client;
-        }
+        
     }
 }
