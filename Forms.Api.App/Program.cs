@@ -186,7 +186,7 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
         {
             return TypedResults.Forbid();
         }
-    });
+    }).AllowAnonymous();
 
     userEndpoints.MapPost("upsert",  Results<Ok<Guid>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
     {
@@ -200,7 +200,7 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
         {
             return TypedResults.Forbid();
         }
-    });
+    }).AllowAnonymous();
 
     
     userEndpoints.MapGet("{id:guid}", Results<Ok<UserDetailModel>, NotFound<string>> (Guid id, IUserFacade userFacade)
@@ -208,7 +208,11 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
             ? TypedResults.Ok(user)
             : TypedResults.NotFound($"User with ID {id} not found"));
     
-    userEndpoints.MapPut("", Results<Ok<Guid?>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
+    var userModifyingEndpoints = userEndpoints.MapGroup("")
+            .RequireAuthorization()
+        ;
+    
+    userModifyingEndpoints.MapPut("", Results<Ok<Guid?>, ForbidHttpResult> (UserDetailModel user, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
     {
         var userId = EndpointsBase.GetUserId(httpContextAccessor);
         try
@@ -220,7 +224,7 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
             return TypedResults.Forbid();
         }
         
-    });
+    }).RequireAuthorization(ApiPolicies.OwnerOrAdmin);
     
     userEndpoints.MapDelete("{id:guid}", Results<Ok, ForbidHttpResult> (Guid id, IUserFacade userFacade, IHttpContextAccessor httpContextAccessor) =>
     {
@@ -239,7 +243,7 @@ void UseUserEndpoints(RouteGroupBuilder routeGroupBuilder)
         {
             return TypedResults.Forbid();
         }
-    });
+    }).RequireAuthorization(ApiPolicies.Admin);
 }
 
 void UseSearchEndpoints(RouteGroupBuilder routeGroupBuilder)

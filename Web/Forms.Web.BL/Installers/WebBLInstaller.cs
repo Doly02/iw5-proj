@@ -14,7 +14,13 @@ namespace Forms.Web.BL.Installers
 
             serviceCollection.AddScoped<IResponseApiClient, ResponseApiClient>();
             
-            serviceCollection.AddScoped<IUserApiClient, UserApiClient>();
+            serviceCollection.AddScoped<Func<string, IUserApiClient>>(serviceProvider => clientName =>
+            {
+                var httpClientFactory = serviceProvider.GetRequiredService<IHttpClientFactory>();
+                var httpClient = httpClientFactory.CreateClient(clientName);
+                return new UserApiClient(httpClient, apiBaseUrl);
+            });
+
             
             serviceCollection.AddScoped<IFormApiClient, FormApiClient>();
             

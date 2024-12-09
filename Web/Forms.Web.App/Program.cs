@@ -39,10 +39,10 @@ builder.Services.AddHttpClient("IdentityServer", client =>
 });
 
 
-// builder.Services.AddHttpClient("AnonymousApi", client =>
-// {
-//     client.BaseAddress = new Uri(apiBaseUrl);
-// });
+builder.Services.AddHttpClient("AnonymousApi", client =>
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+});
 
 builder.Services.AddScoped<HttpClient>(serviceProvider => serviceProvider.GetService<IHttpClientFactory>().CreateClient("api"));
 
