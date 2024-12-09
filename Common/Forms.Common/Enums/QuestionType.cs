@@ -6,17 +6,14 @@ namespace Forms.Common.Enums
 {
     public enum QuestionType
     {
-        [QuestionTypeDescription(nameof(QuestionTypeResources.UnknownDescription))]
-        Unknown = 0,
-
         [QuestionTypeDescription(nameof(QuestionTypeResources.OpenQuestionDescription))]
-        OpenQuestion = 1,
+        OpenQuestion = 0,
 
         [QuestionTypeDescription(nameof(QuestionTypeResources.SelectionFromOptionsDescription))]
-        Selection = 2,
+        Selection = 1,
         
         [QuestionTypeDescription(nameof(QuestionTypeResources.RangeDescription))]
-        Range = 3,
+        Range = 2,
     }
 
 

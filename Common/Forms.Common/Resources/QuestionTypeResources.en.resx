@@ -24,9 +24,6 @@
     <data name="SelectionFromOptionsDescription" xml:space="preserve">
         <value>Selection From Options</value>
     </data>
-    <data name="UnknownDescription" xml:space="preserve">
-        <value>Unknown</value>
-    </data>
     <data name="RangeDescription" xml:space="preserve">
         <value>Range</value>
     </data>

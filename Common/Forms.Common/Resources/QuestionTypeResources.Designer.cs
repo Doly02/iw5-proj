@@ -85,14 +85,5 @@ namespace Forms.Common.Resources {
                 return ResourceManager.GetString("SelectionFromOptionsDescription", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unkown.
-        /// </summary>
-        internal static string UnknownDescription {
-            get {
-                return ResourceManager.GetString("UnknownDescription", resourceCulture);
-            }
-        }
     }
 }
