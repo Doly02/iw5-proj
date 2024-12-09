@@ -13,6 +13,7 @@ public static class Config
         {
             var profileIdentityResources = new IdentityResources.Profile();
             profileIdentityResources.UserClaims.Add("username");
+            profileIdentityResources.UserClaims.Add("id");
             profileIdentityResources.UserClaims.Add(JwtClaimTypes.Role);
                 
             return

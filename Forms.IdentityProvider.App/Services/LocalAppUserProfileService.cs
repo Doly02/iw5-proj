@@ -53,6 +53,7 @@ public class LocalAppUserProfileService : IProfileService
                 }).ToList();
 
                 claims.Add(new Claim("username", user.UserName));
+                claims.Add(new Claim("id", user.Id.ToString()));
                 
                 var userRoles = await appUserFacade.GetUserRolesByIdAsync(user.Id);
                 Console.WriteLine($"Roles for user {user.UserName}: {string.Join(", ", userRoles)}");
@@ -63,6 +64,9 @@ public class LocalAppUserProfileService : IProfileService
                 }
                 
                 context.AddRequestedClaims(claims);
+                
+                Console.WriteLine("Claims added to token:");
+
             }
         }
         Console.WriteLine("Getting user infooooo");

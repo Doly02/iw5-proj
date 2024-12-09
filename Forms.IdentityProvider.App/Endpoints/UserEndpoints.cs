@@ -18,7 +18,7 @@ public static class UserEndpoints
                 => await appUserFacade.SearchAsync(searchString));
 
         userEndpoints.MapPost("",
-            async Task<Results<Created<Guid>, BadRequest, BadRequest<string>>> (
+            async Task<IResult> (
                     IAppUserFacade appUserFacade,
                     [FromBody] AppUserCreateModel appUser)
                 =>
@@ -28,16 +28,33 @@ public static class UserEndpoints
                     var userId = await appUserFacade.CreateAppUserAsync(appUser);
                     if (userId is not null)
                     {
-                        return TypedResults.Created($"/user/{userId.Value}", userId.Value);
+                        return Results.Created($"{userId.Value}", userId.Value);
                     }
 
-                    return TypedResults.BadRequest();
+                    return Results.BadRequest("Failed to create user.");
                 }
                 catch (ArgumentException e)
                 {
-                    return TypedResults.BadRequest(e.Message);
-                    throw;
+                    return Results.BadRequest(e.Message);
                 }
+            });
+        
+        userEndpoints.MapGet("by-username/{username}",
+            async (IAppUserFacade appUserFacade, string username) =>
+            {
+                var user = await appUserFacade.GetUserByUserNameAsync(username);
+                return user is not null
+                    ? Results.Ok(user)
+                    : Results.NotFound($"User with username '{username}' not found.");
+            });
+
+        userEndpoints.MapGet("by-email/{email}",
+            async (IAppUserFacade appUserFacade, string email) =>
+            {
+                var user = await appUserFacade.GetUserByEmailAsync(email);
+                return user is not null
+                    ? Results.Ok(user)
+                    : Results.NotFound($"User with email '{email}' not found.");
             });
 
         return endpointRouteBuilder;
