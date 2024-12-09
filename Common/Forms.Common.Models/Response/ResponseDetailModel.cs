@@ -8,7 +8,7 @@ public record ResponseDetailModel : IWithId
 {
     public required Guid Id { get; init; }
     
-    public required UserListModel User { get; set; }
+    public required UserDetailModel User { get; set; }
     
     public required QuestionListModel Question { get; set; }
     
