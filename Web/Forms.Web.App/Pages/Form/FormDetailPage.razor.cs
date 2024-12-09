@@ -20,6 +20,8 @@ namespace Forms.Web.App.Pages
         private UserFacade UserFacade { get; set; } = null!;
         [Inject]
         private AuthenticationStateProvider AuthenticationStateProvider { get; set; } = null!;
+        [Inject]
+        private NavigationManager NavigationManager { get; set; } = null!;
 
         [Parameter]
         public Guid Id { get; set; }
@@ -191,6 +193,7 @@ namespace Forms.Web.App.Pages
 
                     // Uloženie odpovede
                     await SaveResponseAsync(response);
+                    NavigationManager.NavigateTo("/forms");
                 }
             }
         }
