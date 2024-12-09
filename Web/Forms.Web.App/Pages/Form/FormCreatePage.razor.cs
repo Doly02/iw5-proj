@@ -88,6 +88,7 @@ namespace Forms.Web.App.Pages
             Form?.Questions.Add(new QuestionDetailModel
             {
                 Id = Guid.NewGuid(),
+                FormId = Form.Id,
                 Name = NewQuestion.Name,
                 Description = NewQuestion.Description,
                 QuestionType = NewQuestion.QuestionType,

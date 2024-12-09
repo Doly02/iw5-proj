@@ -21,6 +21,6 @@ public class FormMapperProfile : Profile
         CreateMap<FormDetailModel, FormEntity>()
             // Ignoring Questions
             .Ignore(entity => entity.OwnerId)
-            .ForMember(dest => dest.Questions, opt => opt.Ignore());
+            .MapMember(model => model.Questions, entity => entity.Questions);
     }
 }
