@@ -1,13 +1,16 @@
-﻿using AutoMapper;
+﻿using System.Globalization;
+using AutoMapper;
 using Forms.Api.DAL.EF.Installers;
 using Forms.Common;
 using Forms.Common.Extensions;
+using Forms.Common.Models.User;
 using Forms.IdentityProvider.App;
 using Forms.IdentityProvider.App.Endpoints;
 using Forms.IdentityProvider.App.Installers;
 using Forms.IdentityProvider.BL.Installers;
 using Forms.IdentityProvider.DAL.Entities;
 using Forms.IdentityProvider.DAL.Installers;
+using Forms.Web.BL;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 
@@ -20,6 +23,7 @@ Log.Information("Starting up");
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+    ConfigureCors(builder.Services);
 
     builder.Services.AddInstaller<IdentityProviderDALInstaller>();
     builder.Services.AddInstaller<IdentityProviderBLInstaller>();
@@ -57,6 +61,17 @@ finally
 {
     Log.Information("Shut down complete");
     Log.CloseAndFlush();
+}
+
+void ConfigureCors(IServiceCollection serviceCollection)
+{
+    serviceCollection.AddCors(options =>
+    {
+        options.AddDefaultPolicy(o =>
+            o.AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod());
+    });
 }
 
 async Task SeedRolesAndUsersAsync(IServiceProvider serviceProvider)
@@ -126,6 +141,32 @@ async Task SeedRolesAndUsersAsync(IServiceProvider serviceProvider)
     {
         await userManager.AddToRoleAsync(normalUser, AppRoles.User);
     }
+    
+    var userApiClient = serviceProvider.GetRequiredService<IUserApiClient>();
+    
+    var adminModel = new UserDetailModel
+    { 
+        Id = adminUser.Id,
+        Email = adminUser.Email,
+        FirstName = "Admin",
+        LastName = "Adminovic",
+        PhotoUrl = string.Empty
+    };
+            
+    await userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", adminModel);
 
+    var userModel = new UserDetailModel
+    { 
+        Id = normalUser.Id,
+        Email = normalUser.Email,
+        FirstName = "User",
+        LastName = "Userovic",
+        PhotoUrl = string.Empty
+    };
+            
+    await userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", userModel);
+
+
+    
     Console.WriteLine("Seeding completed: Roles and users created.");
 }

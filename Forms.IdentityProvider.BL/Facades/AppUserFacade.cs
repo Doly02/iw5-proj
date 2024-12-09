@@ -18,6 +18,11 @@ public class AppUserFacade(
         {
             throw new ArgumentException($"User with username '{appUserModel.UserName}' already exists");
         }
+        
+        if (await userManager.FindByEmailAsync(appUserModel.Email) is not null)
+        {
+            throw new ArgumentException($"User with email '{appUserModel.Email}' already exists");
+        }
 
         var appUserEntity = mapper.Map<AppUserEntity>(appUserModel);
         await userManager.CreateAsync(appUserEntity, appUserModel.Password);
@@ -80,6 +85,19 @@ public class AppUserFacade(
 
         return mapper.Map<AppUserDetailModel>(user);
     }
+    
+    public async Task<AppUserDetailModel?> GetUserByEmailAsync(string email)
+    {
+        var user = await userManager.FindByEmailAsync(email);
+
+        if (user is null)
+        {
+            return null;
+        }
+
+        return mapper.Map<AppUserDetailModel>(user);
+    }
+
 
     public async Task<AppUserDetailModel?> GetAppUserByExternalProviderAsync(string provider, string providerIdentityKey)
     {

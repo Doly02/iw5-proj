@@ -85,10 +85,10 @@ public class Index : PageModel
             ModelState.AddModelError("Input.Username", "Invalid username");
         }
         
-        // if ((await appUserFacade.GetUserByEmailAsync(Input.Email)) != null)
-        // {
-        //     ModelState.AddModelError("Input.Email", "Email is already in use");
-        // }
+        if ((await appUserFacade.GetUserByEmailAsync(Input.Email)) != null)
+        {
+            ModelState.AddModelError("Input.Email", "Email is already in use");
+        }
 
         if (ModelState.IsValid)
         {
@@ -110,7 +110,7 @@ public class Index : PageModel
                 PhotoUrl = Input.PhotoUrl
             };
             
-            await _userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", userModel);
+            // await _userApiClient.UpsertAsync(CultureInfo.DefaultThreadCurrentCulture?.Name ?? "cs", userModel);
             
             // issue authentication cookie with subject ID and username
             //var issuer = new IdentityServerUser(user.Subject)

@@ -13,6 +13,7 @@ public interface IAppUserFacade : IAppFacade
 
     Task<IList<AppUserListModel>> SearchAsync(string searchString);
     Task<AppUserDetailModel?> GetUserByUserNameAsync(string userName);
+    Task<AppUserDetailModel?> GetUserByEmailAsync(string email);
     Task<AppUserDetailModel?> GetAppUserByExternalProviderAsync(string provider, string providerIdentityKey);
     Task<AppUserDetailModel> CreateExternalAppUserAsync(AppUserExternalCreateModel appUserModel);
     Task<bool> ActivateUserAsync(string securityCode, string email);

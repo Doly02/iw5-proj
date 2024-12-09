@@ -17,7 +17,7 @@
     {
 
         <div class="card m-1" style="width: 16rem;">
-            <img class="card-img-top" src="@user.PhotoUrl" alt="Card image cap">
+            <img class="card-img-top" src="@(!string.IsNullOrWhiteSpace(user.PhotoUrl) ? user.PhotoUrl : "https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg?20200418092106")" alt="Card image cap">
             <div class="card-body">
                 <h5 class="card-title">
                     @{
