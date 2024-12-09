@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Forms.Common.Models.Form;
 
 namespace Forms.Common.Models.User;
 
@@ -17,9 +18,6 @@ public record UserDetailModel : IWithId
     public required string Email { get; set; }
 
     public string? PhotoUrl { get; set; }
-
-
-    // todo
-    // public IList<ResponseModel> Responses { get; set; } = new List<ResponseModel>();
-    // public IList<FormModel> Forms { get; set; } = new List<FormModel>();
+    
+    public IList<FormDetailModel> Forms { get; set; } = new List<FormDetailModel>();
 }
