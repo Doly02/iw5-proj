@@ -87,7 +87,7 @@ public class ResponseFacadeTests
                 Answer = storage.Questions[0].Answer,
                 QuestionType = storage.Questions[0].QuestionType,
             },
-            User = new UserListModel
+            User = new UserDetailModel
             {
                 Id = storage.Users[0].Id,
                 FirstName = storage.Users[0].FirstName,
@@ -148,7 +148,7 @@ public class ResponseFacadeTests
                 Answer = storage.Questions[0].Answer,
                 QuestionType = storage.Questions[0].QuestionType,
             },
-            User = new UserListModel
+            User = new UserDetailModel
             {
                 Id = storage.Users[0].Id,
                 FirstName = storage.Users[0].FirstName,
