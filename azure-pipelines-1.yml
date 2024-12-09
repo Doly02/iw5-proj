@@ -11,11 +11,13 @@ variables:
   targetRuntime: 'win-x64'
 
 steps:
+  # Nastavení prostředí .NET
   - task: UseDotNet@2
     inputs:
       version: $(dotNetVersion)
       includePreviewVersions: true
 
+  # Build API projektu
   - task: DotNetCoreCLI@2
     displayName: 'Build .NET Project for API'
     inputs:
@@ -23,6 +25,7 @@ steps:
       projects: './Forms.Api.App/Forms.Api.App.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
+  # Publish API projektu
   - task: DotNetCoreCLI@2
     displayName: 'Publish .NET Project for API'
     inputs:
@@ -31,6 +34,15 @@ steps:
       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api-app'
       zipAfterPublish: true
 
+  # Uložení artefaktů (zip souborů)
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish API Artifact'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/api-app'
+      ArtifactName: 'api-app-artifact'
+      publishLocation: 'Container'
+
+  # Nasazení na Azure Web App
   - task: AzureWebApp@1
     displayName: 'Deploy API to Azure Web App'
     inputs:
@@ -39,6 +51,7 @@ steps:
       appName: 'app-iw5-2024-team-xdolak09-api'
       package: '$(Build.ArtifactStagingDirectory)/api-app/**/*.zip'
 
+ # Build Web projektu
   - task: DotNetCoreCLI@2
     displayName: 'Build .NET Project for Web App'
     inputs:
@@ -46,7 +59,7 @@ steps:
       projects: './Web/Forms.Web.App/Forms.Web.App.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
-
+  # Publish Web projektu
   - task: DotNetCoreCLI@2
     displayName: 'Publish .NET Project for Web App'
     inputs:
@@ -55,7 +68,15 @@ steps:
       arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/web-app'
       zipAfterPublish: true
 
+  # Uložení artefaktů (Web)
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Web Artifact'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)/web-app'
+      ArtifactName: 'web-app-artifact'
+      publishLocation: 'Container'
 
+  # Nasazení Web App na Azure App Service
   - task: AzureWebApp@1
     displayName: 'Deploy Web App to Azure Web App'
     inputs:
