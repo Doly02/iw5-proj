@@ -20,7 +20,7 @@ steps:
     displayName: 'Build .NET Project for API'
     inputs:
       command: 'build'
-      projects: '**/Forms.Api.App.csproj'
+      projects: 'Forms.Api.App/Forms.Api.App.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
@@ -43,7 +43,7 @@ steps:
     displayName: 'Build .NET Project for Web App'
     inputs:
       command: 'build'
-      projects: '**/Forms.Web.App.csproj'
+      projects: 'Web/Forms.Web.App/Forms.Web.App.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
 
