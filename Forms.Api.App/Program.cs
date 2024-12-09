@@ -335,7 +335,7 @@ void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
 
         var formId = formFacade.CreateOrUpdate(form, userId);
         return TypedResults.Ok(formId);
-    });
+    }).RequireAuthorization(ApiPolicies.OwnerOrAdmin);
 
     formModifyingEndpoints.MapDelete("{id:guid}", Results<NoContent, ForbidHttpResult> (Guid id, IFormFacade formFacade, IHttpContextAccessor httpContextAccessor) =>
     {

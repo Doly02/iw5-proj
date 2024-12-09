@@ -47,7 +47,7 @@ namespace Forms.Web.App.Pages
             {
                 if (Form != null)
                 {
-                    await FormFacade.SaveAsync(Form);
+                    await FormFacade.UpdateToApiAsync(Form);
                     NavigationManager.NavigateTo("/forms");
                 }
                 else

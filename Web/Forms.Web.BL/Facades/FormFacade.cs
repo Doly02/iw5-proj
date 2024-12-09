@@ -51,6 +51,11 @@ public class FormFacade : FacadeBase<FormDetailModel, FormListModel>
     {
         return await _apiClient.FormGetAsync(id, culture);
     }
+    
+    public async Task<Guid?> UpdateToApiAsync(FormDetailModel data)
+    {
+        return await _apiClient.FormPutAsync(culture, data);
+    }
 
     protected override async Task<Guid> SaveToApiAsync(FormDetailModel data)
     {
