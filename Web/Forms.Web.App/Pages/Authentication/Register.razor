@@ -3,6 +3,7 @@
 @using Forms.Common.Models.User
 @using Forms.IdentityProvider.BL.Models
 @using Forms.Web.BL.Facades
+@inject NavigationManager NavigationManager
 @inject AppUserFacade AppUserFacade
 @inject UserFacade UserFacade
 
@@ -111,6 +112,7 @@
                     ReturnUrl = "/",
                     Button = "Register"
                 };
+                NavigationManager.NavigateTo("/");
             }
             catch (Exception ex)
             {
