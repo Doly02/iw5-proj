@@ -17,24 +17,49 @@ steps:
       includePreviewVersions: true
 
   - task: DotNetCoreCLI@2
-    displayName: 'Build .NET Project'
+    displayName: 'Build .NET Project for API'
     inputs:
       command: 'build'
       projects: '**/Forms.Api.App.csproj'
       arguments: '--configuration $(buildConfiguration)'
 
   - task: DotNetCoreCLI@2
-    displayName: 'Publish .NET Project'
+    displayName: 'Publish .NET Project for API'
     inputs:
       command: 'publish'
-      publishWebProjects: true
-      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+      projects: '**/Forms.Api.App.csproj'
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api-app'
       zipAfterPublish: true
 
   - task: AzureWebApp@1
-    displayName: 'Deploy to Azure Web App'
+    displayName: 'Deploy API to Azure Web App'
     inputs:
       azureSubscription: 'AzureConnectionToAppService'
       appType: 'webApp'
       appName: 'app-iw5-2024-team-xdolak09-api'
-      package: '$(Build.ArtifactStagingDirectory)/**/*.zip'
+      package: '$(Build.ArtifactStagingDirectory)/api-app/**/*.zip'
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Build .NET Project for Web App'
+    inputs:
+      command: 'build'
+      projects: '**/Forms.Web.App.csproj'
+      arguments: '--configuration $(buildConfiguration)'
+
+
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish .NET Project for Web App'
+    inputs:
+      command: 'publish'
+      projects: '**/Forms.Web.App.csproj'
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/web-app'
+      zipAfterPublish: true
+
+
+  - task: AzureWebApp@1
+    displayName: 'Deploy Web App to Azure Web App'
+    inputs:
+      azureSubscription: 'AzureConnectionToAppService'
+      appType: 'webApp'
+      appName: 'app-iw5-2024-team-xdolak09-web'
+      package: '$(Build.ArtifactStagingDirectory)/web-app/**/*.zip'
