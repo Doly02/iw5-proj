@@ -17,8 +17,9 @@ public class FacadeBase<TRepository, TEntity>
 
     protected void ThrowIfWrongOwner(Guid id, string? ownerId)
     {
+        var IdOwner = repository.GetById(id)?.OwnerId;
         if (ownerId is not null
-            && repository.GetById(id)?.OwnerId != ownerId)
+            && IdOwner != ownerId)
         {
             throw new UnauthorizedAccessException();
         }
