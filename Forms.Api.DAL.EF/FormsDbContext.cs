@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Forms.Api.DAL.Memory;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Configuration;
+
 
 namespace Forms.Api.DAL.EF;
 
@@ -13,10 +15,31 @@ public class FormsDbContext : DbContext
     public DbSet<FormEntity> Forms { get; set; } = null!;
     public DbSet<ResponseEntity> Responses { get; set; } = null!;
     
-    public FormsDbContext(DbContextOptions<FormsDbContext> options)
+    private readonly bool _seedDemoData;
+    private readonly bool _recreateDatabaseEachTime;
+
+    public FormsDbContext(DbContextOptions<FormsDbContext> options, IConfiguration configuration)
         : base(options)
     {
+        IConfigurationSection dalOptions = configuration.GetSection("DALSelectionOptions");
 
+        _seedDemoData = bool.TryParse(dalOptions["SeedDemoData"], out var seedDemoData) && seedDemoData;
+        _recreateDatabaseEachTime = bool.TryParse(dalOptions["RecreateDatabaseEachTime"], out var recreateDb) && recreateDb;
+    }
+
+    
+    public void InitializeDatabase()
+    {
+        if (_recreateDatabaseEachTime)
+        {
+            Database.EnsureDeleted(); 
+            Database.EnsureCreated(); 
+        }
+
+        if (_seedDemoData)
+        {
+            SeedData(); 
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

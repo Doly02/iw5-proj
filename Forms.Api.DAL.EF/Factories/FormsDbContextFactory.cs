@@ -15,7 +15,7 @@ namespace Forms.Api.DAL.EF.Factories
 
             var optionsBuilder = new DbContextOptionsBuilder<FormsDbContext>();
             optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            return new FormsDbContext(optionsBuilder.Options);
+            return new FormsDbContext(optionsBuilder.Options, configuration);
         }
     }
 }
