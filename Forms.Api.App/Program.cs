@@ -255,12 +255,9 @@ void UseSearchEndpoints(RouteGroupBuilder routeGroupBuilder)
         {
             var results = await searchFacade.SearchAsync(query);
 
-            return results.Any()
-                ? Results.Ok(results) 
-                : Results.NotFound($"No results found for query '{query}'"); 
+            return Results.Ok(results);
         })
-        .Produces<List<SearchResultModel>>(StatusCodes.Status200OK) 
-        .Produces<string>(StatusCodes.Status404NotFound);
+        .Produces<List<SearchResultModel>>(StatusCodes.Status200OK);
 }
 
 void UseFormEndpoints(RouteGroupBuilder routeGroupBuilder)
