@@ -46,6 +46,24 @@
                                         case QuestionType.OpenQuestion:
                                             <input type="text" class="form-control" @bind="UserResponses[question.Id][0]" placeholder="Vaše odpověď" />
                                             break;
+                                        case QuestionType.Selection:
+                                            @if (question.Answer != null)
+                                            {
+                                                <h5>@question.Name (@question.QuestionType)</h5>
+                                                @foreach (var answer in question.Answer)
+                                                {
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="radio" 
+                                                               name="@($"question-{question.Id}")" 
+                                                               value="@answer" 
+                                                               @onchange="(e) => UpdateRadioResponse(question, e.Value.ToString())" />
+                                                        <label class="form-check-label">
+                                                            @answer
+                                                        </label>
+                                                    </div>
+                                                }
+                                            }
+                                            break;
                                         case QuestionType.Range:
                                             @if (question.Answer != null)
                                             {
@@ -61,20 +79,6 @@
                                                         @answer
                                                     </label>
                                                 </div>
-                                                }
-                                            }
-                                            break;
-                                        case QuestionType.Selection:
-                                            @if (question.Answer != null)
-                                            {
-                                                @foreach (var answer in question.Answer)
-                                                {
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" name="@($"question-{question.Id}")" value="@answer" @onchange="(e) => UpdateCheckboxResponse(question, e.Value.ToString(), e)" />
-                                                        <label class="form-check-label">
-                                                            @answer
-                                                        </label>
-                                                    </div>
                                                 }
                                             }
                                             break;
