@@ -1,7 +1,7 @@
 using AutoMapper;
 using Forms.Api.DAL.Common.Entities;
+using Forms.Common.Extensions;
 using Forms.Common.Models.Form;
-using Forms.Common.Models.User;
 
 namespace Forms.Api.BL.MapperProfiles;
 
@@ -9,17 +9,18 @@ public class FormMapperProfile : Profile
 {
     public FormMapperProfile()
     {
-        // Mapping for UserDetailModel
+        // Mapping for FormDetailModel
         CreateMap<FormEntity, FormDetailModel>()
-            .ForMember(dest => dest.User, opt => opt.Ignore());
-;
-        
-        // Mapping for UserListModel
+            .ForMember(dest => dest.User, opt => opt.Ignore()) // Ignoring user mapping
+            .ForMember(dest => dest.Questions, opt => opt.MapFrom(src => src.Questions)); // Map Questions
+
+        // Mapping for FormListModel
         CreateMap<FormEntity, FormListModel>();
-        
-        // Reverse mapping back to UserEntity
+
+        // Reverse mapping for FormDetailModel to FormEntity
         CreateMap<FormDetailModel, FormEntity>()
             // Ignoring Questions
-            .ForMember(dest => dest.Questions, opt => opt.Ignore());
+            .Ignore(entity => entity.OwnerId)
+            .MapMember(model => model.Questions, entity => entity.Questions);
     }
 }

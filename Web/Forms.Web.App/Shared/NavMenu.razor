@@ -1,4 +1,7 @@
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@using Forms.Web.App.Components
 @namespace Forms.Web.App
+@inject NavigationManager Navigation
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -20,7 +23,7 @@
                     </NavLink>
                 </li>
                 <li class="nav-item">
-                    <NavLink href="/forms/create" Match="NavLinkMatch.All" ActiveClass="active border-bottom border-success" class="nav-link font-weight-bold">
+                    <NavLink href="/create" Match="NavLinkMatch.All" ActiveClass="active border-bottom border-success" class="nav-link font-weight-bold">
                         Vytvořit formulář
                     </NavLink>
                 </li>
@@ -29,36 +32,22 @@
                         Uživatelé
                     </NavLink>
                 </li>
-                @if (isLoggedIn)
-                {
-                    <li class="nav-item">
-                        <a href="/logout" class="nav-link btn btn-danger btn-sm">Odhlášení</a>
-                    </li>
-                }
-                else
-                {
-                    <li class="nav-item">
-
-
-                        <a href="/login" class="nav-link active btn btn-primary btn-sm mx-2">Přihlášení</a>
-                    </li>
-
-                    <li class="nav-item">
-
-                        <a href="/login" class="nav-link active btn btn-info btn-sm">Registrace</a>
-                    </li>
-                }
+                <li class="nav-item">
+                    <NavLink href="/search" Match="NavLinkMatch.All" ActiveClass="active border-bottom border-success" class="nav-link font-weight-bold">
+                        Vyhledávání
+                    </NavLink>
+                </li>
+                <LoginDisplay/>
             </ul>
         </div>
     </div>
 </nav>
 
 @code {
-    private bool isLoggedIn;
 
-    protected override async Task OnInitializedAsync()
+    private void BeginLogOut()
     {
-        // todo
-        isLoggedIn = false;
+        Navigation.NavigateToLogout("authentication/logout");
     }
+
 }

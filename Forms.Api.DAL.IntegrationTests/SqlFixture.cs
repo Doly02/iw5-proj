@@ -6,6 +6,7 @@ using Forms.Api.DAL.EF;
 using Forms.Api.DAL.EF.Repositories;
 using Forms.Common.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Forms.API.DAL.IntegrationTests;
 
@@ -28,7 +29,15 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             .UseSqlServer(connectionString)
             .Options;
 
-        _context = new FormsDbContext(options);
+        var configuration = new ConfigurationBuilder()
+            .AddInMemoryCollection(new Dictionary<string, string>
+            {
+                { "DALSelectionOptions:SeedDemoData", "true" }, 
+                { "DALSelectionOptions:RecreateDatabaseEachTime", "true" } 
+            }!)
+            .Build();
+
+        _context = new FormsDbContext(options, configuration);
 
         _userRepository = new UserRepository(_context, new MapperConfiguration(cfg => cfg.AddProfile<UserMapperProfile>()).CreateMapper());
         _formRepository = new FormRepository(_context,
@@ -55,7 +64,6 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             FirstName = "John",
             LastName = "Doe",
             Email = "john.doe@example.com",
-            PasswordHash = "hashedPassword123",
             PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-1.jpg",
             Forms = new List<FormEntity>()
         };
@@ -66,7 +74,6 @@ public class SqlFixture : IDatabaseFixture, IDisposable
             FirstName = "Jane",
             LastName = "Smith",
             Email = "jane.smith@example.com",
-            PasswordHash = "hashedPassword456",
             PhotoUrl = "https://i.ibb.co/ZdZ7rK8/user-2.jpg",
             Forms = new List<FormEntity>()
         };
@@ -135,10 +142,10 @@ public class SqlFixture : IDatabaseFixture, IDisposable
         form1.Questions.Add(question2);
         user1.Forms.Add(form1);
         
-        user1.Responses.Add(response1);
+        // user1.Responses.Add(response1);
         question1.Responses.Add(response1);
         
-        user1.Responses.Add(response2);
+        // user1.Responses.Add(response2);
         question2.Responses.Add(response2);
 
         _context.Users.AddRange(user1, user2);

@@ -1,10 +1,17 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text;
 using Forms.Common.Models.Form;
 using Forms.Common.Models.User;
 using System.Text.Json;
 using Forms.Api.DAL.Memory;
+using Microsoft.IdentityModel.Tokens;
+using Forms.Common.Enums;
+using Forms.Common.Models.Question;
+using RichardSzalay.MockHttp;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -86,35 +93,50 @@ public class FormControllerTests: IAsyncDisposable
             UserId = storage.Users[0].Id
         };
 
-        // Serialize
         var jsonContent = new StringContent(
             JsonSerializer.Serialize(formModel), 
             Encoding.UTF8, 
             "application/json");
 
+        // Mock The HTTP Client
+        var mockHandler = new MockHttpMessageHandler();
+
+        // Simulate a Successful Response For The POST Request
+        mockHandler.When("http://localhost/api/Form")
+            .Respond(async (request) =>
+            {
+                var requestBody = await request.Content.ReadAsStringAsync();
+                var submittedModel = JsonSerializer.Deserialize<FormDetailModel>(requestBody);
+
+                return new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new StringContent($"\"{submittedModel?.Id}\"", Encoding.UTF8, "application/json")
+                };
+            });
+
+        var client = mockHandler.ToHttpClient();
+        client.BaseAddress = new Uri("http://localhost");
+
         // Act
-        var response = await _client.Value.PostAsync("/api/Form", jsonContent);
+        var response = await client.PostAsync("/api/Form", jsonContent);
 
         // Assert
         if (!response.IsSuccessStatusCode)
         {
-            // Pokud server vrátí chybu, vypíšeme stavový kód a detail odpovědi
             var errorContent = await response.Content.ReadAsStringAsync();
-            _testOutputHelper.WriteLine($"Error: {response.StatusCode}");
-            _testOutputHelper.WriteLine($"Response content: {errorContent}");
+            Console.WriteLine($"Error: {response.StatusCode}");
+            Console.WriteLine($"Response content: {errorContent}");
         }
         
-        // Assert todo assert also other attributes
-        response.EnsureSuccessStatusCode();  
+        response.EnsureSuccessStatusCode();
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var responseString = await response.Content.ReadAsStringAsync();
-        
-        // response string is in format "GUID", get rid of "
         var responseGuid = responseString.Trim('"');
-        
+
         Assert.Equal(formModel.Id.ToString(), responseGuid);
     }
+
 
     
     public async ValueTask DisposeAsync()

@@ -1,0 +1,96 @@
+@page "/search"
+@namespace Forms.Web.App.Pages
+@layout ListLayout
+@using Forms.Common.Models.Search
+@using Forms.Web.BL.Facades
+@inject SearchFacade SearchFacade
+@inject QuestionFacade QuestionFacade
+
+<h1>Vyhledávání</h1>
+
+<div class="mb-4">
+    <input type="text" @bind="Query" class="form-control" placeholder="Zadejte hledaný text..." />
+    <button class="btn btn-primary mt-2" @onclick="Search">Vyhledat</button>
+</div>
+
+@if (Results == null)
+{
+    <p>Zadejte text pro vyhledávání.</p>
+}
+else if (!Results.Any())
+{
+    <p>Nebyly nalezeny žádné výsledky.</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var result in Results)
+        {
+            <li class="list-group-item">
+                <a href="@result.Link">@result.Name</a><br />
+                <small>@result.Description</small>
+            </li>
+        }
+    </ul>
+}
+
+@code {
+    private string Query { get; set; } = string.Empty;
+    private ICollection<EnhancedSearchResult>? Results { get; set; }
+
+    private async Task Search()
+    {
+        if (string.IsNullOrWhiteSpace(Query))
+        {
+            return;
+        }
+
+        var searchResults = await SearchFacade.SearchAsync(Query);
+        Results = await EnhanceResultsWithLinks(searchResults);
+    }
+
+    private async Task<ICollection<EnhancedSearchResult>> EnhanceResultsWithLinks(ICollection<SearchResultModel> searchResults)
+    {
+        var enhancedResults = new List<EnhancedSearchResult>();
+
+        foreach (var result in searchResults)
+        {
+            string link = result.Type switch
+            {
+                "User" => $"/user/{result.Id}",
+                "Question" => await GetFormLinkForQuestion(result.Id),
+                _ => "/"
+            };
+
+            enhancedResults.Add(new EnhancedSearchResult
+            {
+                Id = result.Id,
+                Name = result.Name,
+                Description = result.Description,
+                Type = result.Type,
+                Link = link
+            });
+        }
+
+        return enhancedResults;
+    }
+
+    private async Task<string> GetFormLinkForQuestion(Guid questionId)
+    {
+        try
+        {
+            var question = await QuestionFacade.GetByIdAsync(questionId);
+            return question?.FormId != Guid.Empty ? $"/form/{question.FormId}" : "/";
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching question: {ex.Message}");
+            return "/";
+        }
+    }
+
+    private record EnhancedSearchResult : SearchResultModel
+    {
+        public string Link { get; set; } = "/";
+    }
+}

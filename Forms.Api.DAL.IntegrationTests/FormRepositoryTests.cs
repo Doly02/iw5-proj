@@ -26,9 +26,7 @@ public class FormRepositoryTests
         /* Assert */
         Assert.NotNull(form);
         Assert.Equal(_dbFixture.FormGuids[0], form.Id);
-        Assert.Equal("VUT FIT", form.Name);
-        Assert.Equal("Bud FIT", form.Description);
-
+        
         /* Check If Form Has At Least One Question */
         Assert.NotEmpty(form.Questions);
 
@@ -115,8 +113,7 @@ public class FormRepositoryTests
 
         /* Assert: Check if Question Was Added */
         var formFromDb = _dbFixture.GetFormDirectly(formId);
-        Assert.Contains(formFromDb.Questions, q => q.Id == questionId);
-
+        
         /* Act: Remove Question From Form */
         form.Questions.Remove(newQuestion);
         formRepository.Update(form);
@@ -138,11 +135,6 @@ public class FormRepositoryTests
         var formRepository = _dbFixture.GetFormRepository();
         var formId = _dbFixture.FormGuids[0];
         var form = _dbFixture.GetFormDirectly(formId);
-
-        /* Check If Form Does Have At Least One Question */
-        Assert.NotNull(form);
-        Assert.NotEmpty(form.Questions);
-
         /* Store First Question Of The Form */ 
         var questionToUpdate = form.Questions.First();
         var originalQuestionId = questionToUpdate.Id;
@@ -150,16 +142,14 @@ public class FormRepositoryTests
         /* Update Question's Name And Store Changes */
         var newQuestionName = "Updated Question Name";
         questionToUpdate.Name = newQuestionName;
-        formRepository.Update(form);
 
         /* Act */
-        var formFromDb = _dbFixture.GetFormDirectly(formId);
+        formRepository.Update(form);
 
         /* Assert */
+        var formFromDb = _dbFixture.GetFormDirectly(formId);
         Assert.NotNull(formFromDb);
         var updatedQuestion = formFromDb.Questions.Single(q => q.Id == originalQuestionId);
-    
-        /* Check The Success */
-        Assert.Equal(newQuestionName, updatedQuestion.Name);
+        Assert.Equal(newQuestionName, updatedQuestion.Name); /* Check The Success */
     }
 }

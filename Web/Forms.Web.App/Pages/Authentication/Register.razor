@@ -1,0 +1,151 @@
+@page "/register"
+@using System.ComponentModel.DataAnnotations
+@using Forms.Common.Models.User
+@using Forms.IdentityProvider.BL.Models
+@using Forms.Web.BL.Facades
+@inject NavigationManager NavigationManager
+@inject AppUserFacade AppUserFacade
+@inject UserFacade UserFacade
+
+<div class="login-page">
+    <div class="lead text-center mb-4">
+        <h1>Registrace uživatele</h1>
+    </div>
+
+    <EditForm Model="RegisterInput" OnValidSubmit="RegisterUser">
+        <DataAnnotationsValidator />
+        <ValidationSummary class="alert alert-danger" />
+
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+
+                <div class="form-group mb-3">
+                    <label for="username">Uživatelské jméno</label>
+                    <InputText id="username" class="form-control" @bind-Value="RegisterInput.Username" placeholder="Zadejte uživatelské jméno" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="password">Heslo</label>
+                    <InputText id="password" type="password" class="form-control" @bind-Value="RegisterInput.Password" InputType="password" placeholder="Zadejte heslo" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="email">Email</label>
+                    <InputText id="email" class="form-control" @bind-Value="RegisterInput.Email" placeholder="Zadejte email" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="firstname">Jméno</label>
+                    <InputText id="firstname" class="form-control" @bind-Value="RegisterInput.FirstName" placeholder="Zadejte jméno" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="lastname">Příjmení</label>
+                    <InputText id="lastname" class="form-control" @bind-Value="RegisterInput.LastName" placeholder="Zadejte příjmení" />
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="photourl">URL Fotografie</label>
+                    <InputText id="photourl" class="form-control" @bind-Value="RegisterInput.PhotoUrl" placeholder="Zadejte URL fotografie (volitelné)" />
+                </div>
+
+                <div class="d-flex justify-content-between">
+                    <button type="submit" class="btn btn-primary">Registrovat</button>
+                </div>
+            </div>
+        </div>
+    </EditForm>
+
+    <p class="mt-3 text-center text-success">@StatusMessage</p>
+</div>
+
+<p>@StatusMessage</p>
+
+@code {
+    private RegisterInputModel RegisterInput { get; set; } = new RegisterInputModel
+    {
+        ReturnUrl = "/",
+        Button = "Register"
+    };
+
+    private string StatusMessage = string.Empty;
+
+    private async Task RegisterUser()
+    {
+        try
+        {
+            Console.WriteLine($"RegisterInput: Username={RegisterInput.Username}, Email={RegisterInput.Email}, FirstName={RegisterInput.FirstName}, LastName={RegisterInput.LastName}, PhotoUrl={RegisterInput.PhotoUrl}");
+            var newUser = new AppUserCreateModel
+            {
+                UserName = RegisterInput.Username!,
+                Password = RegisterInput.Password!,
+                Email = RegisterInput.Email!,
+                Subject = RegisterInput.Username!
+            };
+
+            try
+            {
+                var userId = await AppUserFacade.CreateAppUserAsync(newUser);
+                StatusMessage = $"Uživatel byl úspěšně vytvořen";
+                
+                if (userId == null)
+                {
+                    throw new InvalidOperationException("User ID was null. User creation might have failed.");
+                }
+                
+                var userModel = new UserDetailModel
+                {
+                    Id = userId.Value,
+                    Email = RegisterInput.Email!,
+                    FirstName = RegisterInput.FirstName!,
+                    LastName = RegisterInput.LastName!,
+                    PhotoUrl = RegisterInput.PhotoUrl
+                };
+                
+                Console.WriteLine($"UserDetailModel created: Id={userModel.Id}, Email={userModel.Email}, FirstName={userModel.FirstName}, LastName={userModel.LastName}, PhotoUrl={userModel.PhotoUrl}");
+
+                await UserFacade.SaveAsync(userModel);
+                Console.WriteLine("User created on app and identity");
+                
+                RegisterInput = new RegisterInputModel
+                {
+                    ReturnUrl = "/",
+                    Button = "Register"
+                };
+                NavigationManager.NavigateTo("/");
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Registrace uživatele selhala: {ex.Message}";
+
+            }
+
+        }
+        catch (Exception ex)
+        {
+            StatusMessage = $"Chyba: {ex.Message}";
+        }
+    }
+
+    public class RegisterInputModel
+    {
+        [Required]
+        public string? Username { get; set; }
+
+        [Required]
+        public string? Password { get; set; }
+
+        [Required]
+        public string? Email { get; set; }
+        [Required]
+
+        public string? FirstName { get; set; }
+        [Required]
+
+        public string? LastName { get; set; }
+        public string? PhotoUrl { get; set; }
+
+        public string? ReturnUrl { get; set; }
+        public string? Button { get; set; }
+    }
+}

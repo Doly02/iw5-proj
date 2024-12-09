@@ -62,5 +62,14 @@ namespace Forms.Api.BL.Facades
             var questions = await _questionRepository.SearchAsync(query);
             return _mapper.Map<List<SearchResultModel>>(questions);
         }
+        
+        public List<QuestionListModel> GetByFormId(Guid formId)
+        {
+            var questions = _questionRepository.GetAll()
+                .Where(q => q.FormId == formId)
+                .ToList();
+
+            return _mapper.Map<List<QuestionListModel>>(questions);
+        }
     }
 }

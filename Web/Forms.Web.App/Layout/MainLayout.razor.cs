@@ -11,7 +11,7 @@ namespace Forms.Web.App
         [Inject]
         public NavigationManager NavigationManager { get; set; } = null!;
 
-        private bool IsOnline { get; set; } = true; // Výchozí stav (předpokládáme, že uživatel je online)
+        private bool IsOnline { get; set; } = true; 
 
         public async Task OnlineStatusChangedAsync(bool isOnline)
         {

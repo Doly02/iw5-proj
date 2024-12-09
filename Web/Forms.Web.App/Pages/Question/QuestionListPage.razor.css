@@ -1,0 +1,7 @@
+.response-container {
+    border: 5px dashed red;         /* sedy ramecek             */
+    padding: 10px;                  /* vnitrni odsazeni         */
+    margin-bottom: 10px;            /* mezera mezi odpovedmi    */
+    border-radius: 5px;             /* zaobleni rohu            */
+    background-color: #f9f9f9;      /* svetle pozadi            */
+}

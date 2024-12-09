@@ -1,0 +1,58 @@
+@page "/questions/{FormId:guid}"
+@namespace Forms.Web.App.Pages
+@layout ListLayout
+@inherits PageBase
+
+<div>
+    <h1>Odpovědi na otázky</h1>
+
+    @if (Questions == null || !Questions.Any())
+    {
+        <p>Načítání otázek...</p>
+    }
+    else
+    {
+        int responseIndex = 1; // Inicializace číslování
+
+        @foreach (var question in Questions)
+        {
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5>@question.Name</h5>
+                    <small>@question.Description</small>
+                </div>
+                <div class="card-body">
+                    <p><strong>Typ otázky:</strong> @question.QuestionType</p>
+
+                    @if (Responses.ContainsKey(question.Id) && Responses[question.Id] != null && Responses[question.Id].Any())
+                    {
+                        @foreach (var response in Responses[question.Id])
+                        {
+                            <div>
+                                <strong>Odpověď @responseIndex:</strong>
+                                @if (response.UserResponse != null && response.UserResponse.Any())
+                                {
+                                    <ul>
+                                        @foreach (var userResponse in response.UserResponse)
+                                        {
+                                            <li>@userResponse</li>
+                                        }
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <p>Bez odpovědi</p>
+                                }
+                            </div>
+                            responseIndex++;
+                        }
+                    }
+                    else
+                    {
+                        <h6>Žádné odpovědi</h6>
+                    }
+                </div>
+            </div>
+        }
+    }
+</div>

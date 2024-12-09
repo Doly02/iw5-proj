@@ -17,7 +17,9 @@ public class QuestionRepository : RepositoryBase<QuestionEntity>, IQuestionRepos
     public override QuestionEntity? GetById(Guid id)
     {
         return context.Questions
-            .Include(u => u.Responses) 
+            .Include(u => u.Responses)
+            .ThenInclude(r => r.User)
+            
             .FirstOrDefault(u => u.Id == id); 
     }
 
@@ -27,6 +29,8 @@ public class QuestionRepository : RepositoryBase<QuestionEntity>, IQuestionRepos
         {
             var existQuestion = context.Questions
                 .Include(u => u.Responses)
+                .ThenInclude(r => r.User)
+                
                 .Single(u => u.Id == question.Id);
             
             _mapper.Map(question, existQuestion);

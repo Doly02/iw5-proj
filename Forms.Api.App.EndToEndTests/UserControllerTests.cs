@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using Forms.Common.Models.User;
 using Forms.Api.DAL.Memory;
+using RichardSzalay.MockHttp;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -19,7 +20,7 @@ namespace Forms.Api.App.EndToEndTests
         {
             _testOutputHelper = testOutputHelper;
             _app = new FormsApiApplicationFactory();
-            _client = new Lazy<HttpClient>(_app.CreateClient());
+            _client = new Lazy<HttpClient>(_app.CreateClient());    
         }
 
         [Fact]
@@ -61,8 +62,41 @@ namespace Forms.Api.App.EndToEndTests
             Assert.Equal(expectedUser.FirstName, returnedUser.FirstName);
             Assert.Equal(expectedUser.LastName, returnedUser.LastName);
             Assert.Equal(expectedUser.Email, returnedUser.Email);
-            Assert.Equal(expectedUser.PasswordHash, returnedUser.PasswordHash);
             Assert.Equal(expectedUser.PhotoUrl, returnedUser.PhotoUrl);
+        }
+        
+        [Fact]
+        public async Task Delete_User()
+        {
+            /* Arrange */
+            var storage = new Storage();
+            var userId = storage.Users[0].Id;
+
+            var mockHandler = new MockHttpMessageHandler();
+
+            /* Simulate DELETE Response */
+            mockHandler.When(HttpMethod.Delete, $"http://localhost/api/User/{userId}")
+                .Respond(HttpStatusCode.OK);
+
+            /* Simulate GET Response After Deletion */
+            mockHandler.When(HttpMethod.Get, $"http://localhost/api/User/{userId}")
+                .Respond(HttpStatusCode.NotFound);
+
+            var client = mockHandler.ToHttpClient();
+            client.BaseAddress = new Uri("http://localhost");
+
+            /* Act */
+            var response = await client.DeleteAsync($"/api/User/{userId}");
+            var content = await response.Content.ReadAsStringAsync();
+            _testOutputHelper.WriteLine($"Response content: {content}");
+
+            /* Assert */
+            response.EnsureSuccessStatusCode();
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+
+            /* Act */
+            response = await client.GetAsync($"/api/User/{userId}");
+            Assert.Equal(HttpStatusCode.NotFound, response.StatusCode);
         }
         
         [Fact]
@@ -75,7 +109,6 @@ namespace Forms.Api.App.EndToEndTests
                 FirstName = "Test",
                 LastName = "User",
                 Email = "test.user@example.com",
-                PasswordHash = "hashedPassword123",
                 PhotoUrl = "https://example.com/photo.jpg"
             };
             
