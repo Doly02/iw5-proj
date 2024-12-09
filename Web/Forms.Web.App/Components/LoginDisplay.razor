@@ -4,15 +4,20 @@
 
 <AuthorizeView>
     <Authorized>
-        <div class="nav-link font-weight-bold">
-            Hello logged in user!
-        </div>
-
+        <li>
+            <a href="profile" class="nav-link font-weight-bold">Profil</a>
+        </li>
+        <li>
         <button class="nav-link btn btn-link" @onclick="BeginLogOut">Log out</button>
+        </li>
     </Authorized>
     <NotAuthorized>
-        <a href="authentication/login" class="nav-link font-weight-bold">Log in</a>
-        <a href="register" class="nav-link font-weight-bold">Register</a>
+        <li>
+            <a href="authentication/login" class="nav-link font-weight-bold">Log in</a>
+        </li>
+        <li>
+            <a href="register" class="nav-link font-weight-bold">Register</a>
+        </li>
     </NotAuthorized>
 </AuthorizeView>
 

@@ -1,0 +1,107 @@
+@page "/profile"
+@inject UserFacade UserFacade
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+@namespace Forms.Web.App.Pages
+@using Forms.Common.Models.User
+@using Forms.Web.BL.Facades
+@using Microsoft.AspNetCore.Components.Authorization
+
+<h3>Profil</h3>
+
+@if (User is null)
+{
+    <p>Načítám data...</p>
+}
+else
+{
+    <EditForm Model="User" OnValidSubmit="UpdateProfile">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="card text-center">
+            <img src="@User.PhotoUrl" class="card-img-top mx-auto" alt="Profilová fotografie" style="width: 16rem;">
+            <div class="card-body">
+                <h5 class="card-title">@User.FirstName @User.LastName</h5>
+                <p>Email: @User.Email</p>
+
+                <div class="form-group mb-3">
+                    <label for="firstName">Jméno</label>
+                    <InputText id="firstName" class="form-control" @bind-Value="User.FirstName" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="lastName">Příjmení</label>
+                    <InputText id="lastName" class="form-control" @bind-Value="User.LastName" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="photoUrl">URL Profilové fotografie</label>
+                    <InputText id="photoUrl" class="form-control" @bind-Value="User.PhotoUrl" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Uložit změny</button>
+            </div>
+        </div>
+    </EditForm>
+
+    <p class="text-success">@StatusMessage</p>
+}
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p class="text-danger">@ErrorMessage</p>
+}
+
+@code {
+    private UserDetailModel? User { get; set; }
+    private string StatusMessage { get; set; } = string.Empty;
+    private string ErrorMessage { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var currentUser = authState.User;
+
+        if (!currentUser.Identity?.IsAuthenticated ?? true)
+        {
+            ErrorMessage = "Uživatel není přihlášen.";
+            return;
+        }
+
+        var userIdClaim = currentUser.FindFirst("id");
+        if (userIdClaim == null || !Guid.TryParse(userIdClaim.Value, out var userId))
+        {
+            ErrorMessage = "Nepodařilo se načíst ID aktuálního uživatele.";
+            return;
+        }
+
+        try
+        {
+            User = await UserFacade.GetByIdAsync(userId);
+            if (User == null)
+            {
+                ErrorMessage = "Uživatel nebyl nalezen.";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Chyba při načítání uživatele: {ex.Message}";
+        }
+    }
+
+    private async Task UpdateProfile()
+    {
+        try
+        {
+            if (User != null)
+            {
+                await UserFacade.SaveAsync(User);
+                StatusMessage = "Změny byly úspěšně uloženy.";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = $"Chyba při ukládání změn: {ex.Message}";
+        }
+    }
+}
