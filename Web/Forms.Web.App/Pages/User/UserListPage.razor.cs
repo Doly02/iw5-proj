@@ -26,7 +26,6 @@ namespace Forms.Web.App.Pages
             }
 
             IsAdmin = user.Claims.Any(c => c.Type == "role" && c.Value == AppRoles.Admin);
-            Console.WriteLine($"IsAdmin: {IsAdmin}");
             
             Users = await UserFacade.GetAllAsync();
 
