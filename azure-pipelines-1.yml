@@ -18,21 +18,14 @@ steps:
       includePreviewVersions: true
 
   # Build API projektu
-  - task: DotNetCoreCLI@2
+  - script: |
+      dotnet build ./Forms.Api.App/Forms.Api.App.csproj --configuration $(buildConfiguration)
     displayName: 'Build .NET Project for API'
-    inputs:
-      command: 'build'
-      projects: './Forms.Api.App/Forms.Api.App.csproj'
-      arguments: '--configuration $(buildConfiguration)'
 
   # Publish API projektu
-  - task: DotNetCoreCLI@2
+  - script: |
+      dotnet publish ./Forms.Api.App/Forms.Api.App.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api-app --no-dependencies
     displayName: 'Publish .NET Project for API'
-    inputs:
-      command: 'publish'
-      projects: './Forms.Api.App/Forms.Api.App.csproj'
-      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api-app --no-dependencies'
-      zipAfterPublish: true
 
   # Uložení artefaktů (zip souborů)
   - task: PublishBuildArtifacts@1
