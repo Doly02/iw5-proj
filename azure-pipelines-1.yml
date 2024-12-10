@@ -45,36 +45,63 @@ steps:
       appName: 'app-iw5-2024-team-xdolak09-api'
       package: '$(Build.ArtifactStagingDirectory)/api-app.zip'
 
- # Build Web projektu
-  - task: DotNetCoreCLI@2
-    displayName: 'Build .NET Project for Web App'
-    inputs:
-      command: 'build'
-      projects: './Web/Forms.Web.App/Forms.Web.App.csproj'
-      arguments: '--configuration $(buildConfiguration)'
+#######################
 
-  # Publish Web projektu
-  - task: DotNetCoreCLI@2
-    displayName: 'Publish .NET Project for Web App'
-    inputs:
-      command: 'publish'
-      projects: './Web/Forms.Web.App/Forms.Web.App.csproj'
-      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/web-app'
-      zipAfterPublish: true
+   # Build WEB projektu
+  - script: |
+      dotnet build ./Web/Forms.Web.App/Forms.Web.App.csproj --configuration $(buildConfiguration)
+    displayName: 'Build .NET Project for WEB'
 
-  # Uložení artefaktů (Web)
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish Web Artifact'
-    inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/web-app'
-      ArtifactName: 'web-app-artifact'
-      publishLocation: 'Container'
+  # Publish WEB projektu
+  - script: |
+      dotnet publish ./Web/Forms.Web.App/Forms.Web.App.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/web-app --no-dependencies
+    displayName: 'Publish .NET Project for WEB'
 
-  # Nasazení Web App na Azure App Service
+  # Zabalování výstupu do ZIP souboru
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/web-app'
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/web-app.zip'
+      replaceExistingArchive: true
+
+  # Nasazení na Azure Web App
   - task: AzureWebApp@1
-    displayName: 'Deploy Web App to Azure Web App'
+    displayName: 'Deploy WEB to Azure Web App'
     inputs:
       azureSubscription: 'AzureConnectionToAppService'
       appType: 'webApp'
       appName: 'app-iw5-2024-team-xdolak09-web'
-      package: '$(Build.ArtifactStagingDirectory)/web-app/**/*.zip'
+      package: '$(Build.ArtifactStagingDirectory)/web-app.zip'
+      
+
+######################################
+
+   # Build Identity projektu
+  - script: |
+      dotnet build ./Forms.IdentityProvider.App/Forms.IdentityProvider.App.csproj --configuration $(buildConfiguration)
+    displayName: 'Build .NET Project for Identity'
+
+  # Publish Identity projektu
+  - script: |
+      dotnet publish ./Forms.IdentityProvider.App/Forms.IdentityProvider.App.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/identity-app --no-dependencies
+    displayName: 'Publish .NET Project for Identity'
+
+  # Zabalování výstupu do ZIP souboru
+  - task: ArchiveFiles@2
+    inputs:
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/identity-app'
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/identity-app.zip'
+      replaceExistingArchive: true
+
+  # Nasazení na Azure Identity App
+  - task: AzureWebApp@1
+    displayName: 'Deploy identity to Azure Web App'
+    inputs:
+      azureSubscription: 'AzureConnectionToAppService'
+      appType: 'webApp'
+      appName: 'app-iw5-2024-team-xdolak09-identity'
+      package: '$(Build.ArtifactStagingDirectory)/identity-app.zip'
