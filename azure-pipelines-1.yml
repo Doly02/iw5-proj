@@ -27,7 +27,7 @@ steps:
 
   # Publish API projektu
   - task: DotNetCoreCLI@2
-    displayName: 'Publish .NET Project for API'
+    displayName: 'Publish .NET Project for APIIIIIII'
     inputs:
       command: 'publish'
       projects: './Forms.Api.App/Forms.Api.App.csproj'
