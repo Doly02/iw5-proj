@@ -27,11 +27,11 @@ steps:
 
   # Publish API projektu
   - task: DotNetCoreCLI@2
-    displayName: 'Publish .NET Project for APIIIIIII'
+    displayName: 'Publish .NET Project for API'
     inputs:
       command: 'publish'
       projects: './Forms.Api.App/Forms.Api.App.csproj'
-      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api-app'
+      arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api-app --no-dependencies'
       zipAfterPublish: true
 
   # Uložení artefaktů (zip souborů)
