@@ -27,13 +27,14 @@ steps:
       dotnet publish ./Forms.Api.App/Forms.Api.App.csproj --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/api-app --no-dependencies
     displayName: 'Publish .NET Project for API'
 
-  # Uložení artefaktů (zip souborů)
-  - task: PublishBuildArtifacts@1
-    displayName: 'Publish API Artifact'
+  # Zabalování výstupu do ZIP souboru
+  - task: ArchiveFiles@2
     inputs:
-      PathtoPublish: '$(Build.ArtifactStagingDirectory)/api-app'
-      ArtifactName: 'api-app-artifact'
-      publishLocation: 'Container'
+      rootFolderOrFile: '$(Build.ArtifactStagingDirectory)/api-app'
+      includeRootFolder: false
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)/api-app.zip'
+      replaceExistingArchive: true
 
   # Nasazení na Azure Web App
   - task: AzureWebApp@1
@@ -42,7 +43,7 @@ steps:
       azureSubscription: 'AzureConnectionToAppService'
       appType: 'webApp'
       appName: 'app-iw5-2024-team-xdolak09-api'
-      package: '$(Build.ArtifactStagingDirectory)/api-app/**/*.zip'
+      package: '$(Build.ArtifactStagingDirectory)/api-app.zip'
 
  # Build Web projektu
   - task: DotNetCoreCLI@2
